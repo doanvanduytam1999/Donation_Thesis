@@ -8,8 +8,8 @@ const mongoSanitize = require('express-mongo-sanitize');
 const flash = require('connect-flash');
 var session = require('express-session');
 const xss = require('xss-clean');
-const passport = require('passport');
 
+const HomeRouter = require('./routes/homeRouter');
 
 const AppError = require('././utils/appError');
 
@@ -52,6 +52,9 @@ app.use(xss());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
+app.use('/', HomeRouter);
+
+
 //Catch 404 Erros and forward them to error handler
 app.use((req, res, next) => {
     const err = new Error('Not found');
@@ -77,6 +80,7 @@ app.use(function (req, res, next) {
     res.setHeader("Content-Security-Policy", "script-src 'none' https://apis.google.com");
     return next();
 });
+
 
 /* app.all('*', (req, res, next) => {
     next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
