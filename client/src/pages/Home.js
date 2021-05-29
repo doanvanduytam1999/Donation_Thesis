@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Progress, Space, Typography, Modal, Form, Input, Button, Radio } from 'antd';
 import { CheckOutlined } from '@ant-design/icons';
-import axios from "axios";
-
+//import Callapi from "../services/Callapi";
+import  Callapi from '../services/Callapi';
 
 import "../style/Home.scss";
 import "../style/bootstrap-grid.min.css";
@@ -13,7 +13,7 @@ const { Text } = Typography;
 const Home = () => {
     const [listDonate, setListdonate] = useState([]);
     useEffect(() => {
-        axios.get("http://localhost:4000/donateEvensts").then((res) => {
+        Callapi.donateEvensts().then((res) => {
             setListdonate(res.data);
         })
     }, [])

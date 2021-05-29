@@ -1,4 +1,6 @@
 .footer{
+    position: relative;
+    bottom: 0;
     .container{
         .footer_text{
             .row{
@@ -47,17 +49,17 @@
             }
         }
     }
-}
-.footer_end{
-    background-color: #76767638;
-    height: 100px;
-    .container{
-        .footer_end_text{
-            p{
-               padding-top: 30px;
-               color: rgb(104, 104, 104);;
+    .footer_end{
+        background-color: #76767638;
+        height: 100px;
+        .container{
+            .footer_end_text{
+                p{
+                   padding-top: 30px;
+                   color: rgb(104, 104, 104);;
+                }
+               
             }
-           
         }
     }
 }

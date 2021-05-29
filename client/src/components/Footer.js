@@ -6,8 +6,9 @@ import { Divider } from 'antd';
 const Footer = () => {
     return (
         <> 
-        <Divider />
+      
             <div className="footer">
+            <Divider />
                 <div className="container">
                     <div className="footer_text col-10 offset-1 ">
                         <div className="row">
@@ -116,8 +117,7 @@ const Footer = () => {
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className="footer_end">
+                <div className="footer_end">
                 <div className="container">
                     <div className="footer_end_text col-10 offset-1 ">
                         <p>Shout fundraising services are provided by Shout For Good Pty Ltd (Shout). Shout is not a bank. Obligations of Shout are not deposits or liabilities of ANZ. ANZ does not stand behind or guarantee Shout or its obligations. Copyright © 2021 Shout For Good Pty Ltd.</p>
@@ -125,6 +125,8 @@ const Footer = () => {
                 </div>
 
             </div>
+            </div>
+           
         </>
     );
 }
