@@ -1,27 +1,78 @@
 const catchAsync = require('../utils/catchAsync');
-const { validationResult } = require('express-validator');
-const { patch } = require('../app');
 const DonateEvent = require('../models/donateEvent');
-const DonateEnvent = require('../models/donateEvent');
+const CategoryDonateEvent = require('../models/categoryDonateEvent');
+
 
 
 exports.postDonateEvents = catchAsync(async(req, res, next) => {
     const a = await DonateEvent.create({
-        title: "Chung tay gây quỹ phẫu thuật 5 nụ cười trong chương trình tại Hà Nội",
-        image: "",
-        content: "Khe hở môi vòm là một bệnh phổ biến ở Việt Nam cũng như các nước Châu Á mà dân gian hay gọi là sứt môi - hở hàm ếch. Tại Việt Nam với tỷ lệ 1/700, mỗi năm có khoảng 3,000 trẻ em sinh ra với dị tật hàm mặt. Với các em, ngoài việc ảnh hưởng tới sức khỏe, thể chất, những khó khăn trong sinh hoạt hàng ngày, còn có những nỗi đau to lớn về mặt tinh thần, đó là sự kỳ thị xa lánh của xã hội. ",
-        expired: "05/08/2021",
-        soTienCanDonate: '500.000.000',
-        soTienDonateHieTai: '300.000.000',
-        nguoiDaDonate: []
-    })
+        tieude: "Đại sứ nước – Chung tay đưa nước về ấp Thanh Trì B",
+        hinhanh: [],
+        noidung: "Thanh Trì B là một ấp nghèo của tỉnh Trà Vinh, người dân phải sử dụng nguồn nước ô nhiễm do xâm nhập mặn. Cùng chung tay quyên góp giúp bà con xây dựng hệ thống nước sạch!",
+        ngaybatdau: "15/06/2021",
+        ngayketthuc: "15/07/2021",
+        soTienCanDonate: "150.000.000 VNĐ",
+        soTienDonateHieTai: "50.000.000 VNĐ",
+        nguoiDaDonate:[],
+        loaibaidang:"60b7a9ff9a127331a8e5b087"
+    });
+    const b = await DonateEvent.create({
+        tieude: "Cùng gây quỹ tặng đồ bảo hộ chống dịch Covid-19 cho người dân và cán bộ y tế huyện Nậm Pồ",
+        hinhanh: [],
+        noidung: "Cùng chung tay quyên góp để hỗ trợ đội ngũ cán bộ y bác sĩ và người dân huyện Nậm Pồ, tỉnh Điện Biên đẩy lùi dịch Covid-19 đang có diễn biến ô cùng phức tạp.",
+        ngaybatdau: "31/05/2021",
+        ngayketthuc: "15/06/2021",
+        soTienCanDonate: "50.000.000 VNĐ",
+        soTienDonateHieTai: "10.000.000 VNĐ",
+        nguoiDaDonate:[],
+        loaibaidang:"60b7a9ff9a127331a8e5b087"
+    });
     res.send("ok!");
 });
 
+//lấy tất cả bài đăng
 exports.getDonateEvents = catchAsync(async(req, res, next) => {
-    const donateEnvents = await DonateEnvent.find();
-    /* res.status(200).json({
+    const donateEnvents = await DonateEvent.find();
+    res.status(200).json({
         DonateEnvents: donateEnvents
-    }) */
-    res.send(donateEnvents);
+    })
+});
+
+//lấy bài đăng theo id
+exports.getDonateEvent = catchAsync(async(req, res, next) => {
+    const id = req.params.id;
+    const donateEnvent = await DonateEvent.findById(id);
+    res.status(200).json({
+        DonateEnvent: donateEnvent
+    })
+});
+
+exports.getCategoryDonateEvents = catchAsync(async(req, res, next) => {
+    const categoryDonateEvents = await CategoryDonateEvent.find().populate('donateEnvents');
+    res.status(200).json({
+        CategoryDonateEvents: categoryDonateEvents
+    })
+});
+/* CategoryDonateEvents => array loại 
+foreach(CategoryDonateEvents as a){
+    a.donateEnvents => array baidang
+    foreach(a.donateEnvents as bd){
+        bd.---
+    }
+}
+
+*/
+exports.postCategoryDonateEvents = catchAsync(async(req, res, next) => {
+    const a = await CategoryDonateEvent.create({
+        tenloai: "Ủng hộ cho hoàn cảnh khó khăn"
+    });
+    const b = await CategoryDonateEvent.create({
+        tenloai: "Ủng hộ cho tổ chức"
+    });
+    const c = await CategoryDonateEvent.create({
+        tenloai: "Gây quỹ cứu trợ"
+    });
+
+    res.send("oke!");
+
 });

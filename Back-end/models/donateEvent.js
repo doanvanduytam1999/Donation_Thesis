@@ -1,36 +1,54 @@
   
-const { data } = require('jquery');
 const mongoose = require('mongoose');
 
 
 const DonateEnventSchemea = new mongoose.Schema(
     {
-        title: {
+        tieude: {
             type: String,
-            required: [true, 'Please provide title']
+            required: [true, 'Vui lòng cung cấp tiêu đề bài đăng']
         },
-        image: [{
+        hinhanh: [{
             type: String,
         }],
-        content: {
+        noidung: {
             type: String,
-            required: [true, 'Please provide content']
+            required: [true, 'Vui lòng cung cấp nội dung bài đăng']
         },
-        expired: {
+        ngaybatdau: {
             type: String,
-            required: [true, 'Please provide date expired']
+            required: [true, 'Vui lòng cung cấp ngày bắt đầu nhận donate']
+        },
+        ngayketthuc: {
+            type: String,
+            required: [true, 'Vui lòng cung cấp ngày kết thúc doante']
         },
         soTienCanDonate: {
             type: String,
-            required: [true, 'Please provide So tien can Donate']
+            required: [true, 'Vui lòng cung cấp số tiền cần donate']
         },
         soTienDonateHieTai: {
+            default: '0',
             type: String,
-            required: [true, 'Please provide So tien Donate hien tai']
+        },
+        trangthai: {
+            default: 'Chưa đủ',
+            type: String,
+        },
+        tinnoibat:{
+            type: Boolean,
+            default: false
+        },
+        nguoidang:{
+            type: mongoose.Schema.Types.ObjectId,
         },
         nguoiDaDonate:[{
             type: mongoose.Schema.Types.ObjectId,
-        }]
+        }],
+        loaibaidang:{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "CategoryDonateEvent"
+        }
     }, 
     
 );
