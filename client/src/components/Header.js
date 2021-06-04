@@ -2,6 +2,7 @@ import React from 'react';
 import { Menu, Row, Col,Button } from 'antd';
 //import { AppstoreOutlined, SettingOutlined } from '@ant-design/icons';
 import "../style/Header.scss";
+import { Link } from 'react-router-dom';
 const handleClick = (e) => {
     console.log(e.target);
 }
@@ -19,7 +20,12 @@ const Header = () => {
                 <Col span={24} >
                     <Menu style={style} onClick={handleClick}  selectedKeys={"hehe"} mode="horizontal">
                         <Menu.Item className="logo-item" key="mail">
+                            <a href="http://localhost:3000/">
                             <img alt="logo"  style={{marginLeft:'30px'}} width="40px" src="../images/logo.png" ></img>
+                            </a>
+                          
+                           
+                           
                         </Menu.Item>
                         <Menu.Item  key="app">
                             Gây quỷ

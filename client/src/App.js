@@ -3,7 +3,7 @@ import Header from './components/Header';
 import 'antd/dist/antd.css';
 import Home from './pages/Home';
 import Footer from './components/Footer';
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import Detail from './pages/Detail';
 function App() {
   return (
@@ -13,7 +13,7 @@ function App() {
         <Route exact path="/">
           <Home />
         </Route>
-        <Route path="/thong-tin-chi-tiet">
+        <Route exact path="/thong-tin-chi-tiet/:_id">
           <Detail />
         </Route>
         <Footer />

@@ -1,25 +1,57 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Progress, Space, Typography, Modal, Form, Input, Button, Radio } from 'antd';
+import { Card, Progress, Space, Typography, Modal, Form, Input, Button, Radio, Tabs } from 'antd';
 import { CheckOutlined } from '@ant-design/icons';
-//import Callapi from "../services/Callapi";
-import  Callapi from '../services/Callapi';
-
+import Callapi from '../services/Callapi';
+import { Link } from "react-router-dom";
 import "../style/Home.scss";
 import "../style/bootstrap-grid.min.css";
+import ScrollToTop from '../services/ScrollToTop';
 
+const { TabPane } = Tabs;
 
 const { Text } = Typography;
 
 const Home = () => {
-    const [listDonate, setListdonate] = useState([]);
+    const [listDonates, setListdonates] = useState([]);
+    const [listDonate, setListdonate] =  useState([]);
     useEffect(() => {
         Callapi.donateEvensts().then((res) => {
-            setListdonate(res.data);
+            setListdonates(res.data.DonateEnvents);
+            setListdonate(res.data.DonateEnvents)
         })
     }, [])
+    const [listCategory, setListCategory] = useState([]);
+    useEffect(() => {
+        Callapi.categoryDonateEvent().then((res) => {
+            setListCategory(res.data.CategoryDonateEvents)
+        })
+    }, [])
+    
+    const handleClick = (e) => {
 
+        setListdonate(listDonates);
+        let filterProduct = [];
+        if (e === "1") {
+            filterProduct = listDonates;
+        } else {
+            /*  for (let i = 0; i < listDonates.length; i++) {
+             let element = listDonates[i]._id;
+             console.log(listDonates[i]._id);
+             if( listDonates[i]._id == e)
+             filterProduct.push(listDonates[i])
+             }
+           console.log(filterProduct);
+         } */
+            filterProduct = listDonates.filter(
+                listDonates => listDonates.loaibaidang === e
+            )
+            setListdonate(filterProduct)
+            console.log(filterProduct);
+
+            
+        }
+    };
     console.log(listDonate);
-
     let i = 0;
     const [value, setValue] = useState(1);
     const onChange = e => {
@@ -36,33 +68,26 @@ const Home = () => {
     const researchStyle = {
         backgroundImage: `url("../images/about.png")`,
     }
-    /* const bgHomepage = {
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
-        backgroundImage: `url("../images/donate/bg.jpg")`,
-    } */
     const bghomepageRegister = {
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
         backgroundImage: `url("../images/donate/bg-rs.jpg")`,
 
     }
-    const [percent, /* setPercent */] = useState(51);
-    const [isModalVisible, setIsModalVisible] = useState(false);
 
+    const [isModalVisible, setIsModalVisible] = useState(false);
     const showModal = () => {
         setIsModalVisible(true);
     };
-
     const handleOk = () => {
         setIsModalVisible(false);
     };
-
     const handleCancel = () => {
         setIsModalVisible(false);
     };
     return (
         <>
+
             <div className="homepage container-sm">
                 <div className="homepage_content col-10 offset-1 ">
                     <div>
@@ -90,7 +115,6 @@ const Home = () => {
                         <div className="text_wapper-about"><a href="/about-us"><span className="text-bold text-uppercase">Tìm hiểu về chúng tôi</span></a></div>
                     </div>
                 </div>
-
             </div>
             <div style={researchStyle} className="bg homepage_research">
                 <div className="container">
@@ -104,68 +128,74 @@ const Home = () => {
                 </div>
 
             </div>
-            <div className="homepage_list_donate">
+            <div className="homepage_list_donate list_donate_hot">
                 <div className="container">
-                    <div className="list_donate_text col-10 offset-1 ">
+                    <div className="list_donate_text  col-10 offset-1 ">
                         <h2 className="text-bold">Nổi bật </h2>
                     </div>
                     <div className="list_card col-10 offset-1">
                         <div className="row">
-                            {listDonate.map((item) => {
-
+                            {listDonates.map((item) => {
                                 if (i !== 0 && i !== 5) {
-                                    i++
-                                    return (
-                                        <>
-                                            <div className="col">
-                                                <Card
-                                                    style={{ borderRadius: 10, height: 420, backgroundImage: "url(../images/donate/nha.jpg)" }}
-                                                    hoverable >
-                                                    <Progress style={{ borderRadius: '5px' }} strokeWidth={15} percent={percent} status="active" strokeColor={
-                                                        '#FD5B55'
-                                                    }
-                                                    />
-                                                    <a type="button" href="#/" style={{ marginTop: "20px", textAlign: "center" }} className="ant-btn ant-btn-primary btn btn-uh text-bold" onClick={showModal}><span className="btn-text">Ủng hộ ngay </span></a>
-                                                </Card>
-                                            </div>
-                                        </>)
+                                    if (item.tinnoibat === true) {
+                                        i++
+                                        return (
+                                            <>
+                                                <div className="col">
+                                                    <Card
+                                                        style={{ borderRadius: 10, height: 420, backgroundImage: "url(../images/donate/nha.jpg)" }}
+                                                        hoverable >
+                                                        <Progress style={{ borderRadius: '5px' }} strokeWidth={15} percent={Math.floor((item.soTienDonateHieTai / item.soTienCanDonate) * 100)} status="active" strokeColor={
+                                                            '#FD5B55'
+                                                        }
+                                                        />
+                                                        <a type="button" href="#/" style={{ marginTop: "20px", textAlign: "center" }} className="ant-btn ant-btn-primary btn btn-uh text-bold" onClick={showModal}><span className="btn-text">Ủng hộ ngay </span></a>
+                                                    </Card>
+                                                </div>
+                                            </>)
+                                    }
+
                                 }
                                 else {
-                                    i++
-                                    return (
-                                        <>
-                                            <div className="col-6">
-                                                <Card
-                                                    style={{ borderRadius: 10, height: 420, width: "100%", backgroundImage: "url(../images/donate/nha.jpg)" }}
-                                                    hoverable
-                                                >
-                                                    <Space direction="vertical">
 
-                                                        <Text
-                                                            style={{ color: "#000", width: "100%", fontWeight: 700, fontSize: 20 }}
-                                                        >
-                                                            {item.title}
+                                    if (item.tinnoibat === true) {
+                                        i++
+                                        return (
+                                            <>
+                                                <div className="col-6">
+                                                    <Card
+                                                        style={{ borderRadius: 10, height: 420, width: "100%", backgroundImage: "url(../images/donate/nha.jpg)" }}
+                                                        hoverable
+                                                    >
+                                                        <Space direction="vertical">
 
-                                                        </Text>
-                                                        <Text
-                                                            style={{ color: "#000", width: "100%", fontWeight: 700, fontSize: 20, }}
-                                                        >
+                                                            <Text
+                                                                style={{ color: "#000", width: "100%", fontWeight: 700, fontSize: 20 }}
+                                                            >
+                                                                {item.tieude}
 
-                                                            {item.soTienCanDonate}
-                                                        </Text>
-                                                    </Space>
+                                                            </Text>
+                                                            <Text
+                                                                style={{ color: "#000", width: "100%", fontWeight: 700, fontSize: 20, }}
+                                                            >
 
-                                                    <Progress style={{ width: "100%", borderRadius: '5px' }} strokeWidth={15} percent={percent} status="active" strokeColor={
-                                                        '#FD5B55'
-                                                    }
-                                                    />
-                                                    <a type="button" href="#/" style={{ marginTop: "20px", textAlign: "center" }} className="ant-btn ant-btn-primary btn btn-uh text-bold" onClick={showModal}><span className="btn-text">Ủng hộ ngay </span></a>
+                                                                {item.soTienCanDonate}
+                                                            </Text>
+                                                        </Space>
 
-                                                </Card>
+                                                        <Progress style={{ width: "100%", borderRadius: '5px' }} strokeWidth={15} percent={Math.floor((item.soTienDonateHieTai / item.soTienCanDonate) * 100)} status="active" strokeColor={
+                                                            '#FD5B55'
+                                                        }
+                                                        />
+                                                        <a type="button" href="#/" style={{ marginTop: "20px", textAlign: "center" }} className="ant-btn ant-btn-primary btn btn-uh text-bold" onClick={showModal}><span className="btn-text">Ủng hộ ngay </span></a>
 
-                                            </div>
+                                                    </Card>
 
-                                        </>)
+                                                </div>
+
+                                            </>)
+                                    }
+
                                 }
                             })
                             }
@@ -182,72 +212,48 @@ const Home = () => {
                 <div className="container">
                     <div className="list_donate_text col-10 offset-1 ">
                         <h2 style={{ textAlign: "center" }} className="text-bold">Những người có hoàn cảnh khó khăn</h2>
-                        <div className="row">
-                            <div className="col-6 " >
-                                <Card className="margin-top"
-                                    style={{ borderRadius: 10, height: 420, backgroundImage: "url(../images/donate/nha.jpg)" }}
-                                    hoverable>
-                                    <a type="button" href="#/" style={{ marginTop: "20px", textAlign: "center" }} className="ant-btn btn ant-btn-primary btn-detail text-bold" ><span className="btn-text">Xem chi tiết</span></a>
+                        <Tabs defaultActiveKey="1" size="large" centered onChange={handleClick} style={{ marginBottom: 32, }}>
+                        <TabPane tab="Tất cả" key="1">
 
-                                </Card>
-                            </div>
-                            <div className="col-6 " >
-                                <Card className="margin-top"
-                                    style={{ borderRadius: 10, height: 420, backgroundImage: "url(../images/donate/nha.jpg)" }}
-                                    hoverable>
-                                    <a type="button" href="#/" style={{ marginTop: "20px", textAlign: "center" }} className="ant-btn btn ant-btn-primary btn-detail text-bold" ><span className="btn-text">Xem chi tiết</span></a>
+                        </TabPane>
+                            {listCategory.map((category) => {
+                                return (
+                                    <>
+                                        <TabPane tab={category.tenloai} key={category._id}>
 
-                                </Card>
-                            </div>
-                            <div className="col-6 " >
-                                <Card className="margin-top"
-                                    style={{ borderRadius: 10, height: 420, backgroundImage: "url(../images/donate/nha.jpg)" }}
-                                    hoverable>
-                                    <a type="button" href="#/" style={{ marginTop: "20px", textAlign: "center" }} className="ant-btn btn ant-btn-primary btn-detail text-bold" ><span className="btn-text">Xem chi tiết</span></a>
+                                        </TabPane>
+                                    </>
+                                )
+                            })}
 
-                                </Card>
-                            </div>
-                            <div className="col-6 " >
-                                <Card className="margin-top"
-                                    style={{ borderRadius: 10, height: 420, backgroundImage: "url(../images/donate/nha.jpg)" }}
-                                    hoverable>
-                                    <a type="button" href="#/" style={{ marginTop: "20px", textAlign: "center" }} className="ant-btn btn ant-btn-primary btn-detail text-bold" ><span className="btn-text">Xem chi tiết</span></a>
+                        </Tabs>
+                        <div className="row" >
+                        {listDonate.map((item) => {
+                            return (
+                                <>
+                              
+                                   <div className="col-6 " >
+                                        <Card className="margin-top"
+                                            style={{ borderRadius: 10, height: 420, backgroundImage: "url(../images/donate/nha.jpg)" }}
+                                            hoverable>
+                                            <Space direction="vertical">
+                                                <Text style={{ color: "#000", width: "100%", fontWeight: 700, fontSize: 20 }}>
+                                                    {item.tieude} </Text>
+                                                <Text style={{ color: "#000", width: "100%", fontWeight: 700, fontSize: 20, }}
+                                                > {item.soTienCanDonate}</Text>
+                                            </Space>
+                                            <ScrollToTop />
 
-                                </Card>
-                            </div>
-                            <div className="col-6 " >
-                                <Card className="margin-top"
-                                    style={{ borderRadius: 10, height: 420, backgroundImage: "url(../images/donate/nha.jpg)" }}
-                                    hoverable>
-                                    <a type="button" href="#/" style={{ marginTop: "20px", textAlign: "center" }} className="ant-btn btn ant-btn-primary btn-detail text-bold" ><span className="btn-text">Xem chi tiết</span></a>
-
-                                </Card>
-                            </div>
-                            <div className="col-6 " >
-                                <Card className="margin-top"
-                                    style={{ borderRadius: 10, height: 420, backgroundImage: "url(../images/donate/nha.jpg)" }}
-                                    hoverable>
-                                    <a type="button" href="#/" style={{ marginTop: "20px", textAlign: "center" }} className="ant-btn btn ant-btn-primary btn-detail text-bold" ><span className="btn-text">Xem chi tiết</span></a>
-
-                                </Card>
-                            </div>
-                            <div className="col-6 " >
-                                <Card className="margin-top"
-                                    style={{ borderRadius: 10, height: 420, backgroundImage: "url(../images/donate/nha.jpg)" }}
-                                    hoverable>
-                                    <a type="button" href="#/" style={{ marginTop: "20px", textAlign: "center" }} className="ant-btn btn ant-btn-primary btn-detail text-bold" ><span className="btn-text">Xem chi tiết</span></a>
-
-                                </Card>
-                            </div>
-                            <div className="col-6 " >
-                                <Card className="margin-top"
-                                    style={{ borderRadius: 10, height: 420, backgroundImage: "url(../images/donate/nha.jpg)" }}
-                                    hoverable>
-                                    <a type="button" href="#/" style={{ marginTop: "20px", textAlign: "center" }} className="ant-btn btn ant-btn-primary btn-detail text-bold"><span className="btn-text">Xem chi tiết</span></a>
-
-                                </Card>
-                            </div>
-                        </div>
+                                            <Link to={`thong-tin-chi-tiet/${item._id}`} ><a href="#/" type="button" style={{ marginTop: "20px", textAlign: "center" }} className="ant-btn btn ant-btn-primary btn-detail text-bold" ><span className="btn-text">Xem chi tiết</span></a>
+                                            </Link>
+                                        </Card>
+                                        </div>
+                                        </>
+                            )
+                           
+                        })}
+                          </div>
+                               
                     </div>
 
                 </div>
