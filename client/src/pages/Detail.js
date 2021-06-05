@@ -21,8 +21,6 @@ const Detail = () => {
     console.log(Donate);
     return (
         <>
-          <ScrollToTop />
-          
             <section className="detail_header">
                 <div className="container">
                     <div className="">
@@ -124,6 +122,7 @@ const Detail = () => {
                 </div>
 
             </section>
+       
         </>
     );
 }

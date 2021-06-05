@@ -3,22 +3,29 @@ import Header from './components/Header';
 import 'antd/dist/antd.css';
 import Home from './pages/Home';
 import Footer from './components/Footer';
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Detail from './pages/Detail';
+import ScrollToTop from './services/ScrollToTop';
 function App() {
   return (
+
+    <Router>
     
-      <Router>
         <Header />
         <Route exact path="/">
           <Home />
+
         </Route>
+        <ScrollToTop />
+        <Switch>
         <Route exact path="/thong-tin-chi-tiet/:_id">
           <Detail />
         </Route>
+        </Switch>
         <Footer />
-      </Router>
-   
+     
+    </Router>
+
   );
 }
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Progress, Space, Typography, Modal, Form, Input, Button, Radio, Tabs } from 'antd';
-import { CheckOutlined } from '@ant-design/icons';
+import { Card, Progress, Space, Typography, Modal, Form, Input, Button, Radio, Tabs, Image, Tooltip } from 'antd';
+import { CheckOutlined, RightOutlined } from '@ant-design/icons';
 import Callapi from '../services/Callapi';
 import { Link } from "react-router-dom";
 import "../style/Home.scss";
@@ -13,7 +13,7 @@ const { Text } = Typography;
 
 const Home = () => {
     const [listDonates, setListdonates] = useState([]);
-    const [listDonate, setListdonate] =  useState([]);
+    const [listDonate, setListdonate] = useState([]);
     useEffect(() => {
         Callapi.donateEvensts().then((res) => {
             setListdonates(res.data.DonateEnvents);
@@ -26,7 +26,7 @@ const Home = () => {
             setListCategory(res.data.CategoryDonateEvents)
         })
     }, [])
-    
+
     const handleClick = (e) => {
 
         setListdonate(listDonates);
@@ -34,14 +34,14 @@ const Home = () => {
         if (e === "1") {
             filterProduct = listDonates;
         } else {
-       
+
             filterProduct = listDonates.filter(
                 listDonates => listDonates.loaibaidang === e
             )
             setListdonate(filterProduct)
             console.log(filterProduct);
 
-            
+
         }
     };
     console.log(listDonate);
@@ -135,14 +135,24 @@ const Home = () => {
                                         return (
                                             <>
                                                 <div className="col">
+
                                                     <Card
                                                         style={{ borderRadius: 10, height: 420, backgroundImage: "url(../images/donate/nha.jpg)" }}
                                                         hoverable >
+                                                        <div className="btn-chitiet_col">
+
+                                                            <Link to={`thong-tin-chi-tiet/${item._id}`} >
+
+                                                                <Tooltip title="Chi tiết">
+                                                                    <Button size="large" shape="circle" icon={<RightOutlined />} />
+                                                                </Tooltip>
+                                                            </Link>
+                                                        </div>
                                                         <Progress style={{ borderRadius: '5px' }} strokeWidth={15} percent={Math.floor((item.soTienDonateHieTai / item.soTienCanDonate) * 100)} status="active" strokeColor={
                                                             '#FD5B55'
                                                         }
                                                         />
-                                                        <a type="button" href="#/" style={{ marginTop: "20px", textAlign: "center" }} className="ant-btn ant-btn-primary btn btn-uh text-bold" onClick={showModal}><span className="btn-text">Ủng hộ ngay </span></a>
+                                                        <a type="button" style={{ marginTop: "20px", textAlign: "center" }} className="ant-btn ant-btn-primary btn btn-uh text-bold" onClick={showModal}><span className="btn-text">Ủng hộ ngay </span></a>
                                                     </Card>
                                                 </div>
                                             </>)
@@ -156,12 +166,21 @@ const Home = () => {
                                         return (
                                             <>
                                                 <div className="col-6">
-                                                    <Card
-                                                        style={{ borderRadius: 10, height: 420, width: "100%", backgroundImage: "url(../images/donate/nha.jpg)" }}
-                                                        hoverable
-                                                    >
-                                                        <Space direction="vertical">
 
+                                                    <Card
+                                                        style={{ borderRadius: 10, height: 420, width: "100%", backgroundImage: "url(../images/donate/nha.jpg)" }}>
+                                                        <Space height={"100%"} direction="vertical"
+
+                                                        >
+                                                            <div className="btn-chitiet">
+
+                                                                <Link to={`thong-tin-chi-tiet/${item._id}`} >
+
+                                                                    <Tooltip title="Chi tiết">
+                                                                        <Button size="large" shape="circle" icon={<RightOutlined />} />
+                                                                    </Tooltip>
+                                                                </Link>
+                                                            </div>
                                                             <Text
                                                                 style={{ color: "#000", width: "100%", fontWeight: 700, fontSize: 20 }}
                                                             >
@@ -180,7 +199,8 @@ const Home = () => {
                                                             '#FD5B55'
                                                         }
                                                         />
-                                                        <a type="button" href="#/" style={{ marginTop: "20px", textAlign: "center" }} className="ant-btn ant-btn-primary btn btn-uh text-bold" onClick={showModal}><span className="btn-text">Ủng hộ ngay </span></a>
+
+                                                        <a type="button" style={{ marginTop: "20px", textAlign: "center", zIndex: "200", }} className="ant-btn ant-btn-primary btn btn-uh text-bold" onClick={showModal}><span className="btn-text">Ủng hộ ngay </span></a>
 
                                                     </Card>
 
@@ -206,9 +226,9 @@ const Home = () => {
                     <div className="list_donate_text col-10 offset-1 ">
                         <h2 style={{ textAlign: "center" }} className="text-bold">Những người có hoàn cảnh khó khăn</h2>
                         <Tabs defaultActiveKey="1" size="large" centered onChange={handleClick} style={{ marginBottom: 32, }}>
-                        <TabPane tab="Tất cả" key="1">
+                            <TabPane tab="Tất cả" key="1">
 
-                        </TabPane>
+                            </TabPane>
                             {listCategory.map((category) => {
                                 return (
                                     <>
@@ -221,32 +241,30 @@ const Home = () => {
 
                         </Tabs>
                         <div className="row" >
-                        {listDonate.map((item) => {
-                            return (
-                                <>
-                              
-                                   <div className="col-6 " >
-                                        <Card className="margin-top"
-                                            style={{ borderRadius: 10, height: 420, backgroundImage: "url(../images/donate/nha.jpg)" }}
-                                            hoverable>
-                                            <Space direction="vertical">
-                                                <Text style={{ color: "#000", width: "100%", fontWeight: 700, fontSize: 20 }}>
-                                                    {item.tieude} </Text>
-                                                <Text style={{ color: "#000", width: "100%", fontWeight: 700, fontSize: 20, }}
-                                                > {item.soTienCanDonate}</Text>
-                                            </Space>
-                                            <ScrollToTop />
+                            {listDonate.map((item) => {
+                                return (
+                                    <>
 
-                                            <Link to={`thong-tin-chi-tiet/${item._id}`} ><a href="#/" type="button" style={{ marginTop: "20px", textAlign: "center" }} className="ant-btn btn ant-btn-primary btn-detail text-bold" ><span className="btn-text">Xem chi tiết</span></a>
-                                            </Link>
-                                        </Card>
+                                        <div className="col-6 " >
+                                            <Card className="margin-top"
+                                                style={{ borderRadius: 10, height: 420, backgroundImage: "url(../images/donate/nha.jpg)" }}
+                                                hoverable>
+                                                <Space direction="vertical">
+                                                    <Text style={{ color: "#000", width: "100%", fontWeight: 700, fontSize: 20 }}>
+                                                        {item.tieude} </Text>
+                                                    <Text style={{ color: "#000", width: "100%", fontWeight: 700, fontSize: 20, }}
+                                                    > {item.soTienCanDonate}</Text>
+                                                </Space>
+                                                <Link to={`thong-tin-chi-tiet/${item._id}`} ><a href="#/" type="button" style={{ marginTop: "20px", textAlign: "center" }} className="ant-btn btn ant-btn-primary btn-detail text-bold" ><span className="btn-text">Xem chi tiết</span></a>
+                                                </Link>
+                                            </Card>
                                         </div>
-                                        </>
-                            )
-                           
-                        })}
-                          </div>
-                               
+                                    </>
+                                )
+
+                            })}
+                        </div>
+
                     </div>
 
                 </div>

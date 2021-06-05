@@ -18,6 +18,7 @@ $fz-text: 16px;
 .margin-top{
     margin-top: 20px;
 }
+
 .homepage{
     
    
@@ -123,7 +124,24 @@ $fz-text: 16px;
     }
     .ant-card-body{
         width: 100%;
+        .btn-chitiet{
+          position: absolute;
+          top: 40px;
+          right:40px;
+          .ant-btn-circle{
+            background-color: #ffffff8a;
+          }
+        }
+        .btn-chitiet_col{
+            position: absolute;
+            top: 40px;
+            right:20px;
+            .ant-btn-circle{
+                background-color: #ffffff8a;
+              }
+        }
     }
+    
     .btn{
       
         border: 0px !important;
