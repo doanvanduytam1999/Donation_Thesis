@@ -34,14 +34,7 @@ const Home = () => {
         if (e === "1") {
             filterProduct = listDonates;
         } else {
-            /*  for (let i = 0; i < listDonates.length; i++) {
-             let element = listDonates[i]._id;
-             console.log(listDonates[i]._id);
-             if( listDonates[i]._id == e)
-             filterProduct.push(listDonates[i])
-             }
-           console.log(filterProduct);
-         } */
+       
             filterProduct = listDonates.filter(
                 listDonates => listDonates.loaibaidang === e
             )
