@@ -6,7 +6,7 @@ h2 {
     font-size: 48px;
 }
 $text-cl-white: #fff;
-$fz-text: 16px;
+$fz-text: 14px;
 .text-bold {
     font-weight: 700;
 }
@@ -125,6 +125,13 @@ $fz-text: 16px;
                         align-self: center;
                         width: 500px;
                         height: 235px;
+                        overflow: hidden;
+                        img{
+                            width: 100%;
+                            min-width: 100%;
+                            min-height: 100%;
+                            object-fit: cover;
+                        }
                     }
                     .ant-card-body {
                         padding: 0 15px 0 15px;
@@ -141,12 +148,12 @@ $fz-text: 16px;
                                     justify-content: space-between;
                                     margin-bottom: -7px;
                                     .progress_detail_text {
-                                        font-size: 14px;
+                                        font-size: $fz-text;
                                         font-weight: 700;
                                         color: #000;
                                     }
                                     .progress_detail_number {
-                                        font-size: 14px;
+                                        font-size:$fz-text;
                                         font-weight: 700;
                                         color: #616161;
                                     }
@@ -156,12 +163,12 @@ $fz-text: 16px;
                                     display: flex;
                                     justify-content: space-between;
                                     .progress_detail_text {
-                                        font-size: 14px;
+                                        font-size: $fz-text;
                                         font-weight: 100;
                                         color: #000;
                                     }
                                     .progress_detail_number {
-                                        font-size: 14px;
+                                        font-size: $fz-text;
                                         font-weight: 100;
                                         color: #616161;
                                     }
@@ -212,12 +219,12 @@ $fz-text: 16px;
                                     display: flex;
                                     justify-content: space-between;
                                     .progress_detail_text {
-                                        font-size: 14px;
+                                        font-size: $fz-text;
                                         font-weight: 700;
                                         color: #000;
                                     }
                                     .progress_detail_number {
-                                        font-size: 14px;
+                                        font-size: $fz-text;
                                         font-weight: 700;
                                         color: #616161;
                                     }
@@ -227,12 +234,12 @@ $fz-text: 16px;
                                     display: flex;
                                     justify-content: space-between;
                                     .progress_detail_text {
-                                        font-size: 14px;
+                                        font-size: $fz-text;
                                         font-weight: 100;
                                         color: #000;
                                     }
                                     .progress_detail_number {
-                                        font-size: 14px;
+                                        font-size: $fz-text;
                                         font-weight: 100;
                                         color: #616161;
                                     }

@@ -1,48 +1,60 @@
-.detail_header{
-    .container{
-        .introduce{
-            .title{
+.detail_header {
+    .container {
+        .introduce {
+            .title {
                 margin-top: 90px;
                 font-size: 35px;
             }
-            p{
-                color: #757575
+            p {
+                color: #757575;
             }
         }
-
-    }
-}
-.detail_body{
-    margin-top: 50px;
-    .container{
-        .row{
-            .col-4{
-                .ant-tabs{
-                        .ant-tabs-content{
-                            .ant-tabs-tabpane{
-                                .ant-steps {
-                                    margin-bottom: 20px;
-                                }
-                                .steps-content {
-                                    .ant-form {
-                                        .ant-radio-group {
-                                            margin-bottom: 10px;
-                                            .ant-radio-button-wrapper {
-                                                margin-left: 20px;
-                                            }
-                                        }
-                                        .ant-form-item {
-                                            margin-bottom: 10px;
-                                        }
-                                    }
-                                }
-                            }
-                        }
+        .slider {
+            .ant-image {
+                    width:400px;
+                    height:215px;
+                    overflow: hidden;
+                .ant-image-img{
+                    width: 100%;
+                    min-width:100%;
+                    min-height:100%;
+                    object-fit:cover;
                 }
             }
         }
     }
 }
-.fb-like{
+.detail_body {
+    margin-top: 50px;
+    .container {
+        .row {
+            .col-4 {
+                .ant-tabs {
+                    .ant-tabs-content {
+                        .ant-tabs-tabpane {
+                            .ant-steps {
+                                margin-bottom: 20px;
+                            }
+                            .steps-content {
+                                .ant-form {
+                                    .ant-radio-group {
+                                        margin-bottom: 10px;
+                                        .ant-radio-button-wrapper {
+                                            margin-left: 20px;
+                                        }
+                                    }
+                                    .ant-form-item {
+                                        margin-bottom: 10px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+.fb-like {
     width: 150px !important;
 }

@@ -24,6 +24,7 @@ const Home = () => {
     const [listDonates, setListdonates] = useState([]);
     const [listDonate, setListdonate] = useState([]);
     const [checked, setChecked] = React.useState(false);
+    const [donator, setDonator] = useState(null)
     useEffect(() => {
         const fetchdonatesData = async () => {
             try {
@@ -170,7 +171,7 @@ const Home = () => {
                                     <Form.Item
                                         name="content"
                                     >
-                                        <TextArea placeholder="Lời nhắc (không bắt buộc)" autoSize={{ minRows: 3}}  />
+                                        <TextArea placeholder="Lời nhắn (không bắt buộc)" autoSize={{ minRows: 3}}  />
                                     </Form.Item>
                                 </>
                             ) : (
@@ -205,7 +206,7 @@ const Home = () => {
             content: () => {
                 return (
                     <>
-                        <p>Số tiền thanh toán 100.000đ</p>
+                        <p>Số tiền ủng hộ 100.000đ</p>
                         <p>Lời nhắn</p>
                         <p>Cùng nhau chung tay đẩy lùi dịch bệnh</p>
                     </>
@@ -245,9 +246,22 @@ const Home = () => {
 
     }
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const showModal = () => {
+    const showModal = (e) => {
         setIsModalVisible(true);
+        console.log('Content: ', e.currentTarget.dataset.id);
+        let id = e.currentTarget.dataset.id
+        let filterProduct = [];
+        
+            filterProduct = listDonates.filter(
+                listDonates => listDonates._id === id
+            )
+            setDonator(filterProduct)
+         
+
+
+        
     };
+    console.log(donator);
     const handleOk = () => {
         setIsModalVisible(false);
         setCurrent(0)
@@ -263,6 +277,9 @@ const Home = () => {
     const prev = () => {
         setCurrent(current - 1);
     };
+    const convertNumber =(x)=>{
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
     return (
         <>
             <div className="homepage container-sm">
@@ -324,6 +341,7 @@ const Home = () => {
                                                     style={{ borderRadius: 10, height: 260, width: "100%" }}
                                                     cover={<img height="100%" alt="example" src={item.hinhanh[0]} />}
                                                 >
+                                                    <p style={{display:"none"}} data-id={item._id}></p>
                                                     <div className="detail">
                                                         <Link to={`thong-tin-chi-tiet/${item._id}`} >
                                                             <Text style={ellipsis ? { width: 200 } : undefined, { fontWeight: "500", fontSize: "18px", color: "#1890ff" }}
@@ -338,7 +356,9 @@ const Home = () => {
                                                         <div className="progress">
                                                             <div className="progress_detail_top">
                                                                 <p className="progress_detail_text">
-                                                                    {item.soTienDonateHieTai} vnđ quyên góp
+                                                                
+                                                                    {convertNumber(item.soTienDonateHieTai)
+                                                                    } VNĐ quyên góp
                                                         </p>
                                                                 <p className="progress_detail_number">{Math.floor((item.soTienDonateHieTai / item.soTienCanDonate) * 100)}%</p>
                                                             </div>
@@ -351,7 +371,7 @@ const Home = () => {
                                                                 <p className="progress_detail_number">ngày còn lại</p>
                                                             </div>
                                                         </div>
-                                                        <p className="ant-btn ant-btn-primary " onClick={showModal}>Ủng hộ ngay</p>
+                                                        <p className="ant-btn ant-btn-primary "data-id={item._id} onClick={showModal}>Ủng hộ ngay</p>
                                                     </div>
 
                                                 </Card>
@@ -425,7 +445,7 @@ const Home = () => {
                                                     <div className="progress">
                                                         <div className="progress_detail_top">
                                                             <p className="progress_detail_text">
-                                                                {item.soTienDonateHieTai} vnđ quyên góp
+                                                                {convertNumber(item.soTienDonateHieTai)} vnđ quyên góp
                                                         </p>
                                                             <p className="progress_detail_number">
                                                             
@@ -623,31 +643,68 @@ const Home = () => {
                     </div>
                 </div>
             </div>
-            <Modal title="Ủng hộ" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-                <Steps current={current}>
-                    {steps.map(item => (
-                        <Step key={item.title} title={item.title} />
-                    ))}
-                </Steps>
-                <div className="steps-content">{steps[current].content()}</div>
-                <div className="steps-action">
-                    {current < steps.length - 1 && (
-                        <Button type="primary" onClick={() => next()}>
-                            Tiếp theo
-                        </Button>
-                    )}
-                    {current === steps.length - 1 && (
-                        <Button type="primary" onClick={handleCancel, () => message.success('Processing complete!')}>
-                            Hoàn thành
-                        </Button>
-                    )}
-                    {current > 0 && (
-                        <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
-                            Trở lại
-                        </Button>
-                    )}
-                </div>
-            </Modal>
+            {donator != null?(
+                    <>
+                   
+                    <Modal title={donator[0].tieude} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+                        <Steps current={current}>
+                            {steps.map(item => (
+                                <Step key={item.title} title={item.title} />
+                            ))}
+                        </Steps>
+                        <div className="steps-content">{steps[current].content()}</div>
+                        <div className="steps-action">
+                            {current < steps.length - 1 && (
+                                <Button type="primary" onClick={() => next()}>
+                                    Tiếp theo
+                                </Button>
+                            )}
+                            {current === steps.length - 1 && (
+                                <Button type="primary" onClick={handleCancel, () => message.success('Processing complete!')}>
+                                    Hoàn thành
+                                </Button>
+                            )}
+                            {current > 0 && (
+                                <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
+                                    Trở lại
+                                </Button>
+                            )}
+                        </div>
+                    </Modal>
+                    
+                    </>
+                
+           
+            ):(
+            <>
+               <Modal title={"ủng hộ"} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+                        <Steps current={current}>
+                            {steps.map(item => (
+                                <Step key={item.title} title={item.title} />
+                            ))}
+                        </Steps>
+                        <div className="steps-content">{steps[current].content()}</div>
+                        <div className="steps-action">
+                            {current < steps.length - 1 && (
+                                <Button type="primary" onClick={() => next()}>
+                                    Tiếp theo
+                                </Button>
+                            )}
+                            {current === steps.length - 1 && (
+                                <Button type="primary" onClick={handleCancel, () => message.success('Processing complete!')}>
+                                    Hoàn thành
+                                </Button>
+                            )}
+                            {current > 0 && (
+                                <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
+                                    Trở lại
+                                </Button>
+                            )}
+                        </div>
+                    </Modal>
+            </>
+            )}
+            
 
         </>
     );

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Progress, Typography, Modal, Form, Input, Radio, Tabs, Steps, message, Checkbox, Select, Result, Badge, Image } from 'antd';
+import { Button, Progress, Table, Modal, Form, Input, Radio, Tabs, Steps, message, Checkbox, Select, Result, Badge, Image } from 'antd';
 import "../style/bootstrap-grid.min.css";
 import "../style/Detail.scss";
 import { useParams } from "react-router-dom";
@@ -12,6 +12,97 @@ const layout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
 };
+const columns = [
+    {
+      title: 'Tên ',
+      dataIndex: 'name',
+      key: 'name',
+      render: text => <a>{text}</a>,
+    },
+    {
+      title: 'Số điện thoại',
+      dataIndex: 'phone',
+      key: 'phone',
+    },
+    {
+      title: 'Số tiền ủng hộ',
+      dataIndex: 'coin',
+      key: 'coin',
+    },
+    {
+      title: 'Trạng thái',
+      key: 'status',
+      dataIndex: 'status',
+      
+    },
+  ];
+  
+  const data = [
+    {
+      key: '1',
+      name: 'Quách Trọng Nhân',
+      phone: '0849119919',
+      coin: '1.000 vnđ',
+      status: "Đã chuyển ",
+    },
+    {
+        key: '2',
+        name: 'Quách Trọng Nhân',
+        phone: '0849119919',
+        coin: '2.000 vnđ',
+        status: "Đã chuyển ",
+    },
+    {
+        key: '3',
+        name: 'Quách Trọng Nhân',
+        phone: '0849119919',
+        coin: '5.000 vnđ',
+        status: "Đã chuyển ",
+    },
+    {
+        key: '4',
+        name: 'Quách Trọng Nhân',
+        phone: '0849119919',
+        coin: '10.000 vnđ',
+        status: "Đã chuyển ",
+    },
+    {
+        key: '5',
+        name: 'Quách Trọng Nhân',
+        phone: '0849119919',
+        coin: '20.000 vnđ',
+        status: "Đã chuyển ",
+    },
+    {
+        key: '6',
+        name: 'Quách Trọng Nhân',
+        phone: '0849119919',
+        coin: '50.000 vnđ',
+        status: "Chưa chuyển ",
+    },
+    {
+        key: '7',
+        name: 'Quách Trọng Nhân',
+        phone: '0849119919',
+        coin: '100.000 vnđ',
+        status: "Đã chuyển ",
+    },
+    {
+        key: '8',
+        name: 'Quách Trọng Nhân',
+        phone: '0849119919',
+        coin: '200.000 vnđ',
+        status: "Chưa chuyển ",
+    },
+    {
+        key: '9',
+        name: 'Quách Trọng Nhân',
+        phone: '0849119919',
+        coin: '500.000 vnđ',
+        status: "Chưa chuyển ",
+    },
+  ];
+
 const Detail = () => {
     let { _id } = useParams();
     const [Donate, setDonate] = useState([]);
@@ -19,7 +110,7 @@ const Detail = () => {
     const [checked, setChecked] = React.useState(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [current, setCurrent] = React.useState(0);
-
+    
     const showModal = () => {
       setIsModalVisible(true);
       setCurrent(0)
@@ -34,6 +125,7 @@ const Detail = () => {
         const fetchData = async () => {
             try {
                 await donateEvensts.get(_id).then((res) => {
+                    res.data.DonateEnvent.soTienCanDonate = res.data.DonateEnvent.soTienCanDonate.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
                     setDonate(res.data.DonateEnvent);
                     setImg(res.data.DonateEnvent.hinhanh)
                 });
@@ -184,8 +276,30 @@ const Detail = () => {
 
             },
         },
+        {
+            title: 'Cám ơn',
+            content: () => {
+                return (
+                    <>
+                        <Result
+                            status="success"
+                            title="Cám ơn bạn đã quyên góp!"
+                            subTitle="Số tiền sẽ được gửI ngay khi hoàn thành mục tiêu !!!"
+
+                        />
+
+                    </>
+                )
+
+            },
+        },
         
     ];
+    const convertNumber = (x)=>{
+        return   x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+    console.log(typeof(Donate.soTienCanDonate));
+    console.log(Donate);
     return (
         <>
             <section className="detail_header">
@@ -193,7 +307,11 @@ const Detail = () => {
                     <div className="">
                         <div className="introduce">
                             <h3 className="title">{Donate.tieude}</h3>
-                            <h3 style={{ fontSize: "25px", fontFamily: "inherit" }}>Số tiền cần quyên góp {Donate.soTienCanDonate}VNĐ</h3>
+                            <h3 style={{ fontSize: "25px", fontFamily: "inherit" }}> 
+                                Số tiền cần quyên góp {Donate.soTienCanDonate}VNĐ </h3>
+                      
+                           
+                          
                             <div class="fb-like" data-href="https://momo.vn/cong-dong/chung-tay-gay-quy-dung-truong-moi-tang-25-em-hoc-sinh-ban-huoi-chua" data-width="" data-layout="standard" data-action="like" data-size="small" data-share="true"></div>
                             <p style={{ fontSize: "20px" }}> {Donate.noidung}</p>
                         </div>
@@ -258,7 +376,7 @@ const Detail = () => {
                                 *Sau khi hoàn thành chiến dịch kêu gọi quyên góp, MoMo sẽ tiến hành gửi toàn bộ số tiền 230 triệu đồng gây quỹ gửi tới Trung tâm Tình nguyện Quốc gia để xây thêm 01 lớp học 01 nhà công vụ cho Điểm trường Sín Chải C. Chúng tôi sẽ cập nhật thêm thông tin về tiến độ dự án đến quý vị trong thời gian sớm nhất.
                             </TabPane>
                                     <TabPane tab="Nhà hảo tâm" key="3">
-                                        Content of Tab Pane 3
+                                    <Table columns={columns} dataSource={data} />
                             </TabPane>
                                     <TabPane tab="Các quyên góp khác" key="4">
                                         Content of Tab Pane 3
