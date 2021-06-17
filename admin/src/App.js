@@ -1,18 +1,38 @@
 import Addpost from "./Pages/Addpost/Addpost.js";
 import Navigation from "./Components/Navigation.js";
-import  "./styles/bootstrap-grid.min.css";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import Dashboard from "./Pages/Dashboard/Dashboard.js"
+import Listpost from "./Pages/ListPost/Listpost.js"
+import "./styles/bootstrap-grid.min.css";
 import 'antd/dist/antd.css';
+import Header from "./Components/Header"
+import Footer from "./Components/Footer"
 
 function App() {
   return (
-    <>
-      <div className="row">
-        <div className="col-2">
-          <Navigation/>        </div>
-        <div className="col-8"> <Addpost /> 
+    <> <Router>
+      <div className="container-fluid">
+        <div className="row">
+          <Header />
+          <div className="col-2">
+            <Navigation />
+          </div>
+          <div className="col-10">
+            <Route exact path="/">
+              <Dashboard />
+            </Route>
+            <Route path="/them-bai-viet">
+              <Addpost />
+            </Route>
+            <Route path="/danh-sach-bai-viet">
+              <Listpost />
+            </Route>
+
+          </div>
+          <Footer />
         </div>
       </div>
-     
+    </Router>
     </>
   );
 }

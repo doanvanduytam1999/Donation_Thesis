@@ -1,0 +1,23 @@
+.logo-item{
+    &:hover{
+        border-bottom: 2px solid transparent !important;
+        color: inherit !important;
+      }
+}
+.right{
+    &:hover{
+        border-bottom: 2px solid transparent !important;
+        color: inherit !important;
+     
+      }
+    position: absolute !important;
+    right: 0 !important;
+}
+.right-lg{
+    &:hover{
+        border-bottom: 2px solid transparent !important;
+        color: inherit !important;
+      }
+    position: absolute !important;
+    right: 90px !important;
+}

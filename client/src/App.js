@@ -21,6 +21,7 @@ function App() {
         <Route exact path="/thong-tin-chi-tiet/:_id">
           <Detail />
         </Route>
+      
         </Switch>
         <Footer />
      
