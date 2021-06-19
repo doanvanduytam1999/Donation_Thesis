@@ -76,3 +76,9 @@ exports.postCategoryDonateEvents = catchAsync(async(req, res, next) => {
     res.send("oke!");
 
 });
+
+exports.postDonate = catchAsync(async(req, res, next) => {
+    const data = req.body;
+    res.send(data);
+
+});
