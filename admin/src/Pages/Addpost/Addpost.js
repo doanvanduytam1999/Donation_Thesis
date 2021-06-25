@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input, DatePicker, InputNumber , Button, message } from 'antd';
+import { Form, Input, DatePicker, InputNumber, Button, Select,message } from 'antd';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import Editor from 'ckeditor5-custom-build/build/ckeditor';
 import Firebase from '../Js/Firebase';
+import donateEvensts from '../../Api/donateEvensts';
+import { useHistory } from "react-router-dom";
+
 import axios from "axios";
 import "../Addpost/Addpost.scss";
+
+const { Option } = Select;
 const layout = {
   labelCol: { span: 6 },
   wrapperCol: { span: 14 },
@@ -25,21 +30,51 @@ const validateMessages = {
 const Addpost = () => {
   const [text, setText] = useState("");
   const [img, setImg] = useState([]);
-
+  const [Category, setCategory] = useState([]);
   const [dateStart, setDateStart] = useState("");
   const [dateEnd, setDateEnd] = useState("");
+  let history = useHistory()
+
   const onFinish = (values) => {
     values['content'] = text;
     values['batdau'] = dateStart;
     values['ketthuc'] = dateEnd;
     values['img'] = img;
-console.log(values);    const url = "///"
-   /*  axios.post(url, {
-      data: values
-    }) */
+
+    console.log(values); const url = "http://localhost:4000/admin/addPost"
+     axios.post(url, {
+       data: values
+     }).then(async (res) => {
+      console.log(res.data.status);
+      if (res.data.status === "susscess") {
+        message.success(`Thêm bài viết thành công !`)
+    
+        setTimeout(() => {
+          history.push("/them-bai-viet")
+         window.location.reload()
+      }, 2000)
+      }
+    })
+    .catch((err) => {
+      message.error(`Sai tài khoản hoặc mật khẩu !!!`)
+    })
     //console.log(todo);
   };
+  useEffect(() => {
+    window.scrollTo(0,0)
+    const CategoryData = async () => {
+      try {
+        await donateEvensts.getCategory().then((res) => {
+          setCategory(res.data.CategoryDonateEvents);
 
+        });
+      } catch (error) {
+        console.log("Failed to fetch brand data at: ", error);
+      }
+    };
+    CategoryData();
+  }, []);
+  console.log(Category);
   const handleChange = (event, editor) => {
     const data = editor.getData();
     console.log(data);
@@ -143,12 +178,13 @@ console.log(values);    const url = "///"
         <Form.Item name='tomtat' label="Tóm tắt" rules={[{ required: true }]}>
           <Input.TextArea />
         </Form.Item>
-        <Form.Item name='sotiencandonate' label="Số tiền cần ủng hộ" rules={[{ required: true }]}>
+        <Form.Item name='sotiencandonate' label="Số tiền cần ủng hộ (VNĐ)" rules={[{ required: true }]}>
           <InputNumber
+          style={{width:"200px"}}
             defaultValue={10000}
             formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
             parser={value => value.replace(/\$\s?|(,*)/g, '')}
-           
+
           />
         </Form.Item>
         <Form.Item label="Ngày bắt đầu" {...config}>
@@ -156,6 +192,24 @@ console.log(values);    const url = "///"
         </Form.Item>
         <Form.Item label="Ngày kết thúc" {...config}>
           <DatePicker onChange={onChangeEnd} />
+        </Form.Item>
+        <Form.Item name='loaibaidang' label="Loại bài đăng" >
+          <Select placeholder="Chọn loại bài đăng" >
+            {Category.map((i)=>{
+              return(
+                <Option value={i._id}>{i.tenloai}</Option>
+              )
+            })}
+           
+           
+          </Select>
+        </Form.Item>
+        <Form.Item name='tinnoibat' label="Tin nổi bật" >
+          <Select defaultValue={0}>
+                <Option value='false'>Không</Option>
+                <Option value='true'>Có</Option>
+           
+          </Select>
         </Form.Item>
         <Form.Item label="Nội dung bài viết">
           <CKEditor

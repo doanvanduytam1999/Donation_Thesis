@@ -30,18 +30,18 @@ const Listpost = () => {
     const columns = [
         {
           title: 'Tiêu đề bài viết',
-          dataIndex: 'tieude',
+          dataIndex: 'tieuDe',
           key: 'tieude',
         },
         {
           title: 'Ngày bắt đầu',
-          dataIndex: 'ngaybatdau',
-          key: 'ngaybatdau',
+          dataIndex: 'ngayBatSau',
+          key: 'ngayBatSau',
         },
         {
           title: 'Ngày kết thúc',
-          dataIndex: 'ngayketthuc',
-          key: 'ngayketthuc',
+          dataIndex: 'ngayKetThuc',
+          key: 'ngayKetThuc',
         },
         {
             title: 'Số tiền cần ủng hộ(VNĐ)',
@@ -55,8 +55,8 @@ const Listpost = () => {
           },
           {
             title: 'Trạng thai',
-            dataIndex: 'trangthai',
-            key: 'trangthai',
+            dataIndex: 'trangThai',
+            key: 'trangThai',
           },
       ];
     return (

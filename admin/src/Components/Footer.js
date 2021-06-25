@@ -1,5 +1,5 @@
 import React from 'react';
-import {FacebookOutlined,TwitterOutlined,InstagramOutlined,YoutubeOutlined} from '@ant-design/icons';
+
 import "../styles/bootstrap-grid.min.css";
 import "./Footer.scss";
 import { Divider } from 'antd';

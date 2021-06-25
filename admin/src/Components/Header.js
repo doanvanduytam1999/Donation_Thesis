@@ -1,6 +1,6 @@
 import React from 'react';
 import { Menu, Row, Col,Button } from 'antd';
-//import { AppstoreOutlined, SettingOutlined } from '@ant-design/icons';
+
 import "./Header.scss";
 import { Link } from 'react-router-dom';
 const handleClick = (e) => {
