@@ -46,6 +46,7 @@ const DonateEnventSchemea = new mongoose.Schema(
         },
         nguoiDang:{
             type: mongoose.Schema.Types.ObjectId,
+            ref: "UserAdmin"
         },
         loaiBaiDang:{
             type: mongoose.Schema.Types.ObjectId,

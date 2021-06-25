@@ -1,6 +1,7 @@
 const catchAsync = require('../utils/catchAsync');
 const DonateEvent = require('../models/donateEvent');
 const CategoryDonateEvent = require('../models/categoryDonateEvent');
+const AuthController = require('../controllers/authController');
 
 exports.postAddpost = catchAsync(async(req, res, next)=> {
     const dataPost = req.body.data;
@@ -20,4 +21,7 @@ exports.postAddpost = catchAsync(async(req, res, next)=> {
     res.status(200).json({
         status: 'susscess'
     })
-})
+});
+
+
+

@@ -24,6 +24,10 @@ const DonateActionSchemea = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: "DonateEnvent"
         },
+        userDonate :{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User"
+        }
         
     }
     
@@ -33,6 +37,3 @@ const DonateActionSchemea = new mongoose.Schema(
 const DonateAction = mongoose.model('DonateAction', DonateActionSchemea);
 
 module.exports = DonateAction;
-// 1 truong hop donate (bai post): 1 truong trinh quyen gop
-// 1 loại truong trinh quyen gop
-// bai dang cua 1 truong trinh quyen gop
