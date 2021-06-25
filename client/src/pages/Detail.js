@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Progress, Table, Modal, Form, Input, Radio, Tabs, Steps, message, Checkbox, Select, Result, Badge, Image } from 'antd';
+import { Button,  Table, Modal, Form, Input, Tabs, Steps, Checkbox, Select, Result, InputNumber, Image } from 'antd';
+import parse from 'react-html-parser';
 import "../style/bootstrap-grid.min.css";
 import "../style/Detail.scss";
 import { useParams } from "react-router-dom";
 import donateEvensts from '../Api/donateEvensts';
+import PayPal from "../components/Paypal";
 const { TabPane } = Tabs;
 const { Option } = Select;
 const { Step } = Steps;
@@ -110,7 +112,6 @@ const Detail = () => {
     const [checked, setChecked] = React.useState(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [current, setCurrent] = React.useState(0);
-    
     const showModal = () => {
       setIsModalVisible(true);
       setCurrent(0)
@@ -122,12 +123,15 @@ const Detail = () => {
       setIsModalVisible(false);
     };
     useEffect(() => {
+        window.scrollTo(0,0)
         const fetchData = async () => {
             try {
                 await donateEvensts.get(_id).then((res) => {
                     res.data.DonateEnvent.soTienCanDonate = res.data.DonateEnvent.soTienCanDonate.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
                     setDonate(res.data.DonateEnvent);
-                    setImg(res.data.DonateEnvent.hinhanh)
+                    console.log('ádas',res.data.DonateEnvent);
+                    setImg(res.data.DonateEnvent.hinhAnh)
+                    
                 });
             } catch (error) {
                 console.log("Failed to fetch Donate data at: ", error);
@@ -135,7 +139,8 @@ const Detail = () => {
         };
         fetchData();
     }, []);
-
+    console.log(Donate.noiDung);
+    
     const phoneSelector = (
         <Form.Item name="prefix" noStyle>
             <Select style={{ width: 70 }}>
@@ -145,13 +150,7 @@ const Detail = () => {
         </Form.Item>
     );
     const [value, setValue] = useState(1);
-    const onChange = e => {
-        console.log('radio checked', e.target.value);
-        let a = e.target.value;
-        setValue(a)
-        console.log("dfd");
-
-    };
+ 
     const handlechecked = (e) => {
         console.log(`checked = ${e.target.checked}`);
         setChecked(e.target.checked);
@@ -169,95 +168,137 @@ const Detail = () => {
         {
             title: 'Nhập thông tin',
             content: () => {
+                const onFinish = (values) => {
+                    console.log('Success:', values);
+                    values['checked'] = checked;
+                    const data = JSON.stringify(values)
+                    localStorage.setItem("data", data);
+                };
+                const onFinishFailed = (errorInfo) => {
+                    console.log('Failed:', errorInfo.values.name);
+                  
+
+                };
                 return (
                     <>
                         <Form
-                            
+
                             {...layout}
                             name="basic"
-                            initialValues={{ prefix: "84" }}
-                        /*  onFinish={onFinish}
-                         onFinishFailed={onFinishFailed} */
+                            initialValues={{ prefix: "84", coin: "10000", id: `${_id}` }}
+                            onFinish={onFinish}
+                            onFinishFailed={onFinishFailed}
                         >
-                            <Radio.Group onChange={onChange} buttonStyle="solid" defaultValue="a">
+                            {/*  <Radio.Group onChange={onChange} buttonStyle="solid" defaultValue="a">
                                 <Radio.Button value="a">Cá nhân</Radio.Button>
                                 <Radio.Button value="b">Tổ chức</Radio.Button>
 
-                            </Radio.Group>
-                            <Form.Item
+                            </Radio.Group> */}
+                            <Form.Item label='Ủng hộ ẩn danh' onChange={handlechecked}>
+                                <Checkbox />
 
-                                name="name"
-                                rules={[{ required: true, message: 'Hãy nhập tên của bạn !' }]}
-                            >
-                                <Input placeholder="Họ và tên của bạn" />
                             </Form.Item>
-                            <Form.Item onChange={handlechecked}>
-                                <Checkbox onClick={handlechecked}>
-                                    Ủng hộ ẩn danh
-                                </Checkbox>
-                            </Form.Item>
+
+
                             {checked === false ? (
                                 <>
                                     <Form.Item
+                                        label="Họ và tên"
+                                        name="name"
+                                        rules={[{ required: true, message: 'Hãy nhập họ tên của bạn !' }]}
+                                    >
+                                        <Input placeholder="Họ và tên của bạn" />
+                                    </Form.Item>
+                                    <Form.Item
+                                        label="Số điện thoại"
                                         name="phone"
-                                        rules={[{ required: true, message: 'Hãy nhập số điện thoại !' }]}
+
                                     >
                                         <Input placeholder="Nhập số điện thoại của bạn " addonBefore={phoneSelector} style={{ width: '100%' }} />
                                     </Form.Item>
-                                    <Form.Item
-                                        name="email"
 
+                                    <Form.Item
+                                        label="Số tiền ủng hộ"
                                         rules={[
-                                            {
-                                                type: 'email',
-                                                message: 'The input is not valid E-mail!',
-                                            },
+
                                             {
                                                 required: true,
-                                                message: 'Hãy nhập E-gmail!',
+                                                message: 'Hãy nhập số tiền ủng hộ',
                                             },
                                         ]}
-                                    >
-                                        <Input placeholder="Nhập e-mail của bạn" />
-                                    </Form.Item>
-                                    <Radio.Group onChange={onChange} defaultValue="a" style={{ marginTop: 16 }}>
-                                        <Radio.Button style={{ marginRight: "20px" }} value="100000">100.000 VNĐ</Radio.Button>
-                                        <Radio.Button style={{ marginRight: "20px" }} value="200000">200.000 VNĐ</Radio.Button>
-                                        <Radio.Button style={{ marginRight: "20px" }} value="500000">500.000 VNĐ</Radio.Button>
-
-                                    </Radio.Group>
-                                    <Form.Item
                                         name="coin">
-                                        <Input placeholder="Số khác" />
+                                        <InputNumber
+                                            
+                                            style={{ width: "200px" }}
+                                            defaultValue={10000}
+                                            formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                            parser={value => value.replace(/\$\s?|(,*)/g, '')}
+
+                                        />
                                     </Form.Item>
                                     <Form.Item
                                         name="content"
+                                        label="Lời nhắn"
                                     >
-                                        <TextArea placeholder="Lời nhắc (không bắt buộc)" autoSize={{ minRows: 3}}  />
+                                        <TextArea placeholder="Lời nhắn (không bắt buộc)" autoSize={{ minRows: 3 }} />
+                                    </Form.Item>
+                                    <Form.Item hidden name="id">
+                                        <Input />
+                                    </Form.Item>
+                                    <Form.Item wrapperCol={{
+                                        xs: { span: 24, offset: 0 },
+                                        sm: { span: 16, offset: 8 },
+                                    }} >
+                                        <Button type="primary"  htmlType="submit">
+                                            Xác nhận
+                                        </Button>
                                     </Form.Item>
                                 </>
                             ) : (
                                 <>
-
-                                    <Radio.Group onChange={onChange} defaultValue="a" style={{ marginTop: 16 }}>
-                                        <Radio.Button style={{ marginRight: "20px" }} value="100000">100.000 VNĐ</Radio.Button>
-                                        <Radio.Button style={{ marginRight: "20px" }} value="200000">200.000 VNĐ</Radio.Button>
-                                        <Radio.Button style={{ marginRight: "20px" }} value="500000">500.000 VNĐ</Radio.Button>
-
-                                    </Radio.Group>
-                                    <Form.Item
-                                        name="coin">
-                                        <Input placeholder="Số khác" />
+                                    <Form.Item hidden name="andanh">
+                                        <Input />
                                     </Form.Item>
                                     <Form.Item
+
+                                        label="Số tiền ủng hộ"
+                                        rules={[
+
+                                            {
+                                                required: true,
+                                                message: 'Hãy nhập số tiền ủng hộ',
+                                            },
+                                        ]}
+                                        name="coin">
+                                        <InputNumber
+                                           
+                                            style={{ width: "200px" }}
+                                            defaultValue={10000}
+                                            formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                            parser={value => value.replace(/\$\s?|(,*)/g, '')}
+
+                                        />
+                                    </Form.Item>
+                                    <Form.Item
+                                        label='Lời nhắn'
                                         name="content"
                                     >
-                                        <TextArea placeholder="Lời nhắc (không bắt buộc)" autoSize={{ minRows: 3}}  />
+                                        <TextArea placeholder="Lời nhắc (không bắt buộc)" autoSize={{ minRows: 3 }} />
                                     </Form.Item>
+                                    <Form.Item hidden name="id">
+                                        <Input />
+                                    </Form.Item>
+                                    <Form.Item >
+                                        <Button type="primary" htmlType="submit">
+                                            Xác nhận
+                                        </Button>
+                                    </Form.Item>
+
                                 </>
                             )}
 
                         </Form>
+
                     </>
                 )
 
@@ -268,9 +309,10 @@ const Detail = () => {
             content: () => {
                 return (
                     <>
-                        <p>Số tiền thanh toán 100.000đ</p>
-                        <p>Lời nhắn</p>
+                        <p>Số tiền ủng hộ: 100.000đ</p>
+                        <p>Lời nhắn:</p>
                         <p>Cùng nhau chung tay đẩy lùi dịch bệnh</p>
+                        <PayPal />
                     </>
                 )
 
@@ -293,27 +335,34 @@ const Detail = () => {
 
             },
         },
-        
     ];
     const convertNumber = (x)=>{
         return   x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     }
-    console.log(typeof(Donate.soTienCanDonate));
-    console.log(Donate);
+    const options = {
+        replace: (domNode) => {
+          if (domNode.attribs && domNode.attribs.class === "remove") {
+            return <></>;
+          }
+        }
+      };
+     let html= Donate.noiDung;
+      
+    console.log(html);
     return (
         <>
             <section className="detail_header">
                 <div className="container">
                     <div className="">
                         <div className="introduce">
-                            <h3 className="title">{Donate.tieude}</h3>
+                            <h3 className="title">{Donate.tieuDe}</h3>
                             <h3 style={{ fontSize: "25px", fontFamily: "inherit" }}> 
                                 Số tiền cần quyên góp {Donate.soTienCanDonate}VNĐ </h3>
                       
                            
                           
                             <div class="fb-like" data-href="https://momo.vn/cong-dong/chung-tay-gay-quy-dung-truong-moi-tang-25-em-hoc-sinh-ban-huoi-chua" data-width="" data-layout="standard" data-action="like" data-size="small" data-share="true"></div>
-                            <p style={{ fontSize: "20px" }}> {Donate.noidung}</p>
+                            <p style={{ fontSize: "20px" }}> {Donate.tomTat}</p>
                         </div>
                         <div className="slider">
                             <div style={{ justifyContent: "space-between", display: "flex" }}>
@@ -339,41 +388,7 @@ const Detail = () => {
                             <div className="col-8">
                                 <Tabs defaultActiveKey="1"/*  onChange={callback} */>
                                     <TabPane tab="Câu chuyện" key="2">
-                                        <p style={{ fontSize: "26px", fontWeight: "bold" }}>Câu chuyện</p>
-                                        <p style={{ fontWeight: "bold" }}>Gian nan “gieo chữ” trên non</p>
-
-                                        <p>Bản Sín Chải C là bản vùng cao khó khăn của xã Pa Vệ Sử, huyện Mường Tè, tỉnh Lai Châu. Đường lên đến bản khó đi, đường gồ ghề, dốc cao, sạt lở nhiều và nhiều đá tảng. Thế nên bà con Dân tộc La Hủ nơi đây sống cuộc sống khép kín, họ dè dặt với người lạ.</p>
-                                        <p>
-                                            Giữa miên man miền đá của con đường độc đạo cách từ trung tâm xã Pa Vệ Sử hơn 30km đến với điểm trường Sín Chải C, tiếng đọc chữ cất lên trong điểm trường tiểu học của 7 đứa trẻ người La Hủ, dù chưa tròn vành tiếng phổ thông nhưng đủ phá vỡ sự im lặng của miền cao nguyên lạnh ngắt xám màu đá.</p>
-                                        <img width="100%" height="400px" src="../images/donate/detail/3.jpg" alt="3"></img>
-                                        <p style={{ textAlign: "center" }}>
-                                            <em>
-                                                Điểm trường Sín Chải C (xã Pa Vệ Sử, huyện Mường Tè, tỉnh Lai Châu) nằm trên một mỏm đồi dưới chân đỉnh núi Pu Si Lung.
-                                </em>
-                                        </p>
-                                        <p>Điểm trường Sín Chải C nằm cheo leo trên triền đồi núi Pu Si Lung. Cơ sở vật chất tại điểm trường đơn sơ và đã xuống cấp nghiêm trọng, lớp học được các thầy chắp vá và gia cố bằng bạt quây xung quanh lớp cho khỏi mưa khỏi rét. Vách tường ván gỗ cong vênh, tấm mối mọt, tấm hỏng, không tấm nào lành lặn. Mùa mưa lầy lội, lớp học cũng thiếu vững chãi hơn với từng đợt gió thổi mạnh, sàn lớp học bằng đất cũng vì thế mà ướt bùn dưới chân. Mùa Đông gió lạnh rít từng cơn qua khe hở, dù có bạt che chắn bên nhưng trong lớp học vẫn rét buốt.
-                                </p>
-                                        <p>
-                                            <img width="100%" height="400px" src="../images/donate/detail/2.jpg" alt="2"></img></p>
-                                        <p style={{ textAlign: "center" }}>
-                                            <em>
-                                                Cơ sở vật chất tuềnh toàng của điểm trường Sín Chải C, lớp học thưng gỗ, mái tôn hưng hỏng, nền đất lầy lội mỗi mùa mưa...
-                                </em>
-                                        </p>
-                                        <p>
-                                            <img width="100%" height="400px" src="../images/donate/detail/1.jpg" alt="1"></img></p>
-                                        <p style={{ textAlign: "center" }}>
-                                            <em>
-                                                Điểm trường chỉ có vỏn vẹn 7 học sinh, vật chất nghèo nàn, nhưng thầy trò Sín Chải C vẫn kiên cường bám trường, bám lớp “gieo chữ, gặt tri thức”
-                                </em>
-                                        </p>
-                                Chung tay gây quỹ để con chữ “nảy mầm”
-
-                                Điều kiện kinh tế của người dân bản Sín Chải C vô cùng khó khăn, hoàn toàn dựa vào việc làm nương rẫy kiếm sống, thì không biết đến bao giờ ước mơ trường mới của thầy trò nơi đây mới trở thành hiện thực được. Vì vậy, hành trình tìm kiếm con chữ của 7 học sinh điểm trường Sín Chải C cần nhiều hơn sự hỗ trợ từ cộng đồng.
-
-                                Với mong muốn xây mới cho các em nhỏ nơi đây một môi trường học tập khang trang, giúp các em được vui tươi cắp sách đi học, tiếp tục dựng xây tương lai của mình, Ví MoMo phối hợp cùng dự án Sức Mạnh 2000 và Trung tâm tình nguyện Quốc Gia đã lên kế hoạch xây dựng 01 lớp học và 01 nhà công vụ chắc chắn cho điểm trường. Món quà này sẽ giúp thầy trò Sín Chải C có thêm niềm tin, nghị lực vượt qua những khó khăn trong, kiên cường bám trường theo đuổi tri thức. Hãy chung tay cùng MoMo quyên góp đủ giúp các em học sinh yên tâm học hành trong một ngôi trường kiên cố!
-
-                                *Sau khi hoàn thành chiến dịch kêu gọi quyên góp, MoMo sẽ tiến hành gửi toàn bộ số tiền 230 triệu đồng gây quỹ gửi tới Trung tâm Tình nguyện Quốc gia để xây thêm 01 lớp học 01 nhà công vụ cho Điểm trường Sín Chải C. Chúng tôi sẽ cập nhật thêm thông tin về tiến độ dự án đến quý vị trong thời gian sớm nhất.
+                                        {parse(parse(html))}
                             </TabPane>
                                     <TabPane tab="Nhà hảo tâm" key="3">
                                     <Table columns={columns} dataSource={data} />
