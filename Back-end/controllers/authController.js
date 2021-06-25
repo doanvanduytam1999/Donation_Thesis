@@ -79,7 +79,7 @@ exports.checkAdminLogin = catchAsync(async (req, res, next) => {
     try {
       // 1) verify token
       const decoded = await promisify(jwt.verify)(
-        cookie,
+        req.cookies.jwtAdmin,
         process.env.JWT_SECRET
       );
 
@@ -112,7 +112,7 @@ exports.checkUserLogin = catchAsync(async (req, res, next) => {
     try {
       // 1) verify token
       const decoded = await promisify(jwt.verify)(
-        cookie,
+        req.cookies.jwt,
         process.env.JWT_SECRET
       );
 
@@ -154,7 +154,6 @@ const createSendToken = (user, statusCode, res) => {
   //if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
 
   res.cookie('jwt', token, cookieOptions);
-
   // Remove password from output
   user.password = undefined;
 
@@ -178,9 +177,8 @@ const createSendTokenAdmin = (userAdmin, statusCode, res) => {
   };
 
   //if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
-
   res.cookie('jwtAdmin', token, cookieOptions);
-
+ 
   // Remove password from output
   userAdmin.password = undefined;
 
