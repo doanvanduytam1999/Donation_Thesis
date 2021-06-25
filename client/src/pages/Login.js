@@ -1,15 +1,40 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { Form, Input, Button, Row, Col } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { useDispatch, useSelector } from "react-redux";
+import { Redirect,useHistory } from 'react-router-dom';
 import "../style/bootstrap-grid.min.css";
-
+import  {login} from "../redux/actions/auth.js";
 
 
 
 const Login = () => {
+
+    const [loading, setLoading] = useState(false);
+    const dispatch = useDispatch();
+    const { isLoggedIn } = useSelector(state => state.auth);
+    const  message  = useSelector(state => state.auth.user);
+    const history = useHistory();
+
     const onFinish = (values) => {
-        console.log('Received values of form: ', values);
+       
+        setLoading(true);
+        dispatch(login(values))
+        .then(() => {
+          history.push("/");
+          //window.location.reload();
+        })
+        .catch(() => {
+          setLoading(false);
+          console.log("Loi đăng nhập");
+        });
+        
+
+        console.log('Received values of form: ', values.username);
     };
+    if (isLoggedIn) {
+        return <Redirect to="/dang-ki" />;
+      }
     return (
         <>
             <Row className='login-container'>

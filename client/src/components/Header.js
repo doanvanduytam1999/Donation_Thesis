@@ -37,11 +37,14 @@ const Header = () => {
                             Liên hệ
                         </Menu.Item>
                         <Menu.Item className="right-lg" key="login"  >
-                            <Button type="primary">Đăng nhập</Button>
+                            <Button type="primary"><Link to="/dang-nhap">Đăng nhập</Link></Button>
                         </Menu.Item>
                         <Menu.Item className="right" key="sign-up" >
-                        <Button type="primary">Đăng kí</Button>
+                        <Button type="primary"><Link to="/dang-ki">Đăng kí</Link></Button>
                         </Menu.Item>
+                       {/*  <Menu.Item className="right" key="logut" >
+                        <Button onClick={} type="primary">Đăng xuất</Button>
+                        </Menu.Item> */}
                     </Menu>
                 </Col>
             </Row>

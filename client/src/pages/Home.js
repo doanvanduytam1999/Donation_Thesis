@@ -9,12 +9,20 @@ import PayPal from "../components/Paypal"
 import HotListDonate from "../components/HotListDonate"
 import ListDonate from '../components/ListDonate';
 import ScrollToTop from "react-scroll-to-top";
+import { useSelector } from 'react-redux';
+import { useCookies } from 'react-cookie';
 
 const { TabPane } = Tabs;
 const Home = () => {
     const [listDonates, setListdonates] = useState([]);
     const [listDonate, setListdonate] = useState([]);
     const [listCategory, setListCategory] = useState([]);
+    const  data  = useSelector(state => state.auth.user);
+    //const [cookies, setCookie] = useCookies(['kk']);
+        console.log(data);
+        //setCookie('kk3', "shshsdchsdcjh", {path: '/', maxAge: 3000})
+
+    //console.log(cookies);
     useEffect(() => {
 
         const fetchdonatesData = async () => {

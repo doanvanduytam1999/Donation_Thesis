@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8080/api/auth/";
+
+const API_URL = "http://localhost:4000/admin/";
 
 const register = (username, email, password) => {
   return axios.post(API_URL + "signup", {
@@ -10,15 +11,22 @@ const register = (username, email, password) => {
   });
 };
 
-const login = (username, password) => {
+const login = (values) => {
+  
   return axios
-    .post(API_URL + "signin", {
-      username,
-      password,
+    .post(API_URL + "login", values, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      withCredentials: true
+     
     })
     .then((response) => {
-      if (response.data.accessToken) {
-        localStorage.setItem("user", JSON.stringify(response.data));
+      if (response.data.status) {
+        
+        localStorage.setItem("user", JSON.stringify(response.data.token));
+        //Cookies.set('userKaca', response.data.data, {path: '/', maxAge: 30000, httpOnly: true });
+
       }
 
       return response.data;
