@@ -10,7 +10,7 @@ var session = require('express-session');
 const xss = require('xss-clean');
 
 const HomeRouter = require('./routes/homeRouter');
-
+const AdminRouter = require('./routes/adminRouter');
 const AppError = require('././utils/appError');
 
 const cookieParser = require('cookie-parser');
@@ -54,6 +54,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', HomeRouter);
 
+app.use('/admin',AdminRouter)
 
 //Catch 404 Erros and forward them to error handler
 app.use((req, res, next) => {

@@ -4,22 +4,27 @@ const mongoose = require('mongoose');
 
 const DonateEnventSchemea = new mongoose.Schema(
     {
-        tieude: {
+        tieuDe: {
             type: String,
             required: [true, 'Vui lòng cung cấp tiêu đề bài đăng']
         },
-        hinhanh: [{
+        hinhAnh: [{
+            default: "",
             type: String,
         }],
-        noidung: {
+        tomTat: {
+            type: String,
+            required: [true, 'Vui lòng cung cấp tóm tắt bài đăng']
+        },
+        noiDung: {
             type: String,
             required: [true, 'Vui lòng cung cấp nội dung bài đăng']
         },
-        ngaybatdau: {
+        ngayBatDau: {
             type: String,
             required: [true, 'Vui lòng cung cấp ngày bắt đầu nhận donate']
         },
-        ngayketthuc: {
+        ngayKetThuc: {
             type: String,
             required: [true, 'Vui lòng cung cấp ngày kết thúc doante']
         },
@@ -28,30 +33,33 @@ const DonateEnventSchemea = new mongoose.Schema(
             required: [true, 'Vui lòng cung cấp số tiền cần donate']
         },
         soTienDonateHieTai: {
-            default: '0',
+            default: "0",
             type: String,
         },
-        trangthai: {
+        trangThai: {
             default: 'Chưa đủ',
             type: String,
         },
-        tinnoibat:{
+        tinNoiBat:{
             type: Boolean,
             default: false
         },
-        nguoidang:{
+        nguoiDang:{
             type: mongoose.Schema.Types.ObjectId,
         },
-        nguoiDaDonate:[{
-            type: mongoose.Schema.Types.ObjectId,
-        }],
-        loaibaidang:{
+        loaiBaiDang:{
             type: mongoose.Schema.Types.ObjectId,
             ref: "CategoryDonateEvent"
         }
-    }, 
+    }
     
 );
+
+DonateEnventSchemea.virtual('donateActions', {
+    ref: 'DonateAction',
+    localField: '_id',
+    foreignField: 'chuongTringQuyenGop',
+})
 
 
 const DonateEnvent = mongoose.model('DonateEnvent', DonateEnventSchemea);

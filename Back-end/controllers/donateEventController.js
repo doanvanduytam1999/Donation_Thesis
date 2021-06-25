@@ -1,10 +1,11 @@
 const catchAsync = require('../utils/catchAsync');
 const DonateEvent = require('../models/donateEvent');
 const CategoryDonateEvent = require('../models/categoryDonateEvent');
+const DonateAction = require('../models/donateAction');
 
 
 
-exports.postDonateEvents = catchAsync(async(req, res, next) => {
+exports.postDonateEvents = catchAsync(async (req, res, next) => {
     const a = await DonateEvent.create({
         tieude: "Đại sứ nước – Chung tay đưa nước về ấp Thanh Trì B",
         hinhanh: [],
@@ -13,8 +14,8 @@ exports.postDonateEvents = catchAsync(async(req, res, next) => {
         ngayketthuc: "15/07/2021",
         soTienCanDonate: "150.000.000 VNĐ",
         soTienDonateHieTai: "50.000.000 VNĐ",
-        nguoiDaDonate:[],
-        loaibaidang:"60b7a9ff9a127331a8e5b087"
+        nguoiDaDonate: [],
+        loaibaidang: "60b7a9ff9a127331a8e5b087"
     });
     const b = await DonateEvent.create({
         tieude: "Cùng gây quỹ tặng đồ bảo hộ chống dịch Covid-19 cho người dân và cán bộ y tế huyện Nậm Pồ",
@@ -24,14 +25,14 @@ exports.postDonateEvents = catchAsync(async(req, res, next) => {
         ngayketthuc: "15/06/2021",
         soTienCanDonate: "50.000.000 VNĐ",
         soTienDonateHieTai: "10.000.000 VNĐ",
-        nguoiDaDonate:[],
-        loaibaidang:"60b7a9ff9a127331a8e5b087"
+        nguoiDaDonate: [],
+        loaibaidang: "60b7a9ff9a127331a8e5b087"
     });
     res.send("ok!");
 });
 
 //lấy tất cả bài đăng
-exports.getDonateEvents = catchAsync(async(req, res, next) => {
+exports.getDonateEvents = catchAsync(async (req, res, next) => {
     const donateEnvents = await DonateEvent.find();
     res.status(200).json({
         DonateEnvents: donateEnvents
@@ -39,7 +40,7 @@ exports.getDonateEvents = catchAsync(async(req, res, next) => {
 });
 
 //lấy bài đăng theo id
-exports.getDonateEvent = catchAsync(async(req, res, next) => {
+exports.getDonateEvent = catchAsync(async (req, res, next) => {
     const id = req.params.id;
     const donateEnvent = await DonateEvent.findById(id);
     res.status(200).json({
@@ -47,7 +48,7 @@ exports.getDonateEvent = catchAsync(async(req, res, next) => {
     })
 });
 
-exports.getCategoryDonateEvents = catchAsync(async(req, res, next) => {
+exports.getCategoryDonateEvents = catchAsync(async (req, res, next) => {
     const categoryDonateEvents = await CategoryDonateEvent.find().populate('donateEnvents');
     res.status(200).json({
         CategoryDonateEvents: categoryDonateEvents
@@ -62,7 +63,7 @@ foreach(CategoryDonateEvents as a){
 }
 
 */
-exports.postCategoryDonateEvents = catchAsync(async(req, res, next) => {
+exports.postCategoryDonateEvents = catchAsync(async (req, res, next) => {
     const a = await CategoryDonateEvent.create({
         tenloai: "Ủng hộ cho hoàn cảnh khó khăn"
     });
@@ -77,8 +78,46 @@ exports.postCategoryDonateEvents = catchAsync(async(req, res, next) => {
 
 });
 
-exports.postDonate = catchAsync(async(req, res, next) => {
-    const data = req.body;
-    res.send(data);
+exports.postDonate = catchAsync(async (req, res, next) => {
+    const data = req.body.data;
+    console.log(data);
+    let donateEvent = await DonateEvent.findById(data.id);
+    let soTienHienCo = donateEvent.soTienDonateHieTai;
+    let soTienDonate = data.coin.toString();
+    let content = "";
+    if (typeof data.content !== 'undefined') {
+        content = data.content;
+    }
+
+    console.log();
+    soTienHienCo = (Number(soTienHienCo) + Number(soTienDonate)).toString();
+    console.log(Number(soTienHienCo));
+    console.log(Number(soTienDonate));
+    console.log(soTienHienCo);
+    const updateTienDaDonate = await DonateEvent.findByIdAndUpdate(data.id, {
+        soTienDonateHieTai: soTienHienCo
+    }, {
+        new: true,
+        runValidators: true
+    });
+
+    if (data.checked) {
+        const donateAnDanh = await DonateAction.create({
+            soTienDonate: soTienDonate,
+            loiNhan: content,
+            chuongTringQuyenGop: data.id
+        })
+    } else {
+        const donateAction = await DonateAction.create({
+            tenNguoiDonate: data.name,
+            soDienThoai: data.phone,
+            loiNhan: content,
+            soTienDonate: soTienDonate,
+            chuongTringQuyenGop: data.id
+        })
+    }
+    res.status(200).json({
+        status: "Success"
+    });
 
 });
