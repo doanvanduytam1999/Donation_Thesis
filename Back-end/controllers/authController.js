@@ -37,10 +37,10 @@ exports.adminIsLoggedIn = async (cookie) => {
 
     } catch (err) {
       //return next();
-      return "No";
+      return "No Login";
     }
   }
-  return "No";
+  return "No Login";
 }
 
 exports.userIsLoggedIn = async (cookie) => {
@@ -68,10 +68,10 @@ exports.userIsLoggedIn = async (cookie) => {
 
     } catch (err) {
       //return next();
-      return "No";
+      return "No Login";
     }
   }
-  return "No";
+  return "No Login";
 }
 
 exports.checkAdminLogin = catchAsync(async (req, res, next) => {
@@ -99,12 +99,14 @@ exports.checkAdminLogin = catchAsync(async (req, res, next) => {
 
     } catch (err) {
       //return next();
-      res.status(200).json({
+      return res.status(401).json({
         status: "No Login"
-      })
+      });
     }
   }
-  next();
+  return res.status(401).json({
+    status: "No Login"
+  });
 });
 
 exports.checkUserLogin = catchAsync(async (req, res, next) => {
@@ -132,12 +134,14 @@ exports.checkUserLogin = catchAsync(async (req, res, next) => {
 
     } catch (err) {
       //return next();
-      res.status(200).json({
+      return res.status(401).json({
         status: "No Login"
       });
     }
   }
-  next();
+  return res.status(401).json({
+    status: "No Login"
+  });
 });
 
 //Create and send token customer
@@ -178,11 +182,11 @@ const createSendTokenAdmin = (userAdmin, statusCode, res) => {
 
   //if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
   res.cookie('jwtAdmin', token, cookieOptions);
- 
+
   // Remove password from output
   userAdmin.password = undefined;
 
-  res.status(statusCode).json({
+  return res.status(statusCode).json({
     status: 'success',
     token,
     data: {
@@ -251,15 +255,8 @@ exports.loginAdmin = catchAsync(async (req, res, next) => {
     })
   }
   //3) If everything Ok
-
-  createSendTokenAdmin(Admin, 200, res);
-  /* const a = await UserAdmin.create({
-    username: "nhan123",
-    email: "nhan@gmail.com",
-    password:"123456789",
-    passwordConfirm: "123456789"
-  });
-  res.send(a);*/
+  console.log("chay xuong day");
+  //createSendTokenAdmin(Admin, 200, res);
 
 });
 
