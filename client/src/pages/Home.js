@@ -18,11 +18,8 @@ const Home = () => {
     const [listDonate, setListdonate] = useState([]);
     const [listCategory, setListCategory] = useState([]);
     const  data  = useSelector(state => state.auth.user);
-    //const [cookies, setCookie] = useCookies(['kk']);
+    
         console.log(data);
-        //setCookie('kk3', "shshsdchsdcjh", {path: '/', maxAge: 3000})
-
-    //console.log(cookies);
     useEffect(() => {
 
         const fetchdonatesData = async () => {

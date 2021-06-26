@@ -24,12 +24,12 @@ const login = (values) => {
     .then((response) => {
       if (response.data.status) {
         
-        localStorage.setItem("user", JSON.stringify(response.data.token));
+        localStorage.setItem("user", JSON.stringify(response.data.data.user));
         //Cookies.set('userKaca', response.data.data, {path: '/', maxAge: 30000, httpOnly: true });
 
       }
 
-      return response.data;
+      return response.data.data.user;
     });
 };
 

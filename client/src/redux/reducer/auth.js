@@ -5,10 +5,11 @@ import {
     LOGIN_FAIL,
     LOGOUT,
   } from "../actions/type";
-  
-  const user = JSON.parse(localStorage.getItem("user"));
-  
-  const initialState = user
+  import { useDispatch, useSelector } from "react-redux";
+ //const  data  = useSelector(state => state.auth.user);
+  const user =  JSON.parse(localStorage.getItem("user"));
+ 
+  const initialState =user
     ? { isLoggedIn: true, user }
     : { isLoggedIn: false, user: null };
   

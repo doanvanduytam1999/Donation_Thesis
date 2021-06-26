@@ -1,10 +1,12 @@
 import "../style/Home.scss";
 import "../style/bootstrap-grid.min.css";
 import React, { useEffect, useState } from 'react';
-import { Card, Progress, Typography, Modal, Form, Input, Button, Steps, message, Checkbox, Select, Result,  InputNumber } from 'antd';
-import {  UsergroupAddOutlined } from '@ant-design/icons';
+import { Card, Progress, Typography, Modal, Form, Input, Button, Steps, message, Checkbox, Select, Result, InputNumber } from 'antd';
+import { UsergroupAddOutlined } from '@ant-design/icons';
 import { Link } from "react-router-dom";
 import PayPal from "../components/Paypal"
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../redux/actions/auth.js";
 const { Option } = Select;
 const { Step } = Steps;
 const { Text } = Typography;
@@ -31,6 +33,10 @@ const HotListDonate = (props) => {
     const [licked, setLicked] = React.useState(false);
     const [checked, setChecked] = React.useState(false);
     const [value, setValue] = useState(1);
+    const { isLoggedIn } = useSelector(state => state.auth);
+    const data = useSelector(state => state.auth.user);
+
+    console.log(data);
     const showModal = (e) => {
         setIsModalVisible(true);
         console.log('Content: ', e.currentTarget.dataset.id);
@@ -78,7 +84,7 @@ const HotListDonate = (props) => {
         setValue(a)
 
     };
-   
+
     const steps = [
         {
             title: 'Nhập thông tin',
@@ -91,128 +97,257 @@ const HotListDonate = (props) => {
                 };
                 const onFinishFailed = (errorInfo) => {
                     console.log('Failed:', errorInfo.values.name);
-                  
-
                 };
                 return (
                     <>
-                        <Form
+                        {isLoggedIn === false ? (
+                            <>
+                                <Form
 
-                            {...layout}
-                            name="basic"
-                            initialValues={{ prefix: "84", coin: "10000", id: `${id}` }}
-                            onFinish={onFinish}
-                            onFinishFailed={onFinishFailed}
-                        >
-                            {/*  <Radio.Group onChange={onChange} buttonStyle="solid" defaultValue="a">
-                                <Radio.Button value="a">Cá nhân</Radio.Button>
-                                <Radio.Button value="b">Tổ chức</Radio.Button>
+                                    {...layout}
+                                    name="basic"
+                                    initialValues={{ prefix: "84", coin: "10000", id: `${id}` }}
+                                    onFinish={onFinish}
+                                    onFinishFailed={onFinishFailed}
+                                >
+                                    {/*  <Radio.Group onChange={onChange} buttonStyle="solid" defaultValue="a">
+    <Radio.Button value="a">Cá nhân</Radio.Button>
+    <Radio.Button value="b">Tổ chức</Radio.Button>
 
-                            </Radio.Group> */}
-                            <Form.Item label='Ủng hộ ẩn danh' onChange={handlechecked}>
-                                <Checkbox />
+</Radio.Group> */}
+                                    <Form.Item label='Ủng hộ ẩn danh' onChange={handlechecked}>
+                                        <Checkbox />
 
-                            </Form.Item>
-
-
-                            {checked === false ? (
-                                <>
-                                    <Form.Item
-                                        label="Họ và tên"
-                                        name="name"
-                                        rules={[{ required: true, message: 'Hãy nhập họ tên của bạn !' }]}
-                                    >
-                                        <Input placeholder="Họ và tên của bạn" />
-                                    </Form.Item>
-                                    <Form.Item
-                                        label="Số điện thoại"
-                                        name="phone"
-
-                                    >
-                                        <Input placeholder="Nhập số điện thoại của bạn " addonBefore={phoneSelector} style={{ width: '100%' }} />
                                     </Form.Item>
 
-                                    <Form.Item
-                                        label="Số tiền ủng hộ"
-                                        rules={[
 
-                                            {
-                                                required: true,
-                                                message: 'Hãy nhập số tiền ủng hộ',
-                                            },
-                                        ]}
-                                        name="coin">
-                                        <InputNumber
-                                            onChange={onChange}
-                                            style={{ width: "200px" }}
-                                            defaultValue={10000}
-                                            formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                            parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                                    {checked === false ? (
+                                        <>
+                                            <Form.Item
+                                                label="Họ và tên"
+                                                name="name"
+                                                rules={[{ required: true, message: 'Hãy nhập họ tên của bạn !' }]}
+                                            >
+                                                <Input placeholder="Họ và tên của bạn" />
+                                            </Form.Item>
+                                            <Form.Item
+                                                label="Số điện thoại"
+                                                name="phone"
 
-                                        />
-                                    </Form.Item>
-                                    <Form.Item
-                                        name="content"
-                                        label="Lời nhắn"
-                                    >
-                                        <TextArea placeholder="Lời nhắn (không bắt buộc)" autoSize={{ minRows: 3 }} />
-                                    </Form.Item>
-                                    <Form.Item hidden name="id">
-                                        <Input />
-                                    </Form.Item>
-                                    <Form.Item wrapperCol={{
-                                        xs: { span: 24, offset: 0 },
-                                        sm: { span: 16, offset: 8 },
-                                    }} >
-                                        <Button type="primary"  htmlType="submit">
-                                            Xác nhận
-                                        </Button>
-                                    </Form.Item>
-                                </>
-                            ) : (
-                                <>
-                                    <Form.Item hidden name="andanh">
-                                        <Input />
-                                    </Form.Item>
-                                    <Form.Item
+                                            >
+                                                <Input placeholder="Nhập số điện thoại của bạn " addonBefore={phoneSelector} style={{ width: '100%' }} />
+                                            </Form.Item>
 
-                                        label="Số tiền ủng hộ"
-                                        rules={[
+                                            <Form.Item
+                                                label="Số tiền ủng hộ"
+                                                rules={[
 
-                                            {
-                                                required: true,
-                                                message: 'Hãy nhập số tiền ủng hộ',
-                                            },
-                                        ]}
-                                        name="coin">
-                                        <InputNumber
-                                            onChange={onChange}
-                                            style={{ width: "200px" }}
-                                            defaultValue={10000}
-                                            formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                            parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                                                    {
+                                                        required: true,
+                                                        message: 'Hãy nhập số tiền ủng hộ',
+                                                    },
+                                                ]}
+                                                name="coin">
+                                                <InputNumber
+                                                    onChange={onChange}
+                                                    style={{ width: "200px" }}
+                                                    defaultValue={10000}
+                                                    formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                                    parser={value => value.replace(/\$\s?|(,*)/g, '')}
 
-                                        />
-                                    </Form.Item>
-                                    <Form.Item
-                                        label='Lời nhắn'
-                                        name="content"
-                                    >
-                                        <TextArea placeholder="Lời nhắc (không bắt buộc)" autoSize={{ minRows: 3 }} />
-                                    </Form.Item>
-                                    <Form.Item hidden name="id">
-                                        <Input />
-                                    </Form.Item>
-                                    <Form.Item >
-                                        <Button type="primary" htmlType="submit">
-                                            Xác nhận
-                                        </Button>
-                                    </Form.Item>
+                                                />
+                                            </Form.Item>
+                                            <Form.Item
+                                                name="content"
+                                                label="Lời nhắn"
+                                            >
+                                                <TextArea placeholder="Lời nhắn (không bắt buộc)" autoSize={{ minRows: 3 }} />
+                                            </Form.Item>
+                                            <Form.Item hidden name="id">
+                                                <Input />
+                                            </Form.Item>
+                                            <Form.Item wrapperCol={{
+                                                xs: { span: 24, offset: 0 },
+                                                sm: { span: 16, offset: 8 },
+                                            }} >
+                                                <Button type="primary" htmlType="submit">
+                                                    Xác nhận
+                                                </Button>
+                                            </Form.Item>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Form.Item hidden name="andanh">
+                                                <Input />
+                                            </Form.Item>
+                                            <Form.Item
 
-                                </>
-                            )}
+                                                label="Số tiền ủng hộ"
+                                                rules={[
 
-                        </Form>
+                                                    {
+                                                        required: true,
+                                                        message: 'Hãy nhập số tiền ủng hộ',
+                                                    },
+                                                ]}
+                                                name="coin">
+                                                <InputNumber
+                                                    onChange={onChange}
+                                                    style={{ width: "200px" }}
+                                                    defaultValue={10000}
+                                                    formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                                    parser={value => value.replace(/\$\s?|(,*)/g, '')}
+
+                                                />
+                                            </Form.Item>
+                                            <Form.Item
+                                                label='Lời nhắn'
+                                                name="content"
+                                            >
+                                                <TextArea placeholder="Lời nhắc (không bắt buộc)" autoSize={{ minRows: 3 }} />
+                                            </Form.Item>
+                                            <Form.Item hidden name="id">
+                                                <Input />
+                                            </Form.Item>
+                                            <Form.Item >
+                                                <Button type="primary" htmlType="submit">
+                                                    Xác nhận
+                                                </Button>
+                                            </Form.Item>
+
+                                        </>
+                                    )}
+
+                                </Form>
+                            </>
+                        ) : (
+                            <>
+                                {data !== [] ? (
+                                    <>
+                                        <Form
+
+                                            {...layout}
+                                            name="basic"
+                                            initialValues={{ prefix: "84", coin: "10000", id: `${id}`,name:`${data.username}`, phone:"0849119919" }}
+                                            onFinish={onFinish}
+                                            onFinishFailed={onFinishFailed}
+                                        >
+                                            {/*  <Radio.Group onChange={onChange} buttonStyle="solid" defaultValue="a">
+<Radio.Button value="a">Cá nhân</Radio.Button>
+<Radio.Button value="b">Tổ chức</Radio.Button>
+
+</Radio.Group> */}
+                                            <Form.Item label='Ủng hộ ẩn danh' onChange={handlechecked}>
+                                                <Checkbox />
+
+                                            </Form.Item>
+
+
+                                            {checked === false ? (
+                                                <>
+                                                    <Form.Item
+                                                        label="Họ và tên"
+                                                        name="name"
+                                                        rules={[{ required: true, message: 'Hãy nhập họ tên của bạn !' }]}
+                                                    >
+                                                        <Input placeholder="Họ và tên của bạn" />
+                                                    </Form.Item>
+                                                    <Form.Item
+                                                        label="Số điện thoại"
+                                                        name="phone"
+
+                                                    >
+                                                        <Input placeholder="Nhập số điện thoại của bạn " addonBefore={phoneSelector} style={{ width: '100%' }} />
+                                                    </Form.Item>
+
+                                                    <Form.Item
+                                                        label="Số tiền ủng hộ"
+                                                        rules={[
+
+                                                            {
+                                                                required: true,
+                                                                message: 'Hãy nhập số tiền ủng hộ',
+                                                            },
+                                                        ]}
+                                                        name="coin">
+                                                        <InputNumber
+                                                            onChange={onChange}
+                                                            style={{ width: "200px" }}
+                                                            defaultValue={10000}
+                                                            formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                                            parser={value => value.replace(/\$\s?|(,*)/g, '')}
+
+                                                        />
+                                                    </Form.Item>
+                                                    <Form.Item
+                                                        name="content"
+                                                        label="Lời nhắn"
+                                                    >
+                                                        <TextArea placeholder="Lời nhắn (không bắt buộc)" autoSize={{ minRows: 3 }} />
+                                                    </Form.Item>
+                                                    <Form.Item hidden name="id">
+                                                        <Input />
+                                                    </Form.Item>
+                                                    <Form.Item wrapperCol={{
+                                                        xs: { span: 24, offset: 0 },
+                                                        sm: { span: 16, offset: 8 },
+                                                    }} >
+                                                        <Button type="primary" htmlType="submit">
+                                                            Xác nhận
+                                                        </Button>
+                                                    </Form.Item>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Form.Item hidden name="andanh">
+                                                        <Input />
+                                                    </Form.Item>
+                                                    <Form.Item
+
+                                                        label="Số tiền ủng hộ"
+                                                        rules={[
+
+                                                            {
+                                                                required: true,
+                                                                message: 'Hãy nhập số tiền ủng hộ',
+                                                            },
+                                                        ]}
+                                                        name="coin">
+                                                        <InputNumber
+                                                            onChange={onChange}
+                                                            style={{ width: "200px" }}
+                                                            defaultValue={10000}
+                                                            formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                                            parser={value => value.replace(/\$\s?|(,*)/g, '')}
+
+                                                        />
+                                                    </Form.Item>
+                                                    <Form.Item
+                                                        label='Lời nhắn'
+                                                        name="content"
+                                                    >
+                                                        <TextArea placeholder="Lời nhắc (không bắt buộc)" autoSize={{ minRows: 3 }} />
+                                                    </Form.Item>
+                                                    <Form.Item hidden name="id">
+                                                        <Input />
+                                                    </Form.Item>
+                                                    <Form.Item >
+                                                        <Button type="primary" htmlType="submit">
+                                                            Xác nhận
+                                                        </Button>
+                                                    </Form.Item>
+
+                                                </>
+                                            )}
+
+                                        </Form>
+                                    </>
+                                ) : (<><p></p></>)}
+
+                            </>
+                        )
+                        }
+
 
                     </>
                 )
@@ -222,11 +357,13 @@ const HotListDonate = (props) => {
         {
             title: 'Xác nhận',
             content: () => {
+                const coin = JSON.parse(localStorage.getItem("data"));
+
                 return (
                     <>
-                        <p>Số tiền ủng hộ: 100.000đ</p>
+                        <p>Số tiền ủng hộ: {convertNumber(coin.coin)}</p>
                         <p>Lời nhắn:</p>
-                        <p>Cùng nhau chung tay đẩy lùi dịch bệnh</p>
+                        <p>{coin.content}</p>
                         <PayPal />
                     </>
                 )
@@ -251,7 +388,7 @@ const HotListDonate = (props) => {
             },
         },
     ];
-  console.log(donator);
+
     return (
         <>
             {props.listDonates.map((item) => {
@@ -297,7 +434,7 @@ const HotListDonate = (props) => {
                 }
             })
             }
-             {donator != null ? (
+            {donator != null ? (
                 <>
 
                     <Modal title={donator[0].tieuDe} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
@@ -310,7 +447,7 @@ const HotListDonate = (props) => {
                         <div className="steps-action">
                             {current < steps.length - 1 && (
                                 <>
-                                    {licked === false ? (<> <Button type="primary"  onClick={() => next()}>
+                                    {licked === false ? (<> <Button type="primary" onClick={() => next()}>
                                         Tiếp theo ffd
                                     </Button></>) : (
                                         <>

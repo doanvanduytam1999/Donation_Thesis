@@ -33,7 +33,7 @@ const Login = () => {
         console.log('Received values of form: ', values.username);
     };
     if (isLoggedIn) {
-        return <Redirect to="/dang-ki" />;
+        return <Redirect to="/" />;
       }
     return (
         <>
