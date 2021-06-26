@@ -104,9 +104,7 @@ exports.checkAdminLogin = catchAsync(async (req, res, next) => {
       });
     }
   }
-  return res.status(401).json({
-    status: "No Login"
-  });
+  next();
 });
 
 exports.checkUserLogin = catchAsync(async (req, res, next) => {
@@ -241,22 +239,16 @@ exports.loginAdmin = catchAsync(async (req, res, next) => {
   const password = req.body.password;
   //check if username & password exists
   if (!username || !password) {
-    return res.status(401).json({
-      status: "Fail",
-      error: "Vui lòng cung cấp đủ usrname và passwords"
-    })
+    return next(new AppError('Vui lòng cung cấp email and password!', 400));
   }
   //2) check if user exist and passowrd is correct
   const Admin = await UserAdmin.findOne({ 'username': username }).select('+password');
   if (!Admin || !(await Admin.correctPassword(password, Admin.password))) {
-    return res.status(401).json({
-      status: "Fail",
-      error: "Không đúng username, password hoặc tài khoản bị khóa, vui lòng kiểm tra lại thông tin"
-    })
+    return next(new AppError('Không đúng email, password hay tài khoản bị khóa, vui lòng kiểm tra lại thông tin', 401));
   }
   //3) If everything Ok
   console.log("chay xuong day");
-  //createSendTokenAdmin(Admin, 200, res);
+  createSendTokenAdmin(Admin, 200, res);
 
 });
 

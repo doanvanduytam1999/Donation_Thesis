@@ -23,20 +23,7 @@ exports.postAddpost = catchAsync(async (req, res, next) => {
     })
 });
 
-exports.postLogin = catchAsync(async (req, res, next) => {
-    const isLogin = await AuthController.adminIsLoggedIn(req.cookies.jwtAdmin);
-    if (isLogin === "No Login") {
-        console.log("vo");
-        const login = await AuthController.loginAdmin(req, res ,next);
-    }
 
-    res.status(401).json({
-        status: 'Logged in',
-        data: {
-            user: isLogin
-        }
-    })
-});
 
 
 
