@@ -1,0 +1,165 @@
+.ant-modal-content {
+    border-radius: 10px !important;
+    height: 550px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    .ant-modal-body {
+        height: 100%;
+        .ant-row {
+            height: 100%;
+            .ant-col {  
+                height: 100%;
+                h3 {
+                    text-align: center;
+                    font-size: 26px;
+                    font-weight: bold;
+                    font-family: Arial, Helvetica, sans-serif;
+                    padding-bottom: 40px;
+
+                }
+                .login-form {
+                    p {
+                        font-size: 16px;
+                        margin-bottom: 2px;
+                    }
+                    .ant-form-item{
+                        margin-bottom: 10px;
+                        .ant-form-item-control{
+                            min-height: 50px;
+                            .ant-form-item-control-input {
+                                .ant-form-item-control-input-content {
+                                   
+                                    .ant-input-affix-wrapper-focused {
+                                        border: none !important;
+                                  
+                                        box-shadow: none;
+                                    }
+                                    .ant-input-affix-wrapper {
+                                        border: none;
+                                        outline: none;
+                                        .ant-input,
+                                        .ant-input:focus {
+                                            width: 100%;
+                                            box-sizing: border-box;
+                                            border: none;
+                                            font-size: 16px;
+                                            padding-left: 10px;
+                                            padding-bottom: 2px;
+                                            box-shadow: inset 0px -1px 0px 0px;
+                                            outline: none;
+                                            transition: opacity 0.5s ease-out;
+                                            
+                                        }
+                                        .ant-input:-internal-autofill-selected{
+                                            background-color: none;
+                                        } 
+                                        .ant-input:hover::-webkit-input-placeholder {
+                                            opacity: 0;
+                                        }
+                                        .ant-input::-webkit-input-placeholder {
+                                            transition: opacity 0.5s ease-out;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        
+                    }
+                }
+                .login-with{
+                    #facebookIcon{
+                        background-image:      url("https://image.flaticon.com/icons/svg/145/145802.svg");
+                        background-repeat: no-repeat;
+                        width:2rem;
+                        height: 2rem;
+                      }
+                      
+                      #twitterIcon{
+                        background-image: url("https://image.flaticon.com/icons/svg/145/145812.svg");
+                        background-repeat: no-repeat;
+                        width: 2rem;
+                        height: 2rem;
+                      }
+                      
+                      #googleIcon{
+                        background-image: url("https://image.flaticon.com/icons/svg/145/145804.svg");
+                        background-repeat: no-repeat;
+                        width: 2rem;
+                        height: 2rem;
+                      }
+                      
+                      #iconGroup{
+                        display: flex;
+                        justify-content: center;
+                        padding: 1rem 0;
+                      }
+                      
+                      #iconGroup a{
+                        margin: 0 0.6rem;
+                      }
+                      
+                      #alternativeLogin {
+                         text-align: center;
+                         padding-top: 1rem;
+                         margin-top: 1.5rem;
+                      }
+                      
+                      
+                }
+            }
+        }
+    }
+}
+.ant-btn-resgister{
+    margin-left: 10px;
+}
+.resgiter-form {
+    p {
+        font-size: 16px;
+        margin-bottom: 2px;
+    }
+    .ant-form-item{
+        margin-bottom: 10px;
+        .ant-form-item-control{
+            min-height: 50px;
+            .ant-form-item-control-input {
+                .ant-form-item-control-input-content {
+                   
+                    .ant-input-affix-wrapper-focused {
+                        border: none !important;
+                  
+                        box-shadow: none;
+                    }
+                    .ant-input-affix-wrapper {
+                        border: none;
+                        outline: none;
+                        .ant-input,
+                        .ant-input:focus {
+                            width: 100%;
+                            box-sizing: border-box;
+                            border: none;
+                            font-size: 16px;
+                            padding-left: 10px;
+                            padding-bottom: 2px;
+                            box-shadow: inset 0px -1px 0px 0px;
+                            outline: none;
+                            transition: opacity 0.5s ease-out;
+                            
+                        }
+                        .ant-input:-internal-autofill-selected{
+                            background-color: none;
+                        } 
+                        .ant-input:hover::-webkit-input-placeholder {
+                            opacity: 0;
+                        }
+                        .ant-input::-webkit-input-placeholder {
+                            transition: opacity 0.5s ease-out;
+                        }
+                    }
+                }
+            }
+        }
+        
+    }
+}

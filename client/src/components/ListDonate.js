@@ -24,16 +24,11 @@ const ListDonate = (props) => {
                                         style={{ borderRadius: 10, height: 460 }}
                                         hoverable
                                         cover={<img alt="example" src={item.hinhAnh[0]} />}>
-
-
-
-
                                         <Text style={ellipsis ? { width: 250 } : undefined, { fontWeight: "500", fontSize: "18px" }}
                                             ellipsis={ellipsis ? { tooltip: 'Xem chi tiết !' } : false} >
                                             {item.tieuDe} </Text>
-
                                         <Text
-                                            style={ellipsis ? { width: 250 } : undefined}
+                                            style={ellipsis ? { width: 250 } : undefined,{fontFamily: "cursive"}}
                                             ellipsis={ellipsis ? { tooltip: 'Xem chi tiết !' } : false} >
                                             {item.tomTat}
                                         </Text>

@@ -10,22 +10,22 @@ import  {login} from "../redux/actions/auth.js";
 
 const Login = () => {
 
-    const [loading, setLoading] = useState(false);
+    //const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
     const { isLoggedIn } = useSelector(state => state.auth);
-    const  message  = useSelector(state => state.auth.user);
+    //const  message  = useSelector(state => state.auth.user);
     const history = useHistory();
 
     const onFinish = (values) => {
        
-        setLoading(true);
+        //setLoading(true);
         dispatch(login(values))
         .then(() => {
           history.push("/");
           //window.location.reload();
         })
         .catch(() => {
-          setLoading(false);
+          //setLoading(false);
           console.log("Loi đăng nhập");
         });
         
@@ -69,7 +69,7 @@ const Login = () => {
                             <Button type="primary" htmlType="submit" className="login-form-button">
                                 Log in
                             </Button>
-                            Or <a href="">register now!</a>
+                            Or <a href="#/">register now!</a>
                         </Form.Item>
                     </Form>
                 </Col>
