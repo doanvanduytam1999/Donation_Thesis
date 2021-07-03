@@ -3,7 +3,8 @@ const DonateEvent = require('../models/donateEvent');
 const CategoryDonateEvent = require('../models/categoryDonateEvent');
 const DonateAction = require('../models/donateAction');
 const UserCustomer = require('../models/user');
-const AuthController= require('../controllers/authController');
+const AuthController = require('../controllers/authController');
+const DonateEnvent = require('../models/donateEvent');
 
 
 
@@ -99,23 +100,83 @@ exports.postDonate = catchAsync(async (req, res, next) => {
         runValidators: true
     });
 
-    if (data.checked) {
-        const donateAnDanh = await DonateAction.create({
-            soTienDonate: soTienDonate,
-            loiNhan: content,
-            chuongTringQuyenGop: data.id
-        })
+    if (user) {
+        if (data.checked) {
+            const donateAnDanh = await DonateAction.create({
+                soTienDonate: soTienDonate,
+                loiNhan: content,
+                chuongTringQuyenGop: data.id,
+                userDonate: user.id
+            })
+        } else {
+            const donateAction = await DonateAction.create({
+                tenNguoiDonate: user.hovaten,
+                soDienThoai: user.phone,
+                loiNhan: content,
+                soTienDonate: soTienDonate,
+                chuongTringQuyenGop: data.id,
+                userDonate: user.id
+            })
+        }
     } else {
-        const donateAction = await DonateAction.create({
-            tenNguoiDonate: data.name,
-            soDienThoai: data.phone,
-            loiNhan: content,
-            soTienDonate: soTienDonate,
-            chuongTringQuyenGop: data.id
-        })
+        if (data.checked) {
+            const donateAnDanh = await DonateAction.create({
+                soTienDonate: soTienDonate,
+                loiNhan: content,
+                chuongTringQuyenGop: data.id
+            })
+        } else {
+            const donateAction = await DonateAction.create({
+                tenNguoiDonate: data.name,
+                soDienThoai: data.phone,
+                loiNhan: content,
+                soTienDonate: soTienDonate,
+                chuongTringQuyenGop: data.id
+            })
+        }
     }
+
     res.status(200).json({
         status: "Success"
     });
 
 });
+
+exports.postRegister = catchAsync(async (req, res, next) => {
+    console.log(req.body);
+    const user = UserCustomer.create({
+        username: req.body.username,
+        hovaten: req.body.name,
+        password: req.body.password,
+        passwordConfirm: req.body.passwordcf,
+        phone: req.body.phone,
+    })
+
+    res.status(200).json({
+        status: "success"
+    })
+});
+
+exports.getAllDonate = catchAsync(async(req, res, next) => {
+    const user = await AuthController.userIsLoggedIn(req.cookies.jwt);
+    if(user === 'No Login'){
+        return res.status(401).json({
+            status: "No Login"
+        })
+    }
+    const allDonate = await UserCustomer.findById(user.id).populate('donateActions');
+    
+    res.status(200).json({
+        AllDonate: allDonate.donateActions
+    })
+});
+
+exports.getAllDonater = catchAsync(async(req, res, next)=> {
+    const idPost = req.params.id;
+    const DsDonate = [];
+    const allDonater = await DonateEnvent.findById(idPost).populate('donateActions');
+    res.status(200).json({
+        status: 'success',
+        AllDonater: allDonater.donateActions
+    })
+})

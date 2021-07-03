@@ -7,7 +7,12 @@ const router = express.Router();
 router.get('/donateEvensts', DonateEnvent.getDonateEvents);
 router.get('/categoryDonateEvents', DonateEnvent.getCategoryDonateEvents);
 router.get('/donateEvenst/:id', DonateEnvent.getDonateEvent);
+router.get('/logout', AuthController.checkUserLogin, AuthController.logoutCustomer);
+router.get('/allDonate', DonateEnvent.getAllDonate);
+router.get('/allDonater/:id', DonateEnvent.getAllDonater);
+
 router.post('/donate', DonateEnvent.postDonate);
-router.post('/login', AuthController.checkUserLogin, AuthController.loginCustomer);
+router.post('/login', AuthController.loginCustomer);
+router.post('/signup', DonateEnvent.postRegister);
 
 module.exports = router;

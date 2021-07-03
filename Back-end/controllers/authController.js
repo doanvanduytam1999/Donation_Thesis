@@ -104,7 +104,9 @@ exports.checkAdminLogin = catchAsync(async (req, res, next) => {
       });
     }
   }
-  next();
+  return res.status(401).json({
+    status: "No Login"
+  });
 });
 
 exports.checkUserLogin = catchAsync(async (req, res, next) => {
@@ -212,6 +214,14 @@ exports.logoutAdmin = (req, res) => {
 
 //Login Customer
 exports.loginCustomer = catchAsync(async (req, res, next) => {
+  const islogin = await this.userIsLoggedIn(req.cookies.jwt);
+  console.log(islogin);
+  if(islogin !== 'No Login'){
+    return res.status(301).json({
+      status: "Is Login",
+      user: islogin
+    })
+  }
   const username = req.body.username;
   const password = req.body.password;
   //check if username & password exists
@@ -235,6 +245,13 @@ exports.loginCustomer = catchAsync(async (req, res, next) => {
 });
 //Login Admin
 exports.loginAdmin = catchAsync(async (req, res, next) => {
+  const islogin = await this.adminIsLoggedIn(req.cookies.jwtAdmin);
+  if(islogin !== 'No Login'){
+    return res.status(301).json({
+      status: "Is Login",
+      useradmin: islogin
+    })
+  }
   const username = req.body.username;
   const password = req.body.password;
   //check if username & password exists

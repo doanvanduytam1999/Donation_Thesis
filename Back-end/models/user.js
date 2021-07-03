@@ -3,13 +3,16 @@ const validator = require('validator');
 const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
+  username: {
+    type: String,
+    required: [true, 'Vui lòng cung cấp username']
+  },
   hovaten: {
       type: String,
       required: [true, 'Vui lòng cung cấp họ và tên']
     },
   email: {
     type: String,
-    required: [true, 'Vui lòng cung cấp email'],
     unique: true,
     lowercase: true,
     validate: [validator.isEmail, 'Vui lòng cung cấp email đúng format']
@@ -19,13 +22,6 @@ const userSchema = new mongoose.Schema({
     required: [true, 'Vui lòng cung cấp password'],
     minlength: 8,
     select: false
-  },
-  phone: {
-    type: String,
-    unique: true,
-    required: [true, 'Vui lòng cung cấp số điện thoại'],
-    minlength: 10,
-    maxlength: 11,
   },
   passwordConfirm: {
     type: String,
@@ -37,6 +33,13 @@ const userSchema = new mongoose.Schema({
       },
       message: 'Mật khẩu xác nhận không giống với mật khẩu'
     }
+  },
+  phone: {
+    type: String,
+    unique: true,
+    required: [true, 'Vui lòng cung cấp số điện thoại'],
+    minlength: 10,
+    maxlength: 11,
   },
   passwordChangedAt: Date,
   passwordResetToken: String,

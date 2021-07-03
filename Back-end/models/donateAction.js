@@ -6,7 +6,7 @@ const DonateActionSchemea = new mongoose.Schema(
     {
         tenNguoiDonate: {
             type: String,
-            default: "Ẩn danh",
+            default: "Nhà hảo tâm",
         },
         soDienThoai: {
             default: "",
@@ -20,7 +20,7 @@ const DonateActionSchemea = new mongoose.Schema(
             type: String,
             required: [true, 'Vui lòng cung cấp ngày bắt đầu nhận donate']
         },
-        chuongTringQuyenGop:{
+        chuongTrinhQuyenGop:{
             type: mongoose.Schema.Types.ObjectId,
             ref: "DonateEnvent"
         },

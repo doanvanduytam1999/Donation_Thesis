@@ -59,7 +59,7 @@ const DonateEnventSchemea = new mongoose.Schema(
 DonateEnventSchemea.virtual('donateActions', {
     ref: 'DonateAction',
     localField: '_id',
-    foreignField: 'chuongTringQuyenGop',
+    foreignField: 'chuongTrinhQuyenGop',
 })
 
 
