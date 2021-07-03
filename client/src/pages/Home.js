@@ -1,25 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Progress, Typography, Modal, Form, Input, Button, Radio, Tabs, Steps, message, Checkbox, Select, Result, Badge, InputNumber } from 'antd';
-import { CheckOutlined, UsergroupAddOutlined } from '@ant-design/icons';
+import { Form, Input, Button, Tabs } from 'antd';
+import { CheckOutlined } from '@ant-design/icons';
 import donateEvensts from '../Api/donateEvensts';
-import { Link } from "react-router-dom";
+//import { Link } from "react-router-dom";
 import "../style/Home.scss";
 import "../style/bootstrap-grid.min.css";
-import PayPal from "../components/Paypal"
+//import PayPal from "../components/Paypal"
 import HotListDonate from "../components/HotListDonate"
 import ListDonate from '../components/ListDonate';
 import ScrollToTop from "react-scroll-to-top";
 import { useSelector } from 'react-redux';
-import { useCookies } from 'react-cookie';
+import { Redirect } from 'react-router-dom';
+
+//import { useCookies } from 'react-cookie';
 
 const { TabPane } = Tabs;
 const Home = () => {
     const [listDonates, setListdonates] = useState([]);
     const [listDonate, setListdonate] = useState([]);
     const [listCategory, setListCategory] = useState([]);
-    const  data  = useSelector(state => state.auth.user);
+    const { isLoggedIn } = useSelector(state => state.login);
+    //const  data  = useSelector(state => state.auth.user);
     
-        console.log(data);
+        //console.log(data);
     useEffect(() => {
 
         const fetchdonatesData = async () => {
@@ -84,6 +87,10 @@ const Home = () => {
         backgroundImage: `url("../images/donate/bg-rs.jpg")`,
 
     }
+    if(isLoggedIn){
+        <Redirect to="/" />
+    
+      }
     return (
         <>
           <ScrollToTop smooth />

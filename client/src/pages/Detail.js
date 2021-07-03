@@ -19,7 +19,7 @@ const columns = [
       title: 'Tên ',
       dataIndex: 'name',
       key: 'name',
-      render: text => <a>{text}</a>,
+      render: text => <a href="#/">{text}</a>,
     },
     {
       title: 'Số điện thoại',
@@ -149,7 +149,7 @@ const Detail = () => {
             </Select>
         </Form.Item>
     );
-    const [value, setValue] = useState(1);
+    //const [value, setValue] = useState(1);
  
     const handlechecked = (e) => {
         console.log(`checked = ${e.target.checked}`);
@@ -339,16 +339,9 @@ const Detail = () => {
     const convertNumber = (x)=>{
         return   x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     }
-    const options = {
-        replace: (domNode) => {
-          if (domNode.attribs && domNode.attribs.class === "remove") {
-            return <></>;
-          }
-        }
-      };
      let html= Donate.noiDung;
       
-    console.log(html);
+    //console.log(html);
     return (
         <>
             <section className="detail_header">

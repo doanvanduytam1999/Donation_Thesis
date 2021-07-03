@@ -11,7 +11,7 @@
      
       }
     position: absolute !important;
-    right: 0 !important;
+    right: 10px !important;
 }
 .right-lg{
     &:hover{
@@ -19,5 +19,15 @@
         color: inherit !important;
       }
     position: absolute !important;
-    right: 90px !important;
+    right: 100px !important;
+}
+.ant-badge {
+  .ant-scroll-number {
+      position: absolute;
+      top: -17px;
+      right: 2px;
+      transform: translate(0, 50%);
+     
+      //transform-origin:50% 0%;
+  }
 }

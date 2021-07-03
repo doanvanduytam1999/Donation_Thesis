@@ -1,0 +1,42 @@
+.col-8 {
+    .ant-form {
+        p{
+            font-size: 16px;
+            margin-bottom: 5px !important;
+        }
+        .ant-form-item {
+            .ant-form-item-control {
+                .ant-form-item-control-input {
+                    .ant-form-item-control-input-content {
+                        .ant-input-affix-wrapper-focused {
+                            border: none !important;
+                            box-shadow: none;
+                        }
+                        
+                            .ant-input,
+                            .ant-input:focus {
+                                width: 100%;
+                                box-sizing: border-box;
+                                border: none;
+                                font-size: 16px;
+                                padding-left: 10px;
+                                padding-bottom: 2px;
+                                box-shadow: inset 0px -1px 0px 0px;
+                                outline: none;
+                                transition: opacity 0.5s ease-out;
+                            }
+                           
+                        
+                    }
+                }
+            }
+        }
+    }
+}
+.ant-upload.ant-upload-select-picture-card {
+    width: 150px;
+    height: 150px;
+}
+.btn-update-img{
+    margin-left: 30px;
+}

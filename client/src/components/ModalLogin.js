@@ -1,96 +1,194 @@
-
 import React, { useState } from 'react';
-import { Modal,Form, Input, Button, Row, Col } from 'antd';
+import { Modal, Form, Input, Button, Row, Col, Tabs } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from "react-redux";
-import { Redirect, useHistory } from 'react-router-dom';
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+import firebase from 'firebase';
+import { useHistory,Redirect } from 'react-router-dom';
 import "../style/bootstrap-grid.min.css";
 import { login } from "../redux/actions/auth.js";
-
+import "../style/ModalLogin.scss";
+// Configure FirebaseUI.
+const uiConfig = {
+    // Popup signin flow rather than redirect flow.
+    signInFlow: 'popup',
+    // Redirect to /signedIn after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
+    signInSuccessUrl: '/thong-tin-tai-khoan',
+    // We will display Google and Facebook as auth providers.
+    signInOptions: [
+      firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+      firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+    ],
+  };
+const { TabPane } = Tabs;
 const ModalLogin = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [loading, setLoading] = useState(false);
+    const { isLoggedIn } = useSelector(state => state.login);
+    //const [Key, setKey] = useState("");
+    //const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
-    const { isLoggedIn } = useSelector(state => state.auth);
-    const message = useSelector(state => state.auth.user);
+    //const { isLoggedIn } = useSelector(state => state.auth);
+    //const message = useSelector(state => state.auth.user);
     const history = useHistory();
-
-    const showModal = () => {
+    const showModal = (e) => {
         setIsModalVisible(true);
     };
-
     const handleOk = () => {
         setIsModalVisible(false);
     };
-
+   
     const handleCancel = () => {
         setIsModalVisible(false);
-        
+
     };
     const onFinish = (values) => {
-
-        setLoading(true);
+        //setLoading(true);
         dispatch(login(values))
             .then(() => {
                 history.push("/");
                 //window.location.reload();
             })
             .catch(() => {
-                setLoading(false);
+                //setLoading(false);
                 console.log("Loi đăng nhập");
             });
 
 
         console.log('Received values of form: ', values.username);
     };
+    const Facebook = props => (
+        <a href="#/" id="facebookIcon"></a>
+    );
+    const Twitter = props => (
+        <a href="#/" id="twitterIcon"></a>
+    );
+    const Google = props => (
+        <a href="#/" id="googleIcon"></a>
+    );
+    if(isLoggedIn !==null){
+        <Redirect to="/" />
+    
+      }
     return (
         <>
-            <Button type="primary" onClick={showModal}>
-                Đăng nhập
+            <Button className="ant-btn-login" data-id="1" type="primary" onClick={showModal}>
+                Đăng nhập / Đăng kí
             </Button>
-            <Modal title="Đăng nhập" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}
-            width={800}
+            {/* <Button className="ant-btn-resgister" data-id="2" type="primary" onClick={showModal}>
+                Đăng kí
+            </Button> */}
+            <Modal visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}
+                width={450} footer={null}
             >
                 <Row>
-                    <Col span={12} offset={6}  >
-                        <Form
-                       
-                            name="normal_login"
-                            className="login-form"
-                            initialValues={{ remember: true }}
-                            onFinish={onFinish}
-                        >
-                            <Form.Item
-                                name="username"
-                                rules={[{ required: true, message: 'Please input your Username!' }]}
-                            >
-                                <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
-                            </Form.Item>
-                            <Form.Item
-                                name="password"
-                                rules={[{ required: true, message: 'Please input your Password!' }]}
-                            >
-                                <Input
-                                    prefix={<LockOutlined className="site-form-item-icon" />}
-                                    type="password"
-                                    placeholder="Password"
-                                />
-                            </Form.Item>
-
-
-                            <Form.Item >
-                                <Button type="primary" htmlType="submit" className="login-form-button">
-                                    Log in
-                                </Button>
-                                Or <a href="/dang-ki">register now!</a>
-                            </Form.Item>
-                        </Form>
+                    <Col span={16} offset={4}  >
+                        <Tabs /* onChange={callback} */>
+                            <TabPane tab="Đăng nhập" key="1">
+                                <Form
+                                    name="normal_login"
+                                    className="login-form"
+                                    initialValues={{ remember: true }}
+                                    onFinish={onFinish}
+                                >
+                                    <p>Tài khoảng </p>
+                                    <Form.Item
+                                        name="username"
+                                        rules={[{ required: true, message: 'Hãy nhập tài khoản!' }]}
+                                    >
+                                        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Tài khoảng" autoComplete="off" />
+                                    </Form.Item>
+                                    <p>Mật khẩu</p>
+                                    <Form.Item
+                                        name="password"
+                                        rules={[{ required: true, message: 'Hãy nhập mật khẩu!' }]}
+                                    >
+                                        <Input
+                                            prefix={<LockOutlined className="site-form-item-icon" />}
+                                            type="password"
+                                            placeholder="Mật khẩu"
+                                            autoComplete="off"
+                                        />
+                                    </Form.Item>
+                                    <Form.Item >
+                                        <Button type="primary" htmlType="submit" className="login-form-button">
+                                            Đăng nhập
+                                        </Button>
+                                       
+                                    </Form.Item>
+                                </Form>
+                            </TabPane>
+                            <TabPane tab="Đăng kí" key="2">
+                                <Form
+                                    name="normal_resgiter"
+                                    className="resgiter-form"
+                                    initialValues={{ remember: true }}
+                                    onFinish={onFinish}
+                                >
+                                    <p>Tài khoảng </p>
+                                    <Form.Item
+                                        name="username"
+                                        rules={[{ required: true, message: 'Hãy nhập tài khoản!' }]}
+                                    >
+                                        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Tài khoảng" autoComplete="off" />
+                                    </Form.Item>
+                                    <p>Mật khẩu</p>
+                                    <Form.Item
+                                        name="password"
+                                        rules={[{ required: true, message: 'Hãy nhập mật khẩu!' }]}
+                                    >
+                                        <Input
+                                            prefix={<LockOutlined className="site-form-item-icon" />}
+                                            type="password"
+                                            placeholder="Mật khẩu"
+                                            autoComplete="off"
+                                        />
+                                    </Form.Item>
+                                    <p>Nhập lại mật khẩu</p>
+                                    <Form.Item
+                                        name="passwordcf"
+                                        rules={[
+                                            {
+                                              required: true,
+                                              message: 'Hãy nhập mật khẩu !',
+                                            },
+                                            ({ getFieldValue }) => ({
+                                              validator(_, value) {
+                                                if (!value || getFieldValue('password') === value) {
+                                                  return Promise.resolve();
+                                                }
+                                                return Promise.reject(new Error('Hai mật khẩu phải trùng nhau !'));
+                                              },
+                                            }),
+                                          ]}>
+                                        <Input
+                                            prefix={<LockOutlined className="site-form-item-icon" />}
+                                            type="password"
+                                            placeholder="Nhập lại mật khẩu"
+                                            autoComplete="off"
+                                        />
+                                    </Form.Item>
+                                    <Form.Item >
+                                        <Button type="primary" htmlType="submit" className="resgister-form-button">
+                                            Đăng kí
+                                        </Button>
+                                     
+                                    </Form.Item>
+                                </Form>
+                            </TabPane>
+                        </Tabs>
+                        <div className="login-with">
+                            <label>Or sign in with:</label>
+                            <div id="iconGroup">
+                               {/*  <Facebook />
+                                <Twitter />
+                                <Google /> */}
+                                 <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
+                            </div>
+                        </div>
                     </Col>
                 </Row>
-
             </Modal>
         </>
     );
 }
-
 export default ModalLogin;

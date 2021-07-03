@@ -1,12 +1,13 @@
 import "../style/Home.scss";
 import "../style/bootstrap-grid.min.css";
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 import { Card, Progress, Typography, Modal, Form, Input, Button, Steps, message, Checkbox, Select, Result, InputNumber } from 'antd';
 import { UsergroupAddOutlined } from '@ant-design/icons';
 import { Link } from "react-router-dom";
 import PayPal from "../components/Paypal"
-import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../redux/actions/auth.js";
+import {  useSelector } from "react-redux";
+//import { logout } from "../redux/actions/auth.js";
+
 const { Option } = Select;
 const { Step } = Steps;
 const { Text } = Typography;
@@ -30,11 +31,11 @@ const HotListDonate = (props) => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [ellipsis, /* setEllipsis */] = React.useState(true);
     const [current, setCurrent] = React.useState(0);
-    const [licked, setLicked] = React.useState(false);
+    const [licked, /* setLicked */] = React.useState(false);
     const [checked, setChecked] = React.useState(false);
     const [value, setValue] = useState(1);
-    const { isLoggedIn } = useSelector(state => state.auth);
-    const data = useSelector(state => state.auth.user);
+    const { isLoggedIn } = useSelector(state => state.login);
+    const data = useSelector(state => state.login.user);
 
     console.log(data);
     const showModal = (e) => {

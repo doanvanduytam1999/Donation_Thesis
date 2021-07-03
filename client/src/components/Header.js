@@ -1,38 +1,77 @@
 import React from 'react';
-import { Menu, Row, Col, Button } from 'antd';
+import { Menu, Row, Col, Button, Dropdown, Badge } from 'antd';
 //import { AppstoreOutlined, SettingOutlined } from '@ant-design/icons';
+import { DownOutlined, BellOutlined } from '@ant-design/icons';
 import "../style/Header.scss";
-import { Link } from 'react-router-dom';
+import { Link,Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
-import  {logout} from "../redux/actions/auth.js";
+import { logout } from "../redux/actions/auth.js";
 import ModalLogin from './ModalLogin';
+import firebase from 'firebase';
 
 
-const handleClick = (e) => {
+/* const handleClick = (e) => {
     console.log(e.target);
-}
+} */
 const style = {
     fontSize: "20px",
     fontWeight: "500",
     height: "65px",
-    lineHeight: "65px"
+    lineHeight: "65px",
+    zIndex: '1000',
 
 }
+
+
 const Header = () => {
-    const { isLoggedIn } = useSelector(state => state.auth);
+    const { isLoggedIn } = useSelector((state) => state.login);
     const dispatch = useDispatch();
+    const data = useSelector(state => state.login.user);
     const logOut = () => {
+        <Redirect to="/" />
         dispatch(logout());
-      };
+        firebase.auth().signOut();
+        localStorage.removeItem('user');
+      
+    };
+    const menu = (
+        <Menu>
+            <Menu.Item>
+                <Link to="">Trang chủ</Link>
+            </Menu.Item>
+            <Menu.Item >
+                <Link to="/thong-tin-tai-khoan">Thông tin tài khoản</Link>
+            </Menu.Item>
+            <Menu.Item danger >
+                <Link onClick={logOut}>Đăng xuất</Link>
+
+            </Menu.Item>
+
+        </Menu>
+    );
+    const notification = (
+        <Menu>
+            <Menu.Item>
+                <Link to="">Trang chủ</Link>
+            </Menu.Item>
+            <Menu.Item >
+                <Link to="/thong-tin-tai-khoan">Thông tin tài khoản</Link>
+            </Menu.Item>
+            <Menu.Item danger >
+                <Link onClick={logOut}>Đăng xuất</Link>
+
+            </Menu.Item>
+
+        </Menu>
+    );
+    <Redirect to="/" />
     return (
         <>
             <Row>
                 <Col span={24} >
-                    <Menu style={style} onClick={handleClick} selectedKeys={"hehe"} mode="horizontal">
+                    <Menu style={style} /* onClick={handleClick} */ selectedKeys={"hehe"} mode="horizontal">
                         <Menu.Item className="logo-item" key="mail">
-                            <a href="http://localhost:3000/">
-                                <img alt="logo" style={{ marginLeft: '30px' }} width="40px" src="../images/logo.png" ></img>
-                            </a>
+                            <Link to=""><img alt="logo" style={{ marginLeft: '30px' }} width="40px" src="../images/logo.png" ></img></Link>
                         </Menu.Item>
                         <Menu.Item key="app">
                             Gây quỷ
@@ -43,24 +82,36 @@ const Header = () => {
                         <Menu.Item key="contact">
                             Liên hệ
                         </Menu.Item>
-                        {isLoggedIn === false? (
+                        {isLoggedIn === false ? (
                             <>
-                                <Menu.Item className="right-lg" key="login"  >
-                                <ModalLogin />
-                                </Menu.Item>
                                 <Menu.Item className="right" key="sign-up" >
-                                    <Button type="primary"><Link to="/dang-ki">Đăng kí</Link></Button>
+                                    <ModalLogin />
                                 </Menu.Item>
                             </>
                         ) : (
                             <>
-                                <Menu.Item className="right" key="logut" >
-                                    <Button onClick={logOut} type="primary">Đăng xuất</Button>
+                                <Menu.Item className="right-lg" key="notification"  >
+
+                                    <Dropdown overlay={notification} trigger={['click']}>
+                                        <a href="#/" className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                                            <Badge size="default" count={5}>
+                                                <BellOutlined style={{ fontSize: "30px" }} />
+                                            </Badge>
+                                        </a>
+                                    </Dropdown>
+
                                 </Menu.Item>
+
+                                <Dropdown className='right' overlay={menu}>
+                                    <a href="#/" className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                                        {data.username} <DownOutlined />
+                                    </a>
+                                </Dropdown>
+
                             </>
                         )}
 
-
+                    
                     </Menu>
                 </Col>
             </Row>
