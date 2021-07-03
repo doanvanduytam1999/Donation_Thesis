@@ -6,6 +6,7 @@ import "../style/Detail.scss";
 import { useParams } from "react-router-dom";
 import donateEvensts from '../Api/donateEvensts';
 import PayPal from "../components/Paypal";
+import ListDonate from '../components/ListDonate';
 const { TabPane } = Tabs;
 const { Option } = Select;
 const { Step } = Steps;
@@ -17,94 +18,18 @@ const layout = {
 const columns = [
     {
       title: 'Tên ',
-      dataIndex: 'name',
-      key: 'name',
-      render: text => <a href="#/">{text}</a>,
-    },
-    {
-      title: 'Số điện thoại',
-      dataIndex: 'phone',
-      key: 'phone',
-    },
-    {
-      title: 'Số tiền ủng hộ',
-      dataIndex: 'coin',
-      key: 'coin',
-    },
-    {
-      title: 'Trạng thái',
-      key: 'status',
-      dataIndex: 'status',
+      dataIndex: 'tenNguoiDonate',
+      key: 'tenNguoiDonate',
       
     },
+    {
+      title: 'Số tiền ủng hộ (VNĐ)',
+      dataIndex: 'soTienDonate',
+      key: 'soTienDonate',
+    }
   ];
   
-  const data = [
-    {
-      key: '1',
-      name: 'Quách Trọng Nhân',
-      phone: '0849119919',
-      coin: '1.000 vnđ',
-      status: "Đã chuyển ",
-    },
-    {
-        key: '2',
-        name: 'Quách Trọng Nhân',
-        phone: '0849119919',
-        coin: '2.000 vnđ',
-        status: "Đã chuyển ",
-    },
-    {
-        key: '3',
-        name: 'Quách Trọng Nhân',
-        phone: '0849119919',
-        coin: '5.000 vnđ',
-        status: "Đã chuyển ",
-    },
-    {
-        key: '4',
-        name: 'Quách Trọng Nhân',
-        phone: '0849119919',
-        coin: '10.000 vnđ',
-        status: "Đã chuyển ",
-    },
-    {
-        key: '5',
-        name: 'Quách Trọng Nhân',
-        phone: '0849119919',
-        coin: '20.000 vnđ',
-        status: "Đã chuyển ",
-    },
-    {
-        key: '6',
-        name: 'Quách Trọng Nhân',
-        phone: '0849119919',
-        coin: '50.000 vnđ',
-        status: "Chưa chuyển ",
-    },
-    {
-        key: '7',
-        name: 'Quách Trọng Nhân',
-        phone: '0849119919',
-        coin: '100.000 vnđ',
-        status: "Đã chuyển ",
-    },
-    {
-        key: '8',
-        name: 'Quách Trọng Nhân',
-        phone: '0849119919',
-        coin: '200.000 vnđ',
-        status: "Chưa chuyển ",
-    },
-    {
-        key: '9',
-        name: 'Quách Trọng Nhân',
-        phone: '0849119919',
-        coin: '500.000 vnđ',
-        status: "Chưa chuyển ",
-    },
-  ];
-
+  
 const Detail = () => {
     let { _id } = useParams();
     const [Donate, setDonate] = useState([]);
@@ -112,6 +37,7 @@ const Detail = () => {
     const [checked, setChecked] = React.useState(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [current, setCurrent] = React.useState(0);
+    const [AllDonator, setAllDonator] = useState([]);
     const showModal = () => {
       setIsModalVisible(true);
       setCurrent(0)
@@ -129,7 +55,7 @@ const Detail = () => {
                 await donateEvensts.get(_id).then((res) => {
                     res.data.DonateEnvent.soTienCanDonate = res.data.DonateEnvent.soTienCanDonate.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
                     setDonate(res.data.DonateEnvent);
-                    console.log('ádas',res.data.DonateEnvent);
+                    //console.log('ádas',res.data.DonateEnvent);
                     setImg(res.data.DonateEnvent.hinhAnh)
                     
                 });
@@ -137,10 +63,28 @@ const Detail = () => {
                 console.log("Failed to fetch Donate data at: ", error);
             }
         };
+        const fetchAllDonater= async()=>{
+            try{
+                await donateEvensts.getAllDonater(_id).then((res)=>{
+                    if(res.data.status==="success"){
+                        /* res.data.AllDonater.soTienDonate = res.data.AllDonater.soTienDonate.replace(/\B(?=(\d{3})+(?!\d))/g, "."); */
+                        setAllDonator(res.data.AllDonater)
+                    }
+                    
+                })
+            } catch(error){
+                console.log("Failed to fetch AllDonator data at: ", error);
+            }
+        }
         fetchData();
+        fetchAllDonater();
     }, []);
-    console.log(Donate.noiDung);
-    
+   
+    AllDonator.forEach(element => {
+        element.soTienDonate= element.soTienDonate.replace(/\B(?=(\d{3})+(?!\d))/g, ".")+'đ'
+
+    });
+    console.log(AllDonator);
     const phoneSelector = (
         <Form.Item name="prefix" noStyle>
             <Select style={{ width: 70 }}>
@@ -384,7 +328,7 @@ const Detail = () => {
                                         {parse(parse(html))}
                             </TabPane>
                                     <TabPane tab="Nhà hảo tâm" key="3">
-                                    <Table columns={columns} dataSource={data} />
+                                    <Table columns={columns} dataSource={AllDonator} />
                             </TabPane>
                                     <TabPane tab="Các quyên góp khác" key="4">
                                         Content of Tab Pane 3

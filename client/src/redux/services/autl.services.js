@@ -1,20 +1,16 @@
 import axios from "axios";
 
 
-const API_URL = "http://localhost:4000/admin/";
-
-const register = (username, email, password) => {
-  return axios.post(API_URL + "signup", {
-    username,
-    email,
-    password,
-  });
+const API_URL = "http://localhost:4000";
+//const API_URLRS ="http://localhost:4000/";
+const register = (values) => {
+  return axios.post(API_URL + "/signup",values);
 };
 
 const login = (values) => {
   
   return axios
-    .post(API_URL + "login", values, {
+    .post(API_URL + "/login", values, {
       headers: {
         'Content-Type': 'application/json'
       },

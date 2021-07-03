@@ -6,7 +6,7 @@ import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import firebase from 'firebase';
 import { useHistory,Redirect } from 'react-router-dom';
 import "../style/bootstrap-grid.min.css";
-import { login } from "../redux/actions/auth.js";
+import { login,register } from "../redux/actions/auth.js";
 import "../style/ModalLogin.scss";
 // Configure FirebaseUI.
 const uiConfig = {
@@ -56,6 +56,15 @@ const ModalLogin = () => {
 
         console.log('Received values of form: ', values.username);
     };
+    const onResgiter =(values)=>{
+        console.log(values);
+        dispatch(register(values)).then(()=>{
+            console.log("dăng kí");
+        })
+        .catch(()=>{
+            console.log("dang ki that bai");
+        })
+    }
     const Facebook = props => (
         <a href="#/" id="facebookIcon"></a>
     );
@@ -122,9 +131,9 @@ const ModalLogin = () => {
                                     name="normal_resgiter"
                                     className="resgiter-form"
                                     initialValues={{ remember: true }}
-                                    onFinish={onFinish}
+                                    onFinish={onResgiter}
                                 >
-                                    <p>Tài khoảng </p>
+                                    <p>Tài khoản </p>
                                     <Form.Item
                                         name="username"
                                         rules={[{ required: true, message: 'Hãy nhập tài khoản!' }]}
@@ -167,11 +176,24 @@ const ModalLogin = () => {
                                             autoComplete="off"
                                         />
                                     </Form.Item>
+                                    <p>Họ và tên</p>
+                                    <Form.Item
+                                        name="name"
+                                        rules={[{ required: true, message: 'Hãy nhập họ tên !' }]}
+                                    >
+                                        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Họ tên" autoComplete="off" />
+                                    </Form.Item>
+                                    <p>Số điện thoại</p>
+                                    <Form.Item
+                                        name="phone"
+                                        rules={[{ required: true, message: 'Hãy nhập số điện thoại!' }]}
+                                    >
+                                        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Số điện thoại" autoComplete="off" />
+                                    </Form.Item>
                                     <Form.Item >
                                         <Button type="primary" htmlType="submit" className="resgister-form-button">
                                             Đăng kí
                                         </Button>
-                                     
                                     </Form.Item>
                                 </Form>
                             </TabPane>

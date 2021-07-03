@@ -32,7 +32,6 @@ const Header = () => {
         dispatch(logout());
         firebase.auth().signOut();
         localStorage.removeItem('user');
-      
     };
     const menu = (
         <Menu>
@@ -44,9 +43,7 @@ const Header = () => {
             </Menu.Item>
             <Menu.Item danger >
                 <Link onClick={logOut}>Đăng xuất</Link>
-
             </Menu.Item>
-
         </Menu>
     );
     const notification = (
@@ -59,9 +56,7 @@ const Header = () => {
             </Menu.Item>
             <Menu.Item danger >
                 <Link onClick={logOut}>Đăng xuất</Link>
-
             </Menu.Item>
-
         </Menu>
     );
     <Redirect to="/" />
@@ -99,9 +94,7 @@ const Header = () => {
                                             </Badge>
                                         </a>
                                     </Dropdown>
-
                                 </Menu.Item>
-
                                 <Dropdown className='right' overlay={menu}>
                                     <a href="#/" className="ant-dropdown-link" onClick={e => e.preventDefault()}>
                                         {data.username} <DownOutlined />
@@ -110,8 +103,6 @@ const Header = () => {
 
                             </>
                         )}
-
-                    
                     </Menu>
                 </Col>
             </Row>

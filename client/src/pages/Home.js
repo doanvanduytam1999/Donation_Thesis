@@ -20,6 +20,7 @@ const Home = () => {
     const [listDonate, setListdonate] = useState([]);
     const [listCategory, setListCategory] = useState([]);
     const { isLoggedIn } = useSelector(state => state.login);
+   
     //const  data  = useSelector(state => state.auth.user);
     
         //console.log(data);
@@ -35,6 +36,7 @@ const Home = () => {
                 console.log("Failed to fetch brand data at: ", error);
             }
         };
+     
         const fetchCategory = async () => {
             try {
                 await donateEvensts.getCategory().then((res) => {
@@ -44,6 +46,7 @@ const Home = () => {
                 console.log(error);
             }
         };
+
         fetchCategory();
         fetchdonatesData();
 
@@ -87,6 +90,7 @@ const Home = () => {
         backgroundImage: `url("../images/donate/bg-rs.jpg")`,
 
     }
+   
     if(isLoggedIn){
         <Redirect to="/" />
     

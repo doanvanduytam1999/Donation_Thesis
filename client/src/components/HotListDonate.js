@@ -251,14 +251,14 @@ const HotListDonate = (props) => {
                                                         name="name"
                                                         rules={[{ required: true, message: 'Hãy nhập họ tên của bạn !' }]}
                                                     >
-                                                        <Input placeholder="Họ và tên của bạn" />
+                                                        <Input style={{background:"#5858583b"}} readOnly/>
                                                     </Form.Item>
                                                     <Form.Item
                                                         label="Số điện thoại"
                                                         name="phone"
 
                                                     >
-                                                        <Input placeholder="Nhập số điện thoại của bạn " addonBefore={phoneSelector} style={{ width: '100%' }} />
+                                                        <Input  style={{ width: '100%',backgroundColor:"#5858583b" }}readOnly />
                                                     </Form.Item>
 
                                                     <Form.Item

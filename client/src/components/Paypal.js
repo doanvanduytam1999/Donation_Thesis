@@ -31,7 +31,10 @@ const Paypal = () => {
                         console.log("abc");
                         axios.post(url,{
                             data: getData
-                        })
+                        },{headers: {
+                            'Content-Type': 'application/json'
+                          },
+                          withCredentials: true})
                     }
                     
 

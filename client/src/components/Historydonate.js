@@ -4,7 +4,7 @@ const layout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
   };
-const Historydonate = () => {
+const Historydonate = (props) => {
     const columns = [
         {
           title: 'Tiêu đề bài viết',
@@ -37,11 +37,10 @@ const Historydonate = () => {
             key: 'trangThai',
           },
       ];
+console.log(props.Historydonate);
     return (
        <>
-       <div style={{textAlign:"center"}}>
-       <Table {...layout} /* dataSource={listDonate} */ columns={columns} />;
-       </div>
+       
        </>
     );
 }

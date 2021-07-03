@@ -1,5 +1,4 @@
 import AxiosClient from "./AxiosClient"
-
 const donateEvensts ={  
    getAll: ()=>{
     const url = '/donateEvensts';
@@ -10,8 +9,16 @@ const donateEvensts ={
     return AxiosClient.get(url);
    },
    getCategory: ()=>{
-       const url ="categoryDonateEvents";
+       const url ="/categoryDonateEvents";
        return AxiosClient.get(url);
+   },
+   getListdonateUser:()=>{
+       const url ="/allDonate";
+       return AxiosClient.get(url)
+   },
+   getAllDonater:(id)=>{
+    const url = `/allDonater/${id}`;
+    return AxiosClient.get(url);
    }
 };
 
