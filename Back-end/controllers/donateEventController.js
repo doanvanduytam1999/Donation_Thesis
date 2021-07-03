@@ -2,6 +2,8 @@ const catchAsync = require('../utils/catchAsync');
 const DonateEvent = require('../models/donateEvent');
 const CategoryDonateEvent = require('../models/categoryDonateEvent');
 const DonateAction = require('../models/donateAction');
+const UserCustomer = require('../models/user');
+const AuthController= require('../controllers/authController');
 
 
 
@@ -80,7 +82,7 @@ exports.postCategoryDonateEvents = catchAsync(async (req, res, next) => {
 
 exports.postDonate = catchAsync(async (req, res, next) => {
     const data = req.body.data;
-    console.log(data);
+    const user = await AuthController.userIsLoggedIn(req.cookies.jwt);
     let donateEvent = await DonateEvent.findById(data.id);
     let soTienHienCo = donateEvent.soTienDonateHieTai;
     let soTienDonate = data.coin.toString();
@@ -89,11 +91,7 @@ exports.postDonate = catchAsync(async (req, res, next) => {
         content = data.content;
     }
 
-    console.log();
     soTienHienCo = (Number(soTienHienCo) + Number(soTienDonate)).toString();
-    console.log(Number(soTienHienCo));
-    console.log(Number(soTienDonate));
-    console.log(soTienHienCo);
     const updateTienDaDonate = await DonateEvent.findByIdAndUpdate(data.id, {
         soTienDonateHieTai: soTienHienCo
     }, {
