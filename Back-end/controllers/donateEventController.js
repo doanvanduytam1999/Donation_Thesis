@@ -99,13 +99,13 @@ exports.postDonate = catchAsync(async (req, res, next) => {
         new: true,
         runValidators: true
     });
-
+    console.log(data);
     if (user) {
         if (data.checked) {
             const donateAnDanh = await DonateAction.create({
                 soTienDonate: soTienDonate,
                 loiNhan: content,
-                chuongTringQuyenGop: data.id,
+                chuongTrinhQuyenGop: data.id,
                 userDonate: user.id
             })
         } else {
@@ -114,7 +114,7 @@ exports.postDonate = catchAsync(async (req, res, next) => {
                 soDienThoai: user.phone,
                 loiNhan: content,
                 soTienDonate: soTienDonate,
-                chuongTringQuyenGop: data.id,
+                chuongTrinhQuyenGop: data.id,
                 userDonate: user.id
             })
         }
@@ -123,7 +123,7 @@ exports.postDonate = catchAsync(async (req, res, next) => {
             const donateAnDanh = await DonateAction.create({
                 soTienDonate: soTienDonate,
                 loiNhan: content,
-                chuongTringQuyenGop: data.id
+                chuongTrinhQuyenGop: data.id
             })
         } else {
             const donateAction = await DonateAction.create({
@@ -131,7 +131,7 @@ exports.postDonate = catchAsync(async (req, res, next) => {
                 soDienThoai: data.phone,
                 loiNhan: content,
                 soTienDonate: soTienDonate,
-                chuongTringQuyenGop: data.id
+                chuongTrinhQuyenGop: data.id
             })
         }
     }

@@ -11,12 +11,13 @@ const userSchema = new mongoose.Schema({
       type: String,
       required: [true, 'Vui lòng cung cấp họ và tên']
     },
-  email: {
+  /* email: {
+    required: [true, 'Vui lòng cung cấp email'],
     type: String,
     unique: true,
     lowercase: true,
     validate: [validator.isEmail, 'Vui lòng cung cấp email đúng format']
-  },
+  } */
   password: {
     type: String,
     required: [true, 'Vui lòng cung cấp password'],
