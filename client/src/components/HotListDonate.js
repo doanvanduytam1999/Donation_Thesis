@@ -1,11 +1,12 @@
 import "../style/Home.scss";
 import "../style/bootstrap-grid.min.css";
-import React, {  useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Progress, Typography, Modal, Form, Input, Button, Steps, message, Checkbox, Select, Result, InputNumber } from 'antd';
 import { UsergroupAddOutlined } from '@ant-design/icons';
 import { Link } from "react-router-dom";
 import PayPal from "../components/Paypal"
-import {  useSelector } from "react-redux";
+import { useSelector } from "react-redux";
+import ListDonate from "./ListDonate";
 //import { logout } from "../redux/actions/auth.js";
 
 const { Option } = Select;
@@ -36,6 +37,10 @@ const HotListDonate = (props) => {
     const [value, setValue] = useState(1);
     const { isLoggedIn } = useSelector(state => state.login);
     const data = useSelector(state => state.login.user);
+    const [Listhost, setListhost] = useState(props.listDonates);
+    useEffect(() => {
+        setListhost(props.listDonates);
+    }, [props.listDonates])
 
     console.log(data);
     const showModal = (e) => {
@@ -229,7 +234,7 @@ const HotListDonate = (props) => {
 
                                             {...layout}
                                             name="basic"
-                                            initialValues={{ prefix: "84", coin: "10000", id: `${id}`,name:`${data.username}`, phone:"0849119919" }}
+                                            initialValues={{ prefix: "84", coin: "10000", id: `${id}`, name: `${data.username}`, phone: "0849119919" }}
                                             onFinish={onFinish}
                                             onFinishFailed={onFinishFailed}
                                         >
@@ -251,14 +256,14 @@ const HotListDonate = (props) => {
                                                         name="name"
                                                         rules={[{ required: true, message: 'Hãy nhập họ tên của bạn !' }]}
                                                     >
-                                                        <Input style={{background:"#5858583b"}} readOnly/>
+                                                        <Input style={{ background: "#5858583b" }} readOnly />
                                                     </Form.Item>
                                                     <Form.Item
                                                         label="Số điện thoại"
                                                         name="phone"
 
                                                     >
-                                                        <Input  style={{ width: '100%',backgroundColor:"#5858583b" }}readOnly />
+                                                        <Input style={{ width: '100%', backgroundColor: "#5858583b" }} readOnly />
                                                     </Form.Item>
 
                                                     <Form.Item
@@ -389,121 +394,125 @@ const HotListDonate = (props) => {
             },
         },
     ];
+ 
 
-    return (
-        <>
-            {props.listDonates.map((item) => {
-                if (item.tinNoiBat === true) {
-                    return (
-                        <>
-                            <div key='1' className="col-6 card">
-                                <Card
-                                    key='1'
-                                    hoverable
-                                    style={{ borderRadius: 10, height: 260, width: "100%" }}
-                                    cover={<img height="100%" alt="example" src={item.hinhAnh[0]} />}
-                                >
-                                    <p style={{ display: "none" }} data-id={item._id}></p>
-                                    <div className="detail">
-                                        <Link to={`thong-tin-chi-tiet/${item._id}`} >
-                                            <Text style={ellipsis ? { width: 200 } : undefined, { fontWeight: "500", fontSize: "18px", color: "#1890ff" }}
-                                                ellipsis={ellipsis ? { tooltip: `${item.tieuDe}` } : false} >
-                                                {item.tieuDe} </Text>
-                                        </Link>
-                                        <div className="progress">
-                                            <div className="progress_detail_top">
-                                                <p className="progress_detail_text">
 
-                                                    {convertNumber(item.soTienDonateHieTai)
-                                                    } VNĐ quyên góp
-                                                </p>
-                                                <p className="progress_detail_number">{Math.floor((item.soTienDonateHieTai / item.soTienCanDonate) * 100)}%</p>
-                                            </div>
-                                            <Progress percent={Math.floor((item.soTienDonateHieTai / item.soTienCanDonate) * 100)} showInfo={false} status="active" />
-                                            <div className="progress_detail_bot">
-                                                <p className="progress_detail_text">
-                                                    <UsergroupAddOutlined />lượt quyên góp
-                                                </p>
-                                                <p className="progress_detail_number">ngày còn lại</p>
-                                            </div>
+return (
+    <>
+        {Listhost.map((item) => {
+            if (item.tinNoiBat === true) {
+                return (
+                    <>
+                        <div key='1' className="col-6 card">
+                            <Card
+                                key='1'
+                                hoverable
+                                style={{ borderRadius: 10, height: 260, width: "100%" }}
+                                cover={<img height="100%" alt="example" src={item.hinhAnh[0]} />}
+                            >
+                                <p style={{ display: "none" }} data-id={item._id}></p>
+                                <div className="detail">
+                                    <Link to={`thong-tin-chi-tiet/${item._id}`} >
+                                        <Text style={ellipsis ? { width: 200 } : undefined, { fontWeight: "500", fontSize: "18px", color: "#1890ff" }}
+                                            ellipsis={ellipsis ? { tooltip: `${item.tieuDe}` } : false} >
+                                            {item.tieuDe} </Text>
+                                    </Link>
+                                    <div className="progress">
+                                        <div className="progress_detail_top">
+                                            <p className="progress_detail_text">
+
+                                                {convertNumber(item.soTienDonateHieTai)
+                                                } VNĐ quyên góp
+                                            </p>
+                                            <p className="progress_detail_number">{((item.soTienDonateHieTai/item.soTienCanDonate) *100).toFixed(3)}%</p>
+
                                         </div>
-                                        <p className="ant-btn ant-btn-primary " data-id={item._id} onClick={showModal}>Ủng hộ ngay</p>
+                                        <Progress percent={(item.soTienDonateHieTai / item.soTienCanDonate) * 100} showInfo={false} status="active" />
+                                     
+                                        <div className="progress_detail_bot">
+                                            <p className="progress_detail_text">
+                                                <UsergroupAddOutlined />lượt quyên góp
+                                            </p>
+                                            <p className="progress_detail_number">ngày còn lại</p>
+                                        </div>
                                     </div>
-                                </Card>
-                            </div>
-                        </>)
-                }
-            })
+                                    <p className="ant-btn ant-btn-primary " data-id={item._id} onClick={showModal}>Ủng hộ ngay</p>
+                                </div>
+                            </Card>
+                        </div>
+                    </>)
             }
-            {donator != null ? (
-                <>
+        })
+        }
+        {donator != null ? (
+            <>
 
-                    <Modal title={donator[0].tieuDe} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-                        <Steps current={current}>
-                            {steps.map(item => (
-                                <Step key={item.title} title={item.title} />
-                            ))}
-                        </Steps>
-                        <div className="steps-content">{steps[current].content()}</div>
-                        <div className="steps-action">
-                            {current < steps.length - 1 && (
-                                <>
-                                    {licked === false ? (<> <Button type="primary" onClick={() => next()}>
-                                        Tiếp theo ffd
-                                    </Button></>) : (
-                                        <>
-                                            <Button type="primary" onClick={() => next()}>
-                                                Tiếp theo
-                                            </Button>
-                                        </>
-                                    )}
+                <Modal title={donator[0].tieuDe} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+                    <Steps current={current}>
+                        {steps.map(item => (
+                            <Step key={item.title} title={item.title} />
+                        ))}
+                    </Steps>
+                    <div className="steps-content">{steps[current].content()}</div>
+                    <div className="steps-action">
+                        {current < steps.length - 1 && (
+                            <>
+                                {licked === false ? (<> <Button type="primary" onClick={() => next()}>
+                                    Tiếp theo ffd
+                                </Button></>) : (
+                                    <>
+                                        <Button type="primary" onClick={() => next()}>
+                                            Tiếp theo
+                                        </Button>
+                                    </>
+                                )}
 
-                                </>
-                            )}
-                            {current === steps.length - 1 && (
-                                <Button type="primary" onClick={handleCancel, () => message.success('Processing complete!')}>
-                                    Hoàn thành
-                                </Button>
-                            )}
-                            {current > 0 && (
-                                <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
-                                    Trở lại
-                                </Button>
-                            )}
-                        </div>
-                    </Modal>
+                            </>
+                        )}
+                        {current === steps.length - 1 && (
+                            <Button type="primary" onClick={handleCancel, () => message.success('Processing complete!')}>
+                                Hoàn thành
+                            </Button>
+                        )}
+                        {current > 0 && (
+                            <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
+                                Trở lại
+                            </Button>
+                        )}
+                    </div>
+                </Modal>
 
-                </>
-            ) : (
-                <>
-                    <Modal title={"ủng hộ"} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-                        <Steps current={current}>
-                            {steps.map(item => (
-                                <Step key={item.title} title={item.title} />
-                            ))}
-                        </Steps>
-                        <div className="steps-content">{steps[current].content()}</div>
-                        <div className="steps-action">
-                            {current < steps.length - 1 && (
-                                <Button type="primary" onClick={onChange, () => next()}>
-                                    Tiếp theo
-                                </Button>
-                            )}
-                            {current === steps.length - 1 && (
-                                <Button type="primary" onClick={handleCancel, () => message.success('Processing complete!')}>
-                                    Hoàn thành
-                                </Button>
-                            )}
-                            {current > 0 && (
-                                <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
-                                    Trở lại
-                                </Button>
-                            )}
-                        </div>
-                    </Modal>
-                </>
-            )}
-        </>
-    );
+            </>
+        ) : (
+            <>
+                <Modal title={"ủng hộ"} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+                    <Steps current={current}>
+                        {steps.map(item => (
+                            <Step key={item.title} title={item.title} />
+                        ))}
+                    </Steps>
+                    <div className="steps-content">{steps[current].content()}</div>
+                    <div className="steps-action">
+                        {current < steps.length - 1 && (
+                            <Button type="primary" onClick={onChange, () => next()}>
+                                Tiếp theo
+                            </Button>
+                        )}
+                        {current === steps.length - 1 && (
+                            <Button type="primary" onClick={handleCancel, () => message.success('Processing complete!')}>
+                                Hoàn thành
+                            </Button>
+                        )}
+                        {current > 0 && (
+                            <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
+                                Trở lại
+                            </Button>
+                        )}
+                    </div>
+                </Modal>
+            </>
+        )}
+    </>
+);
 }
 export default HotListDonate;
