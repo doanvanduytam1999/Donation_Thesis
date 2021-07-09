@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/actions/auth.js";
 import ModalLogin from './ModalLogin';
 import firebase from 'firebase';
+import donateEvensts from '../Api/donateEvensts';
 
 
 /* const handleClick = (e) => {
@@ -28,10 +29,15 @@ const Header = () => {
     const dispatch = useDispatch();
     const data = useSelector(state => state.login.user);
     const logOut = () => {
-        <Redirect to="/" />
-        dispatch(logout());
-        firebase.auth().signOut();
-        localStorage.removeItem('user');
+        donateEvensts.getLogout().then((res)=>{
+            if(res.data.status==="success"){
+                <Redirect to="/" />
+                dispatch(logout());
+                firebase.auth().signOut();
+                localStorage.removeItem('user');
+            }
+        })
+       
     };
     const menu = (
         <Menu>
@@ -69,13 +75,14 @@ const Header = () => {
                             <Link to=""><img alt="logo" style={{ marginLeft: '30px' }} width="40px" src="../images/logo.png" ></img></Link>
                         </Menu.Item>
                         <Menu.Item key="app">
-                            Gây quỷ
+                    
+                            <a href="#register">Gây quỷ</a>
                         </Menu.Item>
                         <Menu.Item key="about">
                             Về chúng thôi
                         </Menu.Item>
                         <Menu.Item key="contact">
-                            Liên hệ
+                            <Link to="/lien-he">Liên hệ</Link>
                         </Menu.Item>
                         {isLoggedIn === false ? (
                             <>

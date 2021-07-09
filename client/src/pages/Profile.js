@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Tabs,Table } from 'antd';
+import { Tabs,Table, message } from 'antd';
 import "../style/bootstrap-grid.min.css";
 import ProFile from '../components/Profilecpn';
 import HistoryDonate from "../components/Historydonate"
 import donateEvensts from '../Api/donateEvensts';
-
+import  { Redirect } from 'react-router-dom'
 const layout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
   };
 const { TabPane } = Tabs;
 const Profile = () => {
+    const islogin= JSON.parse(localStorage.getItem("user"))
+    
     const [AllDonate, setAllDonate] = useState([]);
     const [listDonates, setListdonates] = useState([]);
     const [History, setHistory] = useState([]);
@@ -74,7 +76,7 @@ const Profile = () => {
     AllDonate.forEach(element => {
         a.push(element.chuongTrinhQuyenGop)
     });
-    console.log(a);
+    console.log(islogin);
     for (let i = 0; i < a.length; i++) {
         //for (let j = 0; j < AllDonate.length; j++) {
             //if (a[i] === AllDonate[j].chuongTrinhQuyenGop) {
@@ -100,7 +102,11 @@ const Profile = () => {
     })
     const merge3 = DonateHistory.flat(1);   
     console.log(merge3);
-
+    if(!islogin){
+        
+        return <Redirect to='/'/>;
+       
+    }
     
     console.log(DonateHistory);
     return (

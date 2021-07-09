@@ -2,11 +2,13 @@
     .container {
         .introduce {
             .title {
+                font-family: NunitoBold;
                 margin-top: 90px;
                 font-size: 35px;
             }
             p {
                 color: #757575;
+                font-family: Nunito;
             }
         }
         .slider {
@@ -28,6 +30,39 @@
     margin-top: 50px;
     .container {
         .row {
+            .col-8{
+                .ant-tabs-top{
+                    .ant-tabs-nav{
+                        .ant-tabs-nav-wrap{
+                            .ant-tabs-nav-list{
+                                .ant-tabs-tab{
+                                    .ant-tabs-tab-btn{
+                                        font-family: NunitoBold;
+                                        font-size: 20px;
+                                    }
+                                }
+                            }
+                        }
+                        
+                    }
+                  
+                }
+                .ant-tabs-content-holder{
+                    .ant-tabs-content-top{
+                        .ant-tabs-tabpane{
+                            h2{
+                                font-family: NunitoBold;
+                            }
+                            p{
+                                color: #000;
+                                font-weight: 500;
+                                font-family: Nunito;
+                                font-size: 18px;
+                            }
+                        }
+                    }
+                }
+            }
             .col-4 {
                 .ant-tabs {
                     .ant-tabs-content {

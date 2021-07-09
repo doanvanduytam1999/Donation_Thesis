@@ -20,10 +20,11 @@ const Home = () => {
     const [listDonate, setListdonate] = useState([]);
     const [listCategory, setListCategory] = useState([]);
     const { isLoggedIn } = useSelector(state => state.login);
-   
+    const [Count, setCount] = useState(0);
     //const  data  = useSelector(state => state.auth.user);
-    
+    const order= JSON.parse(localStorage.getItem("orderStatus"))
         //console.log(data);
+        window.scrollTo({ behavior: 'smooth' });
     useEffect(() => {
 
         const fetchdonatesData = async () => {
@@ -50,7 +51,7 @@ const Home = () => {
         fetchCategory();
         fetchdonatesData();
 
-    }, []);
+    }, [Count]);
     const handleClick = (e) => {
         setListdonate(listDonates);
         let filterProduct = [];
@@ -90,14 +91,22 @@ const Home = () => {
         backgroundImage: `url("../images/donate/bg-rs.jpg")`,
 
     }
-   
+    const sumConinDonate = ()=>{
+        let sum = 0
+        for (let i = 0; i < listDonate.length; i++) {
+             sum =sum+  Number(listDonate[i].soTienDonateHieTai);
+            
+        }
+        return sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+    }
+    console.log(listDonate);
     if(isLoggedIn){
         <Redirect to="/" />
     
       }
     return (
         <>
-          <ScrollToTop smooth />
+          <ScrollToTop smooth={true} />
             <div className="homepage container-sm">
                 <div className="homepage_content col-10 offset-1 ">
                     <div>
@@ -110,16 +119,16 @@ const Home = () => {
                     </div>
                     <div className="button">
                         <div className="button_wapper ">
-                            <a type="button" className="ant-btn ant-btn-primary btn-explore" href="/explore"><span className="btn-text">Explore Charities</span></a>
+                            <a type="button" className="ant-btn ant-btn-primary btn-explore" href="/explore"><span className="btn-text">Tìm hiểu về tổ chức từ thiện</span></a>
                         </div>
-                        <div className="button_wapper ">
+                       {/*  <div className="button_wapper ">
                             <a type="button" className="ant-btn ant-btn-default btn-sign-in" href="/explore"><span className="btn-text">Explore Charities</span></a>
-                        </div>
+                        </div> */}
 
                     </div>
                     <div className="text_wapper">
                         <p className="text-bold ">Chúng tôi đã quyên góp được</p>
-                        <h2 className="text-bold"><span>$32,274,417.14</span></h2>
+                        <h2 className="text-bold"><span>{sumConinDonate()} VNĐ</span></h2>
                         <div className="icon-micro-heart"><img width="50px" alt="Heart" src="../images/hands.svg" /></div>
                         <div className="mb-1x"><span className="text-medium"><div className="html-sanitizer">Hãy giúp chúng thôi một tay</div></span></div>
                         <div className="text_wapper-about"><a href="/about-us"><span className="text-bold text-uppercase">Tìm hiểu về chúng tôi</span></a></div>
@@ -141,7 +150,7 @@ const Home = () => {
             <div className="homepage_list_donate list_donate_hot">
                 <div className="container">
                     <div className="list_donate_text  col-10 offset-1 ">
-                        <h2 className="text-bold">Nổi bật </h2>
+                        <h2 style={{ textAlign: "center" }}  className="text-bold">Nổi bật </h2>
                     </div>
                     <div className="list_card col-10 offset-1">
                         <div className="row">
@@ -157,10 +166,10 @@ const Home = () => {
                         <Tabs defaultActiveKey="1" size="large" centered onChange={handleClick} style={{ marginBottom: 32, }}>
                             <TabPane tab="Tất cả" key="1">
                             </TabPane>
-                            <TabPane tab="Mới nhất" key="2">
+                           {/*  <TabPane tab="Mới nhất" key="2">
                             </TabPane>
                             <TabPane tab="Sắp hết hạn" key="3">
-                            </TabPane>
+                            </TabPane> */}
                             {listCategory.map((category) => {
                                 return (
                                     <>
@@ -191,7 +200,7 @@ const Home = () => {
                 </div>
 
             </div>
-            <div style={bghomepageRegister} className="homepage_register">
+            <div style={bghomepageRegister} id="register" className="homepage_register">
                 <div className="container">
                     <div className="register_text col-10 offset-1 ">
                         <h2 className="text-bold text-wh ">Hãy tham gia cùng với chúng tôi</h2>

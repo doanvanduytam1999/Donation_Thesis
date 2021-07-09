@@ -27,6 +27,8 @@ const Profile = () => {
             <div style={{ marginTop: 8 }} >Tải ảnh đại diện</div>
         </div>
     );
+    const user= JSON.parse(localStorage.getItem("user"))
+    console.log(user.phone);
     return (
         <>
             <div className="row">
@@ -47,7 +49,7 @@ const Profile = () => {
                         name="basic"
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 16 }}
-                        initialValues={{ remember: true }}
+                        initialValues={{ username:`${user.username}`,name:`${user.hovaten}`,phone:`${user.phone}` }}
                         onFinish={onFinish}
                         onFinishFailed={onFinishFailed}
                     >

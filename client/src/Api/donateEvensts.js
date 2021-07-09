@@ -19,6 +19,10 @@ const donateEvensts ={
    getAllDonater:(id)=>{
     const url = `/allDonater/${id}`;
     return AxiosClient.get(url);
+   },
+   getLogout:()=>{
+       const url ="/logout";
+       return AxiosClient.get(url)
    }
 };
 

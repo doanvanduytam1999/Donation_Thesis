@@ -1,10 +1,22 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import axios from "axios";
+import { Modal,Result,Button } from 'antd';
+import {Link} from "react-router-dom"
 const Paypal = () => {
     const paypal = useRef();
     const getData = JSON.parse(localStorage.getItem("data"))
-   const vndToUsd =(getData.coin/23000).toFixed(2);
-
+    const vndToUsd = (getData.coin / 23000).toFixed(2);
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const showModal = () => {
+        setIsModalVisible(true);
+    };
+    const handleOk = () => {
+        setIsModalVisible(false);
+        window.location.reload();
+    };
+    const handleCancel = () => {
+        setIsModalVisible(false);
+    };
     console.log(vndToUsd);
     useEffect(() => {
         window.paypal
@@ -26,17 +38,21 @@ const Paypal = () => {
                 onApprove: async (data, actions) => {
                     const order = await actions.order.capture();
                     console.log(order.status);
-                    const url='http://localhost:4000/donate';
-                    if(order.status ==="COMPLETED"){
-                        console.log("abc");
-                        axios.post(url,{
+                    const url = 'http://localhost:4000/donate';
+                    if (order.status === "COMPLETED") {
+                        console.log(order.status);
+                        axios.post(url, {
                             data: getData
-                        },{headers: {
-                            'Content-Type': 'application/json'
-                          },
-                          withCredentials: true})
+                        }, {
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            withCredentials: true
+                        })
+                        showModal();
+
                     }
-                    
+
 
 
                 },
@@ -51,6 +67,19 @@ const Paypal = () => {
             <div>
                 <div ref={paypal}></div>
             </div>
+            <Modal title="" visible={isModalVisible}>
+                <Result
+                    status="success"
+                    title="Cám ơn bạn đã ủng hộ !"
+                    subTitle="Số tiền sẽ gữi cho người nhận ngay khi kết thúc chương trình !"
+                    extra={[
+                        <Button onClick={handleOk} type="primary" key="console">
+                            Trở về trang chủ
+                        </Button>,
+                       
+                    ]}
+                />
+            </Modal>
         </div>
     );
 }

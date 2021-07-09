@@ -1,0 +1,64 @@
+.container {
+    .ant-card {
+        border-radius: 10px;
+        -webkit-box-shadow: 0px 0px 10px -5px rgba(71, 71, 71, 1);
+        -moz-box-shadow: 0px 0px 10px -5px rgba(71, 71, 71, 1);
+        box-shadow: 0px 0px 10px -5px rgba(71, 71, 71, 1);
+
+        .ant-card-body {
+            .row {
+                .col-6 {
+                    .contact_form {
+                        width: 450px;
+                        .title {
+                            text-align: center;
+                            font-size: 26px;
+                            font-weight: bolder;
+                        }
+                        .ant-form {
+                            .ant-row {
+                                .ant-col {
+                                    .ant-form-item-control-input {
+                                        .ant-form-item-control-input-content {
+                                            textarea {
+                                                resize: none;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                .col-4 {
+                    border-radius: 10px;
+                    background-color: #1890ff;
+                    .title {
+                        margin-left: 20px;
+                        margin-top: 20px;
+                        font-size: 26px;
+                        font-weight: bolder;
+                        color: #fff;
+                    }
+                    .contact {
+                        margin-left: 20px;
+                        height: 100%;
+
+                        div {
+                            height: 300px;
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: space-evenly;
+                            align-self: start;
+
+                            p {
+                                color: #fff;
+                                font-size: 20px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

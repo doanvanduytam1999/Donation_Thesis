@@ -11,6 +11,14 @@ const ListDonate = (props) => {
     const convertNumber = (x) => {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     }
+    
+    const dayEnd = (day) => {
+        const currentDay = new Date();
+        let endtDay = Date.parse(day)
+        let ngayconlai = (endtDay - currentDay.getTime()) / 1000;
+        return Math.floor((ngayconlai / 60) / 60 / 24)
+
+    }
     return (
         <>
             {props.listDonate.map((item) => {
@@ -24,11 +32,11 @@ const ListDonate = (props) => {
                                         style={{ borderRadius: 10, height: 460 }}
                                         hoverable
                                         cover={<img alt="example" src={item.hinhAnh[0]} />}>
-                                        <Text style={ellipsis ? { width: 250 } : undefined, { fontWeight: "500", fontSize: "18px" }}
+                                        <Text className="title-text" style={ellipsis ? { width: 250 } : undefined}
                                             ellipsis={ellipsis ? { tooltip: 'Xem chi tiết !' } : false} >
                                             {item.tieuDe} </Text>
-                                        <Text
-                                            style={ellipsis ? { width: 250 } : undefined,{fontFamily: "cursive"}}
+                                        <Text className="title-tomtat"
+                                            style={ellipsis ? { width: 250 } : undefined}
                                             ellipsis={ellipsis ? { tooltip: 'Xem chi tiết !' } : false} >
                                             {item.tomTat}
                                         </Text>
@@ -43,9 +51,7 @@ const ListDonate = (props) => {
                                                         <p>Hoàn thành</p>
                                                     ) : (
                                                         <>
-                                                            <p>
-                                                                {Math.floor((item.soTienDonateHieTai / item.soTienCanDonate) * 100)}%
-                                                            </p>
+                                                             <p className="progress_detail_number">{((item.soTienDonateHieTai / item.soTienCanDonate) * 100).toFixed(3)}%</p>
 
                                                         </>
 
@@ -57,9 +63,9 @@ const ListDonate = (props) => {
                                             <Progress percent={Math.floor((item.soTienDonateHieTai / item.soTienCanDonate) * 100)} showInfo={Math.floor((item.soTienDonateHieTai / item.soTienCanDonate) * 100) === 100 ? (true) : (false)} status={Math.floor((item.soTienDonateHieTai / item.soTienCanDonate) * 100) === 100 ? ("success") : ("normal")} />
                                             <div className="progress_detail_bot">
                                                 <p className="progress_detail_text">
-                                                    <UsergroupAddOutlined />lượt quyên góp
+                                                    <UsergroupAddOutlined /> {item.luotDonate} lượt quyên góp
                                                 </p>
-                                                <p className="progress_detail_number">ngày còn lại</p>
+                                                <p className="progress_detail_number">{dayEnd(item.ngayKetThuc)} ngày còn lại</p>
                                             </div>
                                         </div>
 

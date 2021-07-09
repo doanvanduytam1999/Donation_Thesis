@@ -3,20 +3,18 @@ import Header from './components/Header';
 import 'antd/dist/antd.css';
 import Home from './pages/Home';
 import Footer from './components/Footer';
-import { BrowserRouter as Router, Route, Switch,Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import Detail from './pages/Detail';
-import Login from './pages/Login';
+//import Login from './pages/Login';
 import Resgister from './pages/Resgister';
 import Profile from './pages/Profile'
-import React,{useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import ScrollToTop from "react-scroll-to-top";
 import firebase from 'firebase';
-import { useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { unwrapResult } from '@reduxjs/toolkit';
 import { getMe } from './redux/reducer/UserSlice';
-
-import { login } from "./redux/actions/auth.js";
-
+import Contact from './pages/Contact';
 // Configure Firebase.
 const config = {
   apiKey: 'AIzaSyBuvMsY6qXN0XOR2pjo9g0YJ9JC5yfh9rE',
@@ -25,6 +23,7 @@ const config = {
 };
 firebase.initializeApp(config);
 function App() {
+  
   const [isSignedIn, setIsSignedIn] = useState(false); // Local signed-in state.
   const { isLoggedIn } = useSelector(state => state.login);
   const dispatch = useDispatch();
@@ -32,7 +31,7 @@ function App() {
   useEffect(() => {
     const unregisterAuthObserver = firebase.auth().onAuthStateChanged(async (user) => {
       setIsSignedIn(!!user);
-      if(!user){
+      if (!user) {
         console.log("Chưa đăng nhập");
         return
       }
@@ -41,7 +40,7 @@ function App() {
         const currentUser = unwrapResult(actionResult);
         localStorage.setItem("user", JSON.stringify(currentUser));
         console.log('Logged in user: ', currentUser);
-       
+
       } catch (error) {
         console.log('Failed to login ', error.message);
         // show toast error
@@ -49,37 +48,41 @@ function App() {
       console.log("Đã đăng nhập");
     });
     return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
-    
+
   }, []);
-  if(isLoggedIn){
+  if (isLoggedIn) {
     <Redirect to="/" />
 
   }
   return (
-   
+
     <Router>
-       <ScrollToTop smooth />
+     
         <Header />
         <Route exact path="/">
           <Home />
 
         </Route>
+        <Route exact path="/lien-he">
+          <Contact />
+
+        </Route>
         <Switch>
-        <Route exact path="/thong-tin-chi-tiet/:_id">
-          <Detail />
-        </Route>
-        <Route exact path="/thong-tin-tai-khoan">
-          <Profile />
-        </Route>
-        <Route exact path="/dang-nhap">
-          <Login />
-        </Route>
-        <Route exact path="/dang-ki">
-          <Resgister />
-        </Route>
+          <Route exact path="/thong-tin-chi-tiet/:_id">
+            <Detail />
+          </Route>
+          <Route exact path="/thong-tin-tai-khoan">
+            <Profile />
+          </Route>
+          {/* <Route exact path="/dang-nhap">
+            <Login />
+          </Route> */}
+          <Route exact path="/dang-ki">
+            <Resgister />
+          </Route>
         </Switch>
         <Footer />
-     
+    
     </Router>
 
   );
