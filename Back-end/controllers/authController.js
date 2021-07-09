@@ -75,6 +75,7 @@ exports.userIsLoggedIn = async (cookie) => {
 }
 
 exports.checkAdminLogin = catchAsync(async (req, res, next) => {
+  //console.log(req.cookies.jwtAdmin);
   if (req.cookies.jwtAdmin) {
     try {
       // 1) verify token

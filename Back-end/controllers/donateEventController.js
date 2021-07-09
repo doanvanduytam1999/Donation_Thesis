@@ -86,15 +86,18 @@ exports.postDonate = catchAsync(async (req, res, next) => {
     const user = await AuthController.userIsLoggedIn(req.cookies.jwt);
     let donateEvent = await DonateEvent.findById(data.id);
     let soTienHienCo = donateEvent.soTienDonateHieTai;
+    let luotDnt = donateEvent.luotDonate;
     let soTienDonate = data.coin.toString();
+    
     let content = "";
     if (typeof data.content !== 'undefined') {
         content = data.content;
     }
-
+    luotDnt = luotDnt + 1;
     soTienHienCo = (Number(soTienHienCo) + Number(soTienDonate)).toString();
     const updateTienDaDonate = await DonateEvent.findByIdAndUpdate(data.id, {
-        soTienDonateHieTai: soTienHienCo
+        soTienDonateHieTai: soTienHienCo,
+        luotDonate: luotDnt 
     }, {
         new: true,
         runValidators: true
@@ -121,6 +124,7 @@ exports.postDonate = catchAsync(async (req, res, next) => {
     } else {
         if (data.checked) {
             const donateAnDanh = await DonateAction.create({
+                
                 soTienDonate: soTienDonate,
                 loiNhan: content,
                 chuongTrinhQuyenGop: data.id

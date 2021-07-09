@@ -51,7 +51,11 @@ const DonateEnventSchemea = new mongoose.Schema(
         loaiBaiDang:{
             type: mongoose.Schema.Types.ObjectId,
             ref: "CategoryDonateEvent"
-        }
+        },
+        luotDonate: {
+            default: "0",
+            type: Number,
+        },
     }
     
 );

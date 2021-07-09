@@ -44,11 +44,13 @@ app.use(
     })
 );
 app.use(flash());
+
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: ['http://localhost:3000','http://localhost:3002'],
     methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD'],
     credentials: true
-  }));
+}));
+
 app.options('*', cors());
 app.use(xss());
 
@@ -58,7 +60,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', HomeRouter);
 
-app.use('/admin',AdminRouter)
+app.use('/admin', AdminRouter)
 
 //Catch 404 Erros and forward them to error handler
 app.use((req, res, next) => {
@@ -91,8 +93,8 @@ app.use(function (req, res, next) {
     next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 }); */
 
-app.use(cors());
-app.options('*', cors());
+/* app.use(cors());
+app.options('*', cors()); */
 //app.use(globalErrorHandler);
 
 
