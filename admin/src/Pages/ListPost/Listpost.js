@@ -1,6 +1,7 @@
 import React,{ useEffect, useState }  from 'react';
 import donateEvensts from '../../Api/donateEvensts';
 import { Table  } from 'antd';
+import {Redirect,Link} from "react-router-dom";
 
 
 
@@ -10,14 +11,15 @@ const layout = {
 };
 const Listpost = () => {
     const [listDonate, setListDonate] = useState([]);
-    
+    const islogin= JSON.parse(localStorage.getItem("user"))
+    islogin ? <Redirect to="/admin/danh-sach-bai-viet" /> : <Redirect to="/" />                                                     
     useEffect(() => {
         const fetchdonatesData = async () => {
             try {
                 await donateEvensts.getAll().then((res) => {
                    
                    
-                    setListDonate(res.data.DonateEnvents);
+                    setListDonate(res.data.AllPost);
                     
                 });
             } catch (error) {
@@ -26,7 +28,7 @@ const Listpost = () => {
         };
         fetchdonatesData();
     }, []);
-  
+  console.log(listDonate);
     const columns = [
         {
           title: 'Tiêu đề bài viết',
@@ -61,6 +63,7 @@ const Listpost = () => {
       ];
     return (
        <>
+       {islogin ? <Redirect to="/admin/danh-sach-bai-viet" /> : <Redirect to="/" />}
        <div style={{textAlign:"center"}}>
        <Table {...layout} dataSource={listDonate} columns={columns} />;
        </div>

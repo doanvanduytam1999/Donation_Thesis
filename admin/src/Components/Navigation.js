@@ -1,9 +1,13 @@
 import React from 'react';
 import { Menu } from 'antd';
 //import { AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
-import {BrowserRouter as Router,Switch,Route,Link} from "react-router-dom";
+import { Link,Redirect} from "react-router-dom";
 const { SubMenu } = Menu;
 const Navigation = () => {
+  const isLoggedIn= JSON.parse(localStorage.getItem("user"))
+    if(!isLoggedIn){
+        <Redirect to="/login"></Redirect>
+    }
     return (
         <Menu
        /*  onClick={this.handleClick} */
@@ -13,11 +17,11 @@ const Navigation = () => {
         mode="inline" 
       >
         <SubMenu key="sub1"  title="Quản lí">
-        <Menu.Item key="1"><Link to="/">Dashboard</Link></Menu.Item>
+        <Menu.Item key="1"><Link to="/admin/dashboard">Dashboard</Link></Menu.Item>
           <Menu.ItemGroup key="g1" title="Bài viết">
            
-            <Menu.Item key="2"><Link to="/danh-sach-bai-viet">Danh sách bài viết</Link></Menu.Item>
-            <Menu.Item  key="3"><Link to="/them-bai-viet">Thêm bài viết</Link></Menu.Item>
+            <Menu.Item key="2"><Link to="/admin/danh-sach-bai-viet">Danh sách bài viết</Link></Menu.Item>
+            <Menu.Item  key="3"><Link to="/admin/them-bai-viet">Thêm bài viết</Link></Menu.Item>
           </Menu.ItemGroup>
           <Menu.ItemGroup key="g2" title="Item 2">
             <Menu.Item key="4">Option 3</Menu.Item>

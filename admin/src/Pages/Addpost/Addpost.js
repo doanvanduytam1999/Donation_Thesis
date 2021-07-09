@@ -5,7 +5,7 @@ import Editor from 'ckeditor5-custom-build/build/ckeditor';
 import Firebase from '../Js/Firebase';
 import donateEvensts from '../../Api/donateEvensts';
 import { useHistory } from "react-router-dom";
-
+import {Redirect,Link} from "react-router-dom";
 import axios from "axios";
 import "../Addpost/Addpost.scss";
 
@@ -17,7 +17,7 @@ const layout = {
 const config = {
   rules: [{ required: true, message: 'Please select time!' }],
 };
-const validateMessages = {
+/* const validateMessages = {
   required: '${label} is required!',
   types: {
     email: '${label} is not a valid email!',
@@ -26,15 +26,19 @@ const validateMessages = {
   number: {
     range: '${label} must be between ${min} and ${max}',
   },
-};
+}; */
 const Addpost = () => {
+  const islogin= JSON.parse(localStorage.getItem("user"))
+  islogin ? <Redirect to="/admin/them-bai-viet" /> : <Redirect to="/" />
   const [text, setText] = useState("");
   const [img, setImg] = useState([]);
   const [Category, setCategory] = useState([]);
   const [dateStart, setDateStart] = useState("");
   const [dateEnd, setDateEnd] = useState("");
   let history = useHistory()
-
+  
+  //const isLoggedIn= JSON.parse(localStorage.getItem("user"))
+    
   const onFinish = (values) => {
     values['content'] = text;
     values['batdau'] = dateStart;
@@ -44,7 +48,10 @@ const Addpost = () => {
     console.log(values); const url = "http://localhost:4000/admin/addPost"
      axios.post(url, {
        data: values
-     }).then(async (res) => {
+     }, {headers: {
+      'Content-Type': 'application/json'
+    },
+    withCredentials: true}).then(async (res) => {
       console.log(res.data.status);
       if (res.data.status === "susscess") {
         message.success(`Thêm bài viết thành công !`)
@@ -163,12 +170,13 @@ const Addpost = () => {
   }
   return (
     <>
+     {islogin ? <Redirect to="/admin/them-bai-viet" /> : <Redirect to="/" />}
       <h3 className="title">Thêm bài viết</h3>
       <Form
         {...layout}
         name="nest-messages"
         onFinish={onFinish}
-        validateMessages={validateMessages}
+        //validateMessages={validateMessages}
         initialValues={{
           content: `${text}`
         }}>

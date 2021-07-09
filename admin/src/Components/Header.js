@@ -1,8 +1,12 @@
 import React from 'react';
-import { Menu, Row, Col,Button } from 'antd';
+import { Menu, Row, Col,Dropdown } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
 
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../redux/actions/auth.js";
 import "./Header.scss";
-import { Link } from 'react-router-dom';
+import { Link,Redirect } from 'react-router-dom';
+//import  donateEvensts  from "../Api/donateEvensts";
 const handleClick = (e) => {
     console.log(e.target);
 }
@@ -14,6 +18,27 @@ const style ={
 
 }
 const Header = () => {
+    const { isLoggedIn } = useSelector((state) => state.login);
+    const dispatch = useDispatch();
+    const data = useSelector(state => state.login.user);
+    const logOut = () => {
+        <Redirect to="/"/>
+        dispatch(logout());
+    };
+ 
+    const menu = (
+        <Menu>
+            <Menu.Item>
+                <Link to="">Trang chủ</Link>
+            </Menu.Item>
+            <Menu.Item >
+                <Link to="/thong-tin-tai-khoan">Thông tin tài khoản</Link>
+            </Menu.Item>
+            <Menu.Item danger >
+                <Link onClick={logOut}>Đăng xuất</Link>
+            </Menu.Item>
+        </Menu>
+    );
     return (
         <>
             <Row>
@@ -23,15 +48,14 @@ const Header = () => {
                             <a href="http://localhost:3000/">
                             <img alt="logo"  style={{marginLeft:'30px'}} width="40px" src="../images/logo.png" ></img>
                             </a>
-                          
-                           
-                           
                         </Menu.Item>
-                        <Menu.Item className="right-lg" key="login"  >
-                            <Button type="primary">Đăng nhập</Button>
-                        </Menu.Item>
-                        <Menu.Item className="right" key="sign-up" >
-                        <Button type="primary">Đăng kí</Button>
+                        <Menu.Item className="right" key="login"  >
+                        <Dropdown overlay={menu}>
+                                    <a href="#/" className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+
+                                        {!isLoggedIn ?(<></>):(<>{data.username}</>)} <DownOutlined />
+                                    </a>
+                                </Dropdown>
                         </Menu.Item>
                     </Menu>
                 </Col>
