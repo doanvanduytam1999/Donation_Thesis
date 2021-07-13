@@ -32,7 +32,7 @@ const Contact = () => {
           message.error("Gửi gmail không  thành công:",error)
         });
     };
-   
+   let day ="2018-04-04"
     return (
 
         <>
@@ -66,6 +66,7 @@ const Contact = () => {
                                     >
                                         <Input.TextArea  name="message" rows={5} placeholder="Nội dung" />
                                     </Form.Item>
+                                  
                                     <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
                                         <Button type="primary" htmlType="submit">
                                             Gửi gmail

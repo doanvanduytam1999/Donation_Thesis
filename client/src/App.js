@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { unwrapResult } from '@reduxjs/toolkit';
 import { getMe } from './redux/reducer/UserSlice';
 import Contact from './pages/Contact';
+import AllDonate from './pages/AllDonate';
 // Configure Firebase.
 const config = {
   apiKey: 'AIzaSyBuvMsY6qXN0XOR2pjo9g0YJ9JC5yfh9rE',
@@ -65,6 +66,10 @@ function App() {
         </Route>
         <Route exact path="/lien-he">
           <Contact />
+
+        </Route>
+        <Route exact path="/tat-ca-chuong-trinh">
+          <AllDonate />
 
         </Route>
         <Switch>

@@ -10,7 +10,7 @@ import HotListDonate from "../components/HotListDonate"
 import ListDonate from '../components/ListDonate';
 import ScrollToTop from "react-scroll-to-top";
 import { useSelector } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { Redirect,Link } from 'react-router-dom';
 
 //import { useCookies } from 'react-cookie';
 
@@ -18,7 +18,7 @@ const { TabPane } = Tabs;
 const Home = () => {
     const [listDonates, setListdonates] = useState([]);
     const [listDonate, setListdonate] = useState([]);
-    const [listCategory, setListCategory] = useState([]);
+    const [listCategory, setListCategory] = useState([]); 
     const { isLoggedIn } = useSelector(state => state.login);
     const [Count, setCount] = useState(0);
     //const  data  = useSelector(state => state.auth.user);
@@ -182,7 +182,8 @@ const Home = () => {
 
                         </Tabs>
                         <div className="row" >
-                            {<ListDonate listDonate={listDonate} />}                         
+                            {<ListDonate listDonate={listDonate} />}  
+                            <Link className="ant-btn ant-btn-primary bnt-load-more" to="/tat-ca-chuong-trinh" >Xem tất cả </Link>                       
                         </div>
                     </div>
                 </div>

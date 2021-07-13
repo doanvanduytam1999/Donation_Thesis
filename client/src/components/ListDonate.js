@@ -1,17 +1,27 @@
-import React from 'react';
-import { Card, Progress, Typography, Badge, } from 'antd';
+import React,{useState,useEffect} from 'react';
+import { Card, Progress, Typography, Badge,Input } from 'antd';
 import {  UsergroupAddOutlined } from '@ant-design/icons';
-
 import { Link } from "react-router-dom";
 import "../style/Home.scss";
 import "../style/bootstrap-grid.min.css";
+const { Search } = Input;
 const ListDonate = (props) => {
+    
+    const [list, setlist] = useState([ props.listDonate]);
     const { Text } = Typography;
-    const [ellipsis, /* setEllipsis */] = React.useState(true);
+    const [ellipsis, setEllipsis] = React.useState(true);
+    const [visible, setVisible] = useState(9);
+    const [searchTerm, setSearchTerm] = useState("");
+    
+ 
     const convertNumber = (x) => {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     }
-    
+    const onSearch = (value) => {
+        setSearchTerm(value.target.value);
+        console.log(value.target.value);
+    }
+   console.log(list);
     const dayEnd = (day) => {
         const currentDay = new Date();
         let endtDay = Date.parse(day)
@@ -19,15 +29,36 @@ const ListDonate = (props) => {
         return Math.floor((ngayconlai / 60) / 60 / 24)
 
     }
+   /*  useEffect(() => {
+        const results = people.filter(person =>
+          person.toLowerCase().includes(searchTerm)
+        );
+        setSearchResults(results);
+      }, [searchTerm]); */
+    const results = !searchTerm
+    ? props.listDonate
+    : props.listDonate.filter(list =>
+        list.tieuDe.toLowerCase().includes(searchTerm.toLocaleLowerCase())
+      );
+      //setSearchResults(results)
+      console.log(searchTerm);
     return (
-        <>
-            {props.listDonate.map((item) => {
+        <>   
+        
+        <Search className="input-search" type="text"
+        placeholder="Tìm kiếm"
+        value={searchTerm}
+        onChange={onSearch} style={{ width: 800}} 
+         />
+           
+
+            {results.slice(0, visible).map((item) => {
                 return (
                     <>
+                  
                         <div className="col-4 " >
                             <Badge count={item.tenLoai}>
                                 <Link to={`thong-tin-chi-tiet/${item._id}`} >
-
                                     <Card className="margin-top"
                                         style={{ borderRadius: 10, height: 460 }}
                                         hoverable
@@ -79,6 +110,7 @@ const ListDonate = (props) => {
                 )
 
             })}
+           
         </>
     );
 }

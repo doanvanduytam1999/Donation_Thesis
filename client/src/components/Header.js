@@ -9,8 +9,6 @@ import { logout } from "../redux/actions/auth.js";
 import ModalLogin from './ModalLogin';
 import firebase from 'firebase';
 import donateEvensts from '../Api/donateEvensts';
-
-
 /* const handleClick = (e) => {
     console.log(e.target);
 } */
@@ -20,10 +18,7 @@ const style = {
     height: "65px",
     lineHeight: "65px",
     zIndex: '1000',
-
 }
-
-
 const Header = () => {
     const { isLoggedIn } = useSelector((state) => state.login);
     const dispatch = useDispatch();
@@ -37,7 +32,6 @@ const Header = () => {
                 localStorage.removeItem('user');
             }
         })
-       
     };
     const menu = (
         <Menu>
@@ -75,7 +69,6 @@ const Header = () => {
                             <Link to=""><img alt="logo" style={{ marginLeft: '30px' }} width="40px" src="../images/logo.png" ></img></Link>
                         </Menu.Item>
                         <Menu.Item key="app">
-                    
                             <a href="#register">Gây quỷ</a>
                         </Menu.Item>
                         <Menu.Item key="about">
@@ -107,14 +100,11 @@ const Header = () => {
                                         {data.username} <DownOutlined />
                                     </a>
                                 </Dropdown>
-
                             </>
                         )}
                     </Menu>
                 </Col>
             </Row>
-
-
         </>
     );
 }

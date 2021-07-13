@@ -1,7 +1,15 @@
 .ant-progress-bg {
     background: #1890ff;
 }
-
+.bnt-load-more{
+    margin:30px 0 20px 0 ;
+    width: 400px;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    border-radius: 5px;
+}
 h2 {
     font-size: 48px;
     font-family: Nunito;
@@ -250,6 +258,8 @@ $fz-text: 14px;
                     }
                     .ant-card {
                         .ant-card-body {
+                            //margin:0 24px 0 24px;
+                            padding: 0 24px 0 24px;
                             .ant-typography{
                                 span{
                                     //font-family: NunitoBold;
@@ -272,7 +282,7 @@ $fz-text: 14px;
                                     }
                                 }
                                 .progress_detail_bot {
-                                    margin-top: 10px;
+                                    //margin-top: 10px;
                                     display: flex;
                                     justify-content: space-between;
                                     .progress_detail_text {
@@ -294,7 +304,11 @@ $fz-text: 14px;
         }
     }
 }
-
+.input-search{
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
 
 .homepage_app {
     height: 350px;
