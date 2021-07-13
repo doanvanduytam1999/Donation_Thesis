@@ -22,7 +22,8 @@ exports.postAddpost = catchAsync(async (req, res, next) => {
     })
 
     res.status(200).json({
-        status: 'susscess'
+        status: 'susscess',
+        Post: post
     })
 });
 
@@ -37,6 +38,30 @@ exports.getAdllCategoryDonateEvents = catchAsync(async (req, res, next) => {
     const allCategoryDonateEvent = await CategoryDonateEvent.find();
     res.status(200).json({
         AllCategory: allCategoryDonateEvent
+    })
+});
+
+exports.getAdllUserAdmin = catchAsync(async (req, res, next) => {
+    const allUserAdmin = await UserAdmin.find();
+    console.log(allUserAdmin);
+    res.status(200).json({
+        status: 'success',
+        AllUserAdmin: allUserAdmin
+    })
+});
+
+exports.postAddUserAdmin = catchAsync(async (req, res, next) => {
+    const data = req.body.data;
+    const addUserAdmin = await UserAdmin.create({
+        username: data.username,
+          email: data.email,
+          role: data.role,
+          password: data.password,
+          passwordConfirm: data.passwordConfirm,
+    });
+    res.status(200).json({
+        status: 'success',
+        UserAdmin: addUserAdmin
     })
 });
 

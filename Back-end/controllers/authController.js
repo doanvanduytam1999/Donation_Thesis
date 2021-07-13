@@ -182,18 +182,29 @@ const createSendTokenAdmin = (userAdmin, statusCode, res) => {
   };
 
   //if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
-  res.cookie('jwtAdmin', token, cookieOptions);
+  
 
   // Remove password from output
   userAdmin.password = undefined;
-
-  return res.status(statusCode).json({
-    status: 'success',
-    token,
-    data: {
-      user: userAdmin
-    }
-  });
+  console.log(userAdmin);
+  if(userAdmin.active === false){
+    return res.status(statusCode).json({
+      status: 'success',
+      active: false
+    });
+  }
+  else{
+    res.cookie('jwtAdmin', token, cookieOptions);
+    return res.status(statusCode).json({
+      status: 'success',
+      token,
+      active: true,
+      data: {
+        user: userAdmin
+      }
+    });
+  }
+  
 };
 //logout  customer
 
@@ -217,7 +228,7 @@ exports.logoutAdmin = (req, res) => {
 exports.loginCustomer = catchAsync(async (req, res, next) => {
   const islogin = await this.userIsLoggedIn(req.cookies.jwt);
   console.log(islogin);
-  if(islogin !== 'No Login'){
+  if (islogin !== 'No Login') {
     return res.status(301).json({
       status: "Is Login",
       user: islogin
@@ -227,6 +238,7 @@ exports.loginCustomer = catchAsync(async (req, res, next) => {
   const password = req.body.password;
   //check if username & password exists
   if (!username || !password) {
+    console.log("thieu");
     return res.status(401).json({
       status: "Fail",
       error: "Vui lòng cung cấp đủ email và passwords"
@@ -235,6 +247,7 @@ exports.loginCustomer = catchAsync(async (req, res, next) => {
   //2) check if user exist and passowrd is correct
   const user = await User.findOne({ 'username': username }).select('+password');
   if (!user || !(await user.correctPassword(password, user.password))) {
+    console.log("saipas");
     return res.status(401).json({
       status: "Fail",
       error: "Không đúng email, password hoặc tài khoản bị khóa, vui lòng kiểm tra lại thông tin"
@@ -247,7 +260,7 @@ exports.loginCustomer = catchAsync(async (req, res, next) => {
 //Login Admin
 exports.loginAdmin = catchAsync(async (req, res, next) => {
   const islogin = await this.adminIsLoggedIn(req.cookies.jwtAdmin);
-  if(islogin !== 'No Login'){
+  if (islogin !== 'No Login') {
     return res.status(301).json({
       status: "Is Login",
       useradmin: islogin
@@ -274,18 +287,17 @@ exports.loginAdmin = catchAsync(async (req, res, next) => {
 
 
 //Allow user for access route
-exports.restrictTo = (...roles) => {
-  return (req, res, next) => {
-    const role = req.user.role;
-    console.log(role);
-    if (!roles.includes(req.user.role)) {
-      return next(
-        new AppError('Bạn không có quyền thực hiện hành động này', 403)
-      );
-    }
-    next();
+exports.restrictTo = catchAsync(async (req, res, next) => {
+  const userAdmin = await this.adminIsLoggedIn(req.cookies.jwtAdmin);
+  if (userAdmin.role === 'Admin') {
+    return next();
+  } else {
+    return res.status(403).json({
+      status: 'fail',
+      error: 'Bạn không có quyền truy cập vào dữ liệu này!'
+    })
   }
-}
+});
 
 /* exports.updatePassword = catchAsync(async (req, res, next) => {
   // 1) Get user from collection

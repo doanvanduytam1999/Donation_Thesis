@@ -83,6 +83,7 @@ exports.postCategoryDonateEvents = catchAsync(async (req, res, next) => {
 
 exports.postDonate = catchAsync(async (req, res, next) => {
     const data = req.body.data;
+    console.log(data);
     const user = await AuthController.userIsLoggedIn(req.cookies.jwt);
     let donateEvent = await DonateEvent.findById(data.id);
     let soTienHienCo = donateEvent.soTienDonateHieTai;
@@ -102,8 +103,8 @@ exports.postDonate = catchAsync(async (req, res, next) => {
         new: true,
         runValidators: true
     });
-    console.log(data);
-    if (user) {
+    if (user !== 'No Login') {
+        console.log("couser");
         if (data.checked) {
             const donateAnDanh = await DonateAction.create({
                 soTienDonate: soTienDonate,
@@ -122,6 +123,7 @@ exports.postDonate = catchAsync(async (req, res, next) => {
             })
         }
     } else {
+        console.log("ko co user");
         if (data.checked) {
             const donateAnDanh = await DonateAction.create({
                 
