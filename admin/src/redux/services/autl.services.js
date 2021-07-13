@@ -1,45 +1,41 @@
 import axios from "axios";
 import { message } from 'antd';
-
-const API_URL = "http://localhost:4000/admin";
+import ApiLogin from "../../Api/ApiLogin";
+import { LoadingOutlined} from '@ant-design/icons';
+ const API_URL = "http://localhost:4000/admin";
 //const API_URLRS ="http://localhost:4000/";
 const register = (values) => {
-  return axios.post(API_URL + "/signup",values);
+  return axios.post(API_URL + "/signup", values);
 };
-
 const login = (values) => {
-  return axios
-    .post(API_URL + "/login", values, {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      withCredentials: true
-     
-    })
-    .then((response) => {
-      if (response.data.status ==="success") {
-        message.success("Đăng nhập thành công!")
-        localStorage.setItem("user", JSON.stringify(response.data.data.user));
+  return ApiLogin.postLogin(values)
+    .then(async( response) => {
+      if (await response.data.status === "success") {
+        if(await response.data.active === false ){
+          message.info("Tài khoản chưa được kích hoạt")
+          //localStorage.setItem("user", JSON.stringify([]));
+        }
+        else{
+          
+           //message.loading("Vui lòng đợi...")
+           await  message.success("Đăng nhập thành công")
+          localStorage.setItem("user", JSON.stringify(response.data.data.user));
+          console.log(response.data.data.user);
+        }
+        
         //Cookies.set('userKaca', response.data.data, {path: '/', maxAge: 30000, httpOnly: true });
 
       }
+      
 
       return response.data.data.user;
     });
 };
-
 const logout = () => {
   localStorage.removeItem("user");
-  return axios
-    .get(API_URL + "/logout", {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      withCredentials: true
-     
-    })
+  return ApiLogin.getLogout()
     .then((response) => {
-      if (response.data.status ==="success") {
+      if (response.data.status === "success") {
         message.error("Đã đăng xuất")
         window.location.reload()
 
@@ -47,10 +43,9 @@ const logout = () => {
 
       //return response.data.data.user;
     });
-  
+
 
 };
-
 export default {
   register,
   login,

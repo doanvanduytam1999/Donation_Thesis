@@ -45,9 +45,9 @@ const Header = () => {
                 <Col span={24} >
                     <Menu style={style} onClick={handleClick}  selectedKeys={"hehe"} mode="horizontal">
                         <Menu.Item className="logo-item" key="mail">
-                            <a href="http://localhost:3000/">
+                        <Link to="">
                             <img alt="logo"  style={{marginLeft:'30px'}} width="40px" src="../images/logo.png" ></img>
-                            </a>
+                            </Link>
                         </Menu.Item>
                         <Menu.Item className="right" key="login"  >
                         <Dropdown overlay={menu}>

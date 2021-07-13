@@ -2,8 +2,9 @@ import React,{ useEffect, useState }  from 'react';
 import donateEvensts from '../../Api/donateEvensts';
 import { Table  } from 'antd';
 import {Redirect,Link} from "react-router-dom";
-
-
+import { Input } from 'antd';
+import "./Listpost.scss"
+const { Search } = Input;
 
 const layout = {
   labelCol: { span: 8 },
@@ -12,7 +13,15 @@ const layout = {
 const Listpost = () => {
     const [listDonate, setListDonate] = useState([]);
     const islogin= JSON.parse(localStorage.getItem("user"))
-    islogin ? <Redirect to="/admin/danh-sach-bai-viet" /> : <Redirect to="/" />                                                     
+    const [searchTerm, setSearchTerm] = useState("");
+    islogin ? <Redirect to="/admin/danh-sach-bai-viet" /> : <Redirect to="/" />
+    
+                                                     
+                                                     
+    const onSearch = (value) => {
+      setSearchTerm(value.target.value);
+      console.log(value.target.value);
+  }
     useEffect(() => {
         const fetchdonatesData = async () => {
             try {
@@ -61,13 +70,26 @@ const Listpost = () => {
             key: 'trangThai',
           },
       ];
+      const results = !searchTerm
+    ? listDonate
+    : listDonate.filter(list =>
+        list.tieuDe.toLowerCase().includes(searchTerm.toLocaleLowerCase())
+      );
     return (
        <>
        {islogin ? <Redirect to="/admin/danh-sach-bai-viet" /> : <Redirect to="/" />}
-       <div style={{textAlign:"center"}}>
-       <Table {...layout} dataSource={listDonate} columns={columns} />;
-       </div>
-      
+       <div className="wapper_table_post row">
+        <div className="col-10 offset-1">
+          <h2 className="title_post">Danh sách bài viết</h2>
+          <Search className="input-search" type="text"
+        placeholder="Tìm kiếm"
+        value={searchTerm}
+        onChange={onSearch} style={{ width: 800}} 
+         />
+          <Table {...layout} dataSource={results} columns={columns} />
+        </div>
+
+      </div>
 
        </>
     );

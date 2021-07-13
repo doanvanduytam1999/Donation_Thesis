@@ -8,6 +8,9 @@ import 'antd/dist/antd.css';
 import Header from "./Components/Header"
 import Footer from "./Components/Footer"
 import Login from "./Pages/Login/Login"
+import Register from "./Pages/Register/Register"
+import ListUser from "./Pages/ListUser/ListUser"
+import EditAccount from "./Pages/EditAccount/EditAccount.js";
 function App() {
   const islogin = JSON.parse(localStorage.getItem("user"))
 
@@ -28,21 +31,33 @@ function App() {
               <div className="col-10">
 
                 <Route path="/admin/dashboard">
-
                   {islogin ? <Redirect to="/admin/dashboard" /> : <Redirect to="/" />}
                   <Dashboard />
                 </Route>
                 <Route path="/admin/them-bai-viet">
                   {islogin ? <Redirect to="/admin/them-bai-viet" /> : <Redirect to="/" />}
                   <Addpost />
-
-
                 </Route>
                 <Route path="/admin/danh-sach-bai-viet">
                   {islogin ? <Redirect to="/admin/danh-sach-bai-viet" /> : <Redirect to="/" />}
                   <Listpost />
                 </Route>
-              
+                <Route path="/admin/dang-ki-tai-khoan">
+                  {islogin ? <Redirect to="/admin/dang-ki-tai-khoan" /> : <Redirect to="/" />}
+                  <Register />
+                </Route>
+             {/*    <Route path="/admin/dang-ki-tai-khoan">
+                  {islogin ? <Redirect to="/admin/dang-ki-tai-khoan" /> : <Redirect to="/" />}
+                  <Register />
+                </Route> */}
+                <Route path="/admin/danh-sach-tai-khoan">
+                  {islogin ? <Redirect to="/admin/danh-sach-tai-khoan" /> : <Redirect to="/" />}
+                  <ListUser />
+                </Route>
+                <Route path="/admin/chinh-sua-tai-khoan">
+                  {islogin ? <Redirect to="/admin/chinh-sua-tai-khoan" /> : <Redirect to="/" />}
+                  <EditAccount />
+                </Route>
               </div>
               <Footer />
             </div>

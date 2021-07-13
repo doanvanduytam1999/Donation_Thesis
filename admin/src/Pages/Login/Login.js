@@ -7,7 +7,6 @@ import "../../styles/bootstrap-grid.min.css";
 import { login } from "../../redux/actions/auth.js";
 import "./Login.scss"
 const Login = () => {
-
     //const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
     //const { isLoggedIn } = useSelector(state => state.auth);
@@ -15,16 +14,13 @@ const Login = () => {
     const history = useHistory();
 
     const onFinish = (values) => {
-
-       
         dispatch(login(values))
             .then(() => {
-              
                 window.location.reload();
             })
             .catch(() => {
-                
-                message.error("Lỗi đăng nhập")
+                //console.log(error);
+                //message.error("Lỗi đăng nhập")
             });
         console.log('Received values of form: ', values.username);
     };
@@ -69,7 +65,6 @@ const Login = () => {
                 </div>
 
             </div>
-
         </>
     );
 }

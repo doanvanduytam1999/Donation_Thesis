@@ -8,7 +8,7 @@ import { useHistory } from "react-router-dom";
 import {Redirect,Link} from "react-router-dom";
 import axios from "axios";
 import "../Addpost/Addpost.scss";
-
+import moment from 'moment';
 const { Option } = Select;
 const layout = {
   labelCol: { span: 6 },
@@ -36,7 +36,14 @@ const Addpost = () => {
   const [dateStart, setDateStart] = useState("");
   const [dateEnd, setDateEnd] = useState("");
   let history = useHistory()
-  
+  const disabledDate = (current)=> {
+    // Can not select days before today and today
+    return current <  moment().add(-1,'days');
+  }
+  const disabledDate1 = (current)=> {
+    // Can not select days before today and today
+    return current <  moment().add(9,'days');
+  }
   //const isLoggedIn= JSON.parse(localStorage.getItem("user"))
     
   const onFinish = (values) => {
@@ -196,10 +203,10 @@ const Addpost = () => {
           />
         </Form.Item>
         <Form.Item label="Ngày bắt đầu" {...config}>
-          <DatePicker onChange={onChangeStar} />
+          <DatePicker disabledDate={disabledDate} onChange={onChangeStar} />
         </Form.Item>
         <Form.Item label="Ngày kết thúc" {...config}>
-          <DatePicker onChange={onChangeEnd} />
+          <DatePicker disabledDate={disabledDate1} onChange={onChangeEnd} />
         </Form.Item>
         <Form.Item name='loaibaidang' label="Loại bài đăng" >
           <Select placeholder="Chọn loại bài đăng" >
