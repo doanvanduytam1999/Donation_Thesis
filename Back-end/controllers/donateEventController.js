@@ -89,7 +89,7 @@ exports.postDonate = catchAsync(async (req, res, next) => {
     let soTienHienCo = donateEvent.soTienDonateHieTai;
     let luotDnt = donateEvent.luotDonate;
     let soTienDonate = data.coin.toString();
-    
+
     let content = "";
     if (typeof data.content !== 'undefined') {
         content = data.content;
@@ -98,7 +98,7 @@ exports.postDonate = catchAsync(async (req, res, next) => {
     soTienHienCo = (Number(soTienHienCo) + Number(soTienDonate)).toString();
     const updateTienDaDonate = await DonateEvent.findByIdAndUpdate(data.id, {
         soTienDonateHieTai: soTienHienCo,
-        luotDonate: luotDnt 
+        luotDonate: luotDnt
     }, {
         new: true,
         runValidators: true
@@ -126,7 +126,7 @@ exports.postDonate = catchAsync(async (req, res, next) => {
         console.log("ko co user");
         if (data.checked) {
             const donateAnDanh = await DonateAction.create({
-                
+
                 soTienDonate: soTienDonate,
                 loiNhan: content,
                 chuongTrinhQuyenGop: data.id
@@ -163,26 +163,44 @@ exports.postRegister = catchAsync(async (req, res, next) => {
     })
 });
 
-exports.getAllDonate = catchAsync(async(req, res, next) => {
+exports.getAllDonate = catchAsync(async (req, res, next) => {
     const user = await AuthController.userIsLoggedIn(req.cookies.jwt);
-    if(user === 'No Login'){
+    if (user === 'No Login') {
         return res.status(401).json({
             status: "No Login"
         })
     }
     const allDonate = await UserCustomer.findById(user.id).populate('donateActions');
-    
+
     res.status(200).json({
         AllDonate: allDonate.donateActions
     })
 });
 
-exports.getAllDonater = catchAsync(async(req, res, next)=> {
+exports.getAllDonater = catchAsync(async (req, res, next) => {
     const idPost = req.params.id;
     const DsDonate = [];
     const allDonater = await DonateEnvent.findById(idPost).populate('donateActions');
     res.status(200).json({
         status: 'success',
         AllDonater: allDonater.donateActions
+    })
+});
+
+exports.postUpdateProfileUser = catchAsync(async (req, res, next) => {
+    const data = req.body.data;
+
+    const user = await UserCustomer.findByIdAndUpdate(data.id, {
+        hovaten: data.name,
+        email: data.email,
+        phone: data.phone,
+    }, {
+        new: true,
+        runValidators: true
+    });
+
+    res.status(200).json({
+        status:'success',
+        User: user
     })
 })

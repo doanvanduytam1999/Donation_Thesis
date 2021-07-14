@@ -28,8 +28,17 @@ exports.postAddpost = catchAsync(async (req, res, next) => {
 });
 
 exports.getAllPost = catchAsync(async (req, res, next) => {
-    const allPost = await DonateEvent.find();
+    const admin = await AuthController.adminIsLoggedIn(req.cookies.jwtAdmin);
+    let allPost = [];
+    if (admin.role === 'CTV') {
+        const ctv = await UserAdmin.findById(admin.id).populate('donateEnvents');
+        allPost = ctv.donateEnvents;
+    } else {
+        allPost = await DonateEvent.find();
+    }
+
     res.status(200).json({
+        status: 'success',
         AllPost: allPost
     })
 });
@@ -54,10 +63,10 @@ exports.postAddUserAdmin = catchAsync(async (req, res, next) => {
     const data = req.body.data;
     const addUserAdmin = await UserAdmin.create({
         username: data.username,
-          email: data.email,
-          role: data.role,
-          password: data.password,
-          passwordConfirm: data.passwordConfirm,
+        email: data.email,
+        role: data.role,
+        password: data.password,
+        passwordConfirm: data.passwordConfirm,
     });
     res.status(200).json({
         status: 'success',
@@ -65,5 +74,64 @@ exports.postAddUserAdmin = catchAsync(async (req, res, next) => {
     })
 });
 
+exports.getUserAdmin = catchAsync(async (req, res, next) => {
+    const id = req.params.id;
+    const userAdmin = await UserAdmin.findById(id);
 
+    res.status(200).json({
+        status: 'success',
+        UserAdmin: userAdmin
+    })
+});
 
+exports.postEditUserAdmin = catchAsync(async (req, res, next) => {
+    const id = req.params.id;
+    const data = req.body.data;
+    const userAdmin = await UserAdmin.findByIdAndUpdate(id, {
+        email: data.email,
+        role: data.role,
+    }, {
+        new: true,
+        runValidators: true
+    });
+
+    res.status(200).json({
+        status: 'success',
+        UserAdmin: userAdmin
+    })
+});
+
+exports.postChangeActive = catchAsync(async (req, res, next) => {
+    const id = req.params.id;
+    const userAdminActive = await UserAdmin.findById(id);
+    const UserActive = !userAdminActive.active;
+
+    const userAdmin = await UserAdmin.findByIdAndUpdate(id, {
+        active: UserActive
+    }, {
+        new: true,
+        runValidators: true
+    });
+
+    res.status(200).json({
+        status: 'success',
+        UserAdmin: userAdmin
+    })
+});
+
+exports.postChangeStatusPost = catchAsync(async (req, res, next) => {
+    const id = req.params.id;
+    const data = req.body.data;
+
+    const post = await UserAdmin.findByIdAndUpdate(id, {
+        trangThai: data.trangthai
+    }, {
+        new: true,
+        runValidators: true
+    });
+
+    res.status(200).json({
+        status: 'success',
+        Post: post
+    })
+});

@@ -183,27 +183,19 @@ const createSendTokenAdmin = (userAdmin, statusCode, res) => {
 
   //if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
   
-
   // Remove password from output
   userAdmin.password = undefined;
+  res.cookie('jwtAdmin', token, cookieOptions);
   console.log(userAdmin);
-  if(userAdmin.active === false){
-    return res.status(statusCode).json({
-      status: 'success',
-      active: false
-    });
-  }
-  else{
-    res.cookie('jwtAdmin', token, cookieOptions);
-    return res.status(statusCode).json({
-      status: 'success',
-      token,
-      active: true,
-      data: {
-        user: userAdmin
-      }
-    });
-  }
+
+  return res.status(statusCode).json({
+    status: 'success',
+    token,
+    active: true,
+    data: {
+      user: userAdmin
+    }
+  });
   
 };
 //logout  customer
@@ -274,7 +266,7 @@ exports.loginAdmin = catchAsync(async (req, res, next) => {
   }
   //2) check if user exist and passowrd is correct
   const Admin = await UserAdmin.findOne({ 'username': username }).select('+password');
-  if (!Admin || !(await Admin.correctPassword(password, Admin.password))) {
+  if (Admin.active === false ||!Admin || !(await Admin.correctPassword(password, Admin.password))) {
     return next(new AppError('Không đúng email, password hay tài khoản bị khóa, vui lòng kiểm tra lại thông tin', 401));
   }
   //3) If everything Ok
@@ -289,7 +281,7 @@ exports.loginAdmin = catchAsync(async (req, res, next) => {
 //Allow user for access route
 exports.restrictTo = catchAsync(async (req, res, next) => {
   const userAdmin = await this.adminIsLoggedIn(req.cookies.jwtAdmin);
-  if (userAdmin.role === 'Admin') {
+  if (userAdmin.role === 'Admin' ||  userAdmin.role === 'Super Admin') {
     return next();
   } else {
     return res.status(403).json({

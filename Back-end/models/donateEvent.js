@@ -37,6 +37,7 @@ const DonateEnventSchemea = new mongoose.Schema(
             type: String,
         },
         trangThai: {
+            enum: ['Chưa đủ', 'Đã đủ', 'Dừng nhận donate'],
             default: 'Chưa đủ',
             type: String,
         },

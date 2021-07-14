@@ -14,5 +14,6 @@ router.get('/allDonater/:id', DonateEnvent.getAllDonater);
 router.post('/donate', DonateEnvent.postDonate);
 router.post('/login', AuthController.loginCustomer);
 router.post('/signup', DonateEnvent.postRegister);
+router.post('/updateProfileUser', AuthController.checkUserLogin, DonateEnvent.postUpdateProfileUser);
 
 module.exports = router;
