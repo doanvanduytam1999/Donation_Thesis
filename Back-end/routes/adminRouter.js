@@ -10,7 +10,7 @@ router.get('/allCategory' , AuthController.checkAdminLogin, AdminController.getA
 router.get('/logout', AuthController.checkAdminLogin, AuthController.logoutAdmin);
 router.get('/allUserAdmin', AuthController.checkAdminLogin, AuthController.restrictTo, AdminController.getAdllUserAdmin);
 router.get('/userAdmin/:id', AuthController.checkAdminLogin, AuthController.restrictTo, AdminController.getUserAdmin);
-router.get('/postID/:id',/*  AuthController.checkAdminLogin, AuthController.restrictTo, */ AdminController.getPostId);
+router.get('/postID/:id', AuthController.checkAdminLogin, AdminController.getPostId);
 
 router.post('/addPost', AuthController.checkAdminLogin, AdminController.postAddpost);
 router.post('/login', AuthController.loginAdmin);

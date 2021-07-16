@@ -38,6 +38,7 @@ exports.postDonateEvents = catchAsync(async (req, res, next) => {
 exports.getDonateEvents = catchAsync(async (req, res, next) => {
     const donateEnvents = await DonateEvent.find();
     res.status(200).json({
+        status: 'success',
         DonateEnvents: donateEnvents
     })
 });
@@ -47,6 +48,7 @@ exports.getDonateEvent = catchAsync(async (req, res, next) => {
     const id = req.params.id;
     const donateEnvent = await DonateEvent.findById(id);
     res.status(200).json({
+        status: 'success',
         DonateEnvent: donateEnvent
     })
 });
@@ -54,6 +56,7 @@ exports.getDonateEvent = catchAsync(async (req, res, next) => {
 exports.getCategoryDonateEvents = catchAsync(async (req, res, next) => {
     const categoryDonateEvents = await CategoryDonateEvent.find().populate('donateEnvents');
     res.status(200).json({
+        status: 'success',
         CategoryDonateEvents: categoryDonateEvents
     })
 });
@@ -150,7 +153,7 @@ exports.postDonate = catchAsync(async (req, res, next) => {
 
 exports.postRegister = catchAsync(async (req, res, next) => {
     console.log(req.body);
-    const user = UserCustomer.create({
+    const user = await UserCustomer.create({
         username: req.body.username,
         hovaten: req.body.name,
         password: req.body.password,
@@ -173,6 +176,7 @@ exports.getAllDonate = catchAsync(async (req, res, next) => {
     const allDonate = await UserCustomer.findById(user.id).populate('donateActions');
 
     res.status(200).json({
+        status: 'success',
         AllDonate: allDonate.donateActions
     })
 });

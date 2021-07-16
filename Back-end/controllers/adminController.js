@@ -7,6 +7,7 @@ const UserAdmin = require('../models/userAdmin');
 exports.postAddpost = catchAsync(async (req, res, next) => {
     const dataPost = req.body.data;
     const admin = await AuthController.adminIsLoggedIn(req.cookies.jwtAdmin);
+
     const post = await DonateEvent.create({
         tieuDe: dataPost.tieude,
         hinhAnh: dataPost.img,
@@ -53,6 +54,7 @@ exports.getPostId = catchAsync(async(req, res, next)=>{
 exports.getAdllCategoryDonateEvents = catchAsync(async (req, res, next) => {
     const allCategoryDonateEvent = await CategoryDonateEvent.find();
     res.status(200).json({
+        status: 'success',
         AllCategory: allCategoryDonateEvent
     })
 });

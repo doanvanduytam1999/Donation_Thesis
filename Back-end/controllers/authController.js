@@ -198,8 +198,8 @@ const createSendTokenAdmin = (userAdmin, statusCode, res) => {
   });
   
 };
-//logout  customer
 
+//logout  customer
 exports.logoutCustomer = (req, res) => {
   res.cookie('jwt', 'loggedout', {
     expires: new Date(Date.now() + 10 * 1000),
@@ -207,6 +207,7 @@ exports.logoutCustomer = (req, res) => {
   });
   res.status(200).json({ status: 'success' });
 };
+
 //logout  admin
 exports.logoutAdmin = (req, res) => {
   res.cookie('jwtAdmin', 'loggedout', {
@@ -230,18 +231,16 @@ exports.loginCustomer = catchAsync(async (req, res, next) => {
   const password = req.body.password;
   //check if username & password exists
   if (!username || !password) {
-    console.log("thieu");
     return res.status(401).json({
-      status: "Fail",
-      error: "Vui lòng cung cấp đủ email và passwords"
+      status: "error",
+      error: "Vui lòng cung cấp đầy đủ email và passwords"
     })
   }
   //2) check if user exist and passowrd is correct
   const user = await User.findOne({ 'username': username }).select('+password');
   if (!user || !(await user.correctPassword(password, user.password))) {
-    console.log("saipas");
     return res.status(401).json({
-      status: "Fail",
+      status: "error",
       error: "Không đúng email, password hoặc tài khoản bị khóa, vui lòng kiểm tra lại thông tin"
     })
   }
@@ -262,15 +261,20 @@ exports.loginAdmin = catchAsync(async (req, res, next) => {
   const password = req.body.password;
   //check if username & password exists
   if (!username || !password) {
-    return next(new AppError('Vui lòng cung cấp email and password!', 400));
+    return res.status(401).json({
+      status: "error",
+      error: "Vui lòng cung cấp đầy đủ email và passwords"
+    })
   }
   //2) check if user exist and passowrd is correct
   const Admin = await UserAdmin.findOne({ 'username': username }).select('+password');
   if (Admin.active === false ||!Admin || !(await Admin.correctPassword(password, Admin.password))) {
-    return next(new AppError('Không đúng email, password hay tài khoản bị khóa, vui lòng kiểm tra lại thông tin', 401));
+    return res.status(401).json({
+      status: "error",
+      error: "Không đúng email, password hoặc tài khoản bị khóa, vui lòng kiểm tra lại thông tin"
+    })
   }
   //3) If everything Ok
-  console.log("chay xuong day");
   createSendTokenAdmin(Admin, 200, res);
 
 });
@@ -285,7 +289,7 @@ exports.restrictTo = catchAsync(async (req, res, next) => {
     return next();
   } else {
     return res.status(403).json({
-      status: 'fail',
+      status: 'error',
       error: 'Bạn không có quyền truy cập vào dữ liệu này!'
     })
   }

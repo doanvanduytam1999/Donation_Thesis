@@ -15,6 +15,8 @@ const AppError = require('././utils/appError');
 
 const cookieParser = require('cookie-parser');
 
+const globalErrorHandler = require('./controllers/errorController');
+
 
 
 
@@ -58,29 +60,10 @@ app.use(xss());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-app.use('/', HomeRouter);
+app.use('/api', HomeRouter);
 
-app.use('/admin', AdminRouter)
+app.use('/api/admin', AdminRouter)  
 
-//Catch 404 Erros and forward them to error handler
-app.use((req, res, next) => {
-    const err = new Error('Not found');
-    err.status = 404;
-    next(err);
-})
-
-//Error handler function
-app.use(() => {
-    const error = app.get('env') === 'development' ? err : {};
-    const status = error.status || 500;
-
-    //res to client
-    res.status(status).json({
-        error: {
-            Message: error.Message
-        }
-    })
-})
 
 //CSP
 app.use(function (req, res, next) {
@@ -89,13 +72,11 @@ app.use(function (req, res, next) {
 });
 
 
-/* app.all('*', (req, res, next) => {
+app.all('*', (req, res, next) => {
     next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
-}); */
+});
 
-/* app.use(cors());
-app.options('*', cors()); */
-//app.use(globalErrorHandler);
+app.use(globalErrorHandler);
 
 
 
