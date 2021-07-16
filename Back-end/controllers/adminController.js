@@ -17,7 +17,7 @@ exports.postAddpost = catchAsync(async (req, res, next) => {
         soTienCanDonate: dataPost.sotiencandonate,
         loaiBaiDang: dataPost.loaibaidang,
         tinNoiBat: dataPost.tinnoibat,
-        nguoidang: admin.id
+        nguoiDang: admin.id
 
     })
 
@@ -42,7 +42,14 @@ exports.getAllPost = catchAsync(async (req, res, next) => {
         AllPost: allPost
     })
 });
-
+exports.getPostId = catchAsync(async(req, res, next)=>{
+    const id = req.params.id;
+    const postId = await DonateEvent.findById(id);
+    res.status(200).json({
+        status: 'success',
+        PostID: postId
+    })
+})
 exports.getAdllCategoryDonateEvents = catchAsync(async (req, res, next) => {
     const allCategoryDonateEvent = await CategoryDonateEvent.find();
     res.status(200).json({
@@ -52,7 +59,7 @@ exports.getAdllCategoryDonateEvents = catchAsync(async (req, res, next) => {
 
 exports.getAdllUserAdmin = catchAsync(async (req, res, next) => {
     const allUserAdmin = await UserAdmin.find();
-    console.log(allUserAdmin);
+    //console.log(allUserAdmin);
     res.status(200).json({
         status: 'success',
         AllUserAdmin: allUserAdmin
@@ -60,13 +67,14 @@ exports.getAdllUserAdmin = catchAsync(async (req, res, next) => {
 });
 
 exports.postAddUserAdmin = catchAsync(async (req, res, next) => {
-    const data = req.body.data;
+    const data = req.body;
+    console.log(data);
     const addUserAdmin = await UserAdmin.create({
         username: data.username,
         email: data.email,
         role: data.role,
         password: data.password,
-        passwordConfirm: data.passwordConfirm,
+        passwordConfirm: data.confirm,
     });
     res.status(200).json({
         status: 'success',
@@ -86,7 +94,8 @@ exports.getUserAdmin = catchAsync(async (req, res, next) => {
 
 exports.postEditUserAdmin = catchAsync(async (req, res, next) => {
     const id = req.params.id;
-    const data = req.body.data;
+    const data = req.body;
+    console.log(id);
     const userAdmin = await UserAdmin.findByIdAndUpdate(id, {
         email: data.email,
         role: data.role,
@@ -121,10 +130,10 @@ exports.postChangeActive = catchAsync(async (req, res, next) => {
 
 exports.postChangeStatusPost = catchAsync(async (req, res, next) => {
     const id = req.params.id;
-    const data = req.body.data;
-
-    const post = await UserAdmin.findByIdAndUpdate(id, {
-        trangThai: data.trangthai
+    const data = req.body;
+    console.log(data.trangThai);
+    const post = await DonateEvent.findByIdAndUpdate(id, {
+        trangThai: data.trangThai
     }, {
         new: true,
         runValidators: true

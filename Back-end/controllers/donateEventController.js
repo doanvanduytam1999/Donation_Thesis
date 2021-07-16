@@ -188,8 +188,7 @@ exports.getAllDonater = catchAsync(async (req, res, next) => {
 });
 
 exports.postUpdateProfileUser = catchAsync(async (req, res, next) => {
-    const data = req.body.data;
-
+    const data = req.body;
     const user = await UserCustomer.findByIdAndUpdate(data.id, {
         hovaten: data.name,
         email: data.email,
