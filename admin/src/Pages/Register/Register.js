@@ -1,5 +1,9 @@
 import React from 'react';
-import { Form, Input, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete } from 'antd';
+import { Form, Input,  Select, Button,message} from 'antd';
+import { useDispatch } from "react-redux";
+import { register } from "../../redux/actions/auth";
+
+
 const formItemLayout = {
     labelCol: {
         xs: { span: 24 },
@@ -24,24 +28,24 @@ const tailFormItemLayout = {
 };
 const { Option } = Select;
 const Register = () => {
+    const dispatch = useDispatch();
     const [form] = Form.useForm();
     const onFinish = (values) => {
         console.log('Received values of form: ', values);
+        dispatch(register(values)).then(()=>{
+            console.log("dăng kí");
+            message.success("Thêm tài khoản thành công !")
+
+        })
+        .catch(()=>{
+            console.log("dang ki that bai");
+        })
     };
-    const prefixSelector = (
-        <Form.Item name="prefix" noStyle>
-            <Select style={{ width: 70 }}>
-                <Option value="84">+84</Option>
-                <Option value="86">+86</Option>
-                <Option value="87">+87</Option>
-            </Select>
-        </Form.Item>
-    );
     return (
         <>
-        <h2 style={{textAlign:"center", marginTop:"100px"}}>Thêm tài khoản</h2>
+            <h2 style={{ textAlign: "center", marginTop: "100px" }}>Thêm tài khoản</h2>
             <Form
-            style={{ marginTop:"50px"}}
+                style={{ marginTop: "50px" }}
                 {...formItemLayout}
                 form={form}
                 name="register"
@@ -117,25 +121,18 @@ const Register = () => {
                 >
                     <Input.Password />
                 </Form.Item>
-                <Form.Item
-                    name="phone"
-                    label="Số điện thoại"
-                    rules={[{ required: true, message: 'Please input your phone number!' }]}
-                >
-                    <Input addonBefore={prefixSelector} style={{ width: 500}} />
-                </Form.Item>
                 <Form.Item name="role"
-                label="Loại tài khoản"
+                    label="Loại tài khoản"
                 >
                     <Select style={{ width: 170 }} defaultValue="Admin">
+                        <Option value="Super Admin">Super Admin</Option>
                         <Option value="Admin">Admin</Option>
                         <Option value="CTV">Cộng tác viên</Option>
-                     
                     </Select>
                 </Form.Item>
                 <Form.Item {...tailFormItemLayout}>
                     <Button type="primary" htmlType="submit">
-                        Đăng kí tài khoản
+                       Thêm tài khoản
                     </Button>
                 </Form.Item>
             </Form>

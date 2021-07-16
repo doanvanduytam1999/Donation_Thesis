@@ -18,7 +18,7 @@ export const register = (values) => (dispatch) => {
 
       dispatch({
         type: SET_MESSAGE,
-        payload: response.data.message,
+        payload: response.data.status,
       });
 
       return Promise.resolve();

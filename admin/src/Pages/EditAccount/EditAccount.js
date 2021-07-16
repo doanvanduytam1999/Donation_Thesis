@@ -1,8 +1,8 @@
 
 import React, { useEffect, useState } from 'react';
-import { Table, Tag, Space, Select, Button,Form,Input } from 'antd';
+import { Select, Button, Form, Input,message } from 'antd';
 import userAdmin from "../../Api/userAdmin";
-import { EditOutlined, LockOutlined, UnlockOutlined } from '@ant-design/icons';
+//import { EditOutlined, LockOutlined, UnlockOutlined } from '@ant-design/icons';
 //import { responsiveArray } from 'antd/lib/_util/responsiveObserve';
 import "./EditAccount.scss";
 import "../../styles/bootstrap-grid.min.css"
@@ -30,119 +30,110 @@ const tailFormItemLayout = {
     },
 };
 const { Option } = Select;
-const EditAccount = () => {
+const EditAccount = (props) => {
+    const [Accout, setAccout] = useState([]);
     const [form] = Form.useForm();
     let { _id } = useParams();
+    useEffect(() => {
+        const fetchListUser = async () => {
+            try {
+                await userAdmin.getUserAdmin(_id).then((res) => {
+                    if (res.data.status == "success") {
+                        setAccout(res.data.UserAdmin);
+                    }
+                    else {
+                        console.log("Loi lay du lieu");
+                    }
+                });
+            } catch (error) {
+                console.log("Failed to fetch brand data at: ", error);
+            }
+        };
+        fetchListUser();
+    }, []);
+    console.log(Accout);
+
     const onEdit = (values) => {
         console.log('Received values of form: ', values);
+        userAdmin.postEditUserAdmin(_id,values).then((res)=>{
+         if (res.data.status == "success") {
+                message.success("Chỉnh sửa thành công !")
+                
+            }
+        })
     };
+    
     return (
-        <>
-            <div className="wapper_form row">
-                <div className="col-10 offset-1">
-                    <h2 className="title_form">Chỉnh sửa tài khoản</h2>
-                    <Form
-                        style={{ marginTop: "50px" }}
-                        {...formItemLayout}
-                        form={form}
-                        name="edit"
-                        onFinish={onEdit}
-                        initialValues={{
-                            prefix: '84',
-                        }}
-                        scrollToFirstError
-                    >
-                        <Form.Item
-                            name="username"
-                            label="Tài khoản"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Nhập tên tài khoản!',
-                                },
-                            ]}
+        <>{ Accout.username !=undefined ? (<><div className="wapper_form row">
+        <div className="col-10 offset-1">
+            <h2 className="title_form">Chỉnh sửa tài khoản</h2>
+            <Form
+                style={{ marginTop: "50px" }}
+                {...formItemLayout}
+                form={form}
+                name="edit"
+                onFinish={onEdit}
+                initialValues={{
+                    username: `${Accout.username}`,
+                    email: `${Accout.email}`,
 
-                        >
-                            <Input />
-                        </Form.Item>
-                        <Form.Item
-                            name="email"
-                            label="E-mail"
-                            rules={[
-                                {
-                                    type: 'email',
-                                    message: 'The input is not valid E-mail!',
-                                },
-                                {
-                                    required: true,
-                                    message: 'Please input your E-mail!',
-                                },
-                            ]}
-                        >
-                            <Input />
-                        </Form.Item>
+                }}
+                scrollToFirstError
+            >
+                <Form.Item
+                    name="username"
+                    label="Tài khoản"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Nhập tên tài khoản!',
+                        },
+                    ]}
 
-                        <Form.Item
-                            name="password"
-                            label="Mật khẩu"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Please input your password!',
-                                },
-                            ]}
-                            hasFeedback
-                        >
-                            <Input.Password />
-                        </Form.Item>
+                >
+                    <Input readOnly />
+                </Form.Item>
+                <Form.Item
+                    name="email"
+                    label="E-mail"
+                    rules={[
+                        {
+                            type: 'email',
+                            message: 'The input is not valid E-mail!',
+                        },
+                        {
+                            required: true,
+                            message: 'Please input your E-mail!',
+                        },
+                    ]}
+                >
+                    <Input />
+                </Form.Item>
+                <Form.Item name="role"
+                    label="Loại tài khoản"
+                >
+                    <Select style={{ width: 170 }} defaultValue="Admin">
+                        <Option value="Admin">Admin</Option>
+                        <Option value="CTV">Cộng tác viên</Option>
 
-                        <Form.Item
-                            name="confirm"
-                            label="Xác nhận mật khẩu"
-                            dependencies={['password']}
-                            hasFeedback
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Please confirm your password!',
-                                },
-                                ({ getFieldValue }) => ({
-                                    validator(_, value) {
-                                        if (!value || getFieldValue('password') === value) {
-                                            return Promise.resolve();
-                                        }
-                                        return Promise.reject(new Error('The two passwords that you entered do not match!'));
-                                    },
-                                }),
-                            ]}
-                        >
-                            <Input.Password />
-                        </Form.Item>
-                        <Form.Item
-                            name="phone"
-                            label="Số điện thoại"
-                            rules={[{ required: true, message: 'Please input your phone number!' }]}
-                        >
-                            <Input  style={{ width: 500 }} />
-                        </Form.Item>
-                        <Form.Item name="role"
-                            label="Loại tài khoản"
-                        >
-                            <Select style={{ width: 170 }} defaultValue="Admin">
-                                <Option value="Admin">Admin</Option>
-                                <Option value="CTV">Cộng tác viên</Option>
+                    </Select>
+                </Form.Item>
+                <Form.Item {...tailFormItemLayout}>
+                    <Button type="primary" htmlType="submit">
+                       Chỉnh sửa
+                    </Button>
+                </Form.Item>
+            </Form>
+        </div>
 
-                            </Select>
-                        </Form.Item>
-                        <Form.Item {...tailFormItemLayout}>
-                            <Button type="primary" htmlType="submit">
-                                Đăng kí tài khoản
-                            </Button>
-                        </Form.Item>
-                    </Form>
-                </div>
+    </div></>) :(<>
 
-            </div>
+
+
+    </>)}
+                
+      
+
         </>
     );
 }

@@ -1,6 +1,6 @@
 import Addpost from "./Pages/Addpost/Addpost.js";
 import Navigation from "./Components/Navigation.js";
-import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Route, Redirect, Switch } from "react-router-dom";
 import Dashboard from "./Pages/Dashboard/Dashboard.js"
 import Listpost from "./Pages/ListPost/Listpost.js"
 import "./styles/bootstrap-grid.min.css";
@@ -11,6 +11,7 @@ import Login from "./Pages/Login/Login"
 import Register from "./Pages/Register/Register"
 import ListUser from "./Pages/ListUser/ListUser"
 import EditAccount from "./Pages/EditAccount/EditAccount.js";
+import EditPost from "./Pages/EditPost/EditPost.js";
 function App() {
   const islogin = JSON.parse(localStorage.getItem("user"))
 
@@ -29,7 +30,7 @@ function App() {
                 <Navigation />
               </div>
               <div className="col-10">
-
+              <Switch>
                 <Route path="/admin/dashboard">
                   {islogin ? <Redirect to="/admin/dashboard" /> : <Redirect to="/" />}
                   <Dashboard />
@@ -54,10 +55,15 @@ function App() {
                   {islogin ? <Redirect to="/admin/danh-sach-tai-khoan" /> : <Redirect to="/" />}
                   <ListUser />
                 </Route>
-                <Route path="/admin/chinh-sua-tai-khoan">
-                  {islogin ? <Redirect to="/admin/chinh-sua-tai-khoan" /> : <Redirect to="/" />}
+                <Route exact path="/admin/chinh-sua-tai-khoan/:_id">
+                 {/*  {islogin ? <Redirect to="/admin/chinh-sua-tai-khoan/:_id" /> : <Redirect to="/" />} */}
                   <EditAccount />
                 </Route>
+                <Route exact path="/admin/chinh-sua-bai-viet/:_id">
+                 {/*  {islogin ? <Redirect to="/admin/chinh-sua-tai-khoan/:_id" /> : <Redirect to="/" />} */}
+                  <EditPost />
+                </Route>
+                </Switch>
               </div>
               <Footer />
             </div>

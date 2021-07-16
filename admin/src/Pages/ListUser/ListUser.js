@@ -1,27 +1,52 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Tag, Space, Select, Button } from 'antd';
+import { Table, Tag, message, Select, Button } from 'antd';
 import userAdmin from "../../Api/userAdmin";
-import { EditOutlined, LockOutlined, UnlockOutlined } from '@ant-design/icons';
+import { EditOutlined } from '@ant-design/icons';
 //import { responsiveArray } from 'antd/lib/_util/responsiveObserve';
 import "./ListUser.scss";
 import "../../styles/bootstrap-grid.min.css"
 import { Link,useHistory } from 'react-router-dom';
+//import EditAccount from '../EditAccount/EditAccount';
 const { Option } = Select;
 
 const ListUser = () => {
-  const history= useHistory();
+  const [ListUser, setListUser] = useState([]);
+  //const [Account, setAccount] = useState([]);
+  const [count, setCount]= useState(0)
+  //const history= useHistory();
   const btnClick = (e) => {
     let id = e.currentTarget.dataset.id
-    console.log(id);
+    userAdmin.postChangeActive(id).then((res)=>{
+      if (res.data.status == "success") {
+             message.success("Chỉnh sửa thành công !")
+             let i=0;
+             setCount(count+1)
+         }
+     })
+    //console.log(count);
 
   }
-  const btnEdit = (e) => {
-    let id = e.currentTarget.dataset.id
-    console.log(id);
-    history.push(`/admin/chinh-sua-tai-khoan`)
-    //return <Link to={}/>
+  useEffect(() => {
+    const fetchListUser = async () => {
+      try {
+        await userAdmin.getAllUser().then((res) => {
+          if (res.data.status == "success") {
+            setListUser(res.data.AllUserAdmin);
+          }
+          else {
+            console.log("Loi lay du lieu");
+          }
 
-  }
+
+        });
+      } catch (error) {
+        console.log("Failed to fetch brand data at: ", error);
+      }
+    };
+    fetchListUser();
+  }, [count]);
+  
+ 
   const columns = [
     {
       title: 'Tên tài khoản',
@@ -36,29 +61,54 @@ const ListUser = () => {
     {
       title: 'Loại tài khoản',
       dataIndex: 'role',
-      key: 'action',
+      filters: [
+        {
+          text: 'Super Admin',
+          value: 'Super Admin',
+        },
+        {
+          text: 'Admin',
+          value: 'Admin',
+        },
+        {
+          text: 'CTV',
+          value: 'CTV',
+        },
+      ],
+      onFilter: (value, record) => record.role.indexOf(value) === 0,
     },
     {
       title: 'Trạng thái',
       dataIndex: 'active',
-      key: 'active',
-      render: active => (
+      
+      render: (text) => (
         <>
-          {active === true ? (
+          {text === true ? (
             <>
               <Tag color={'green'} >
                 {"Đang hoạt động ".toUpperCase()}
               </Tag>
-              <Button data-id={active} onClick={btnClick}><LockOutlined /> Khoá</Button>
+              
             </>
           ) : (
             <>
               <Tag color={'red'} >
                 {"không hoạt động".toUpperCase()}
               </Tag>
-              <Button data-id={active} onClick={btnClick}><UnlockOutlined />Kích hoạt</Button>
+             
             </>
           )}
+        </>
+      ),
+    },
+    {
+      
+      dataIndex: '_id',
+      
+      render: (text) => (
+        <>
+              <Button data-id={text} onClick={btnClick}><EditOutlined /> Thay đổi trạng thái</Button>
+            
         </>
       ),
     },
@@ -68,36 +118,18 @@ const ListUser = () => {
       key: '_id',
       render: text => (
         <>
-          <Button data-id={text} onClick={btnEdit}><EditOutlined /></Button>
+          <Link to={`/admin/chinh-sua-tai-khoan/${text}`}><Button><EditOutlined /></Button> </Link>
         </>
       ),
     },
+    
   ]
 
-  const [ListUser, setListUser] = useState([]);
-  useEffect(() => {
-    const fetchListUser = async () => {
-      try {
-        await userAdmin.getAllUser().then((res) => {
-          if (res.data.status == "success") {
-            setListUser(res.data.AllUserAdmin);
-          }
-          else {
-            console.log("Loi kay du lieu");
-          }
-
-
-        });
-      } catch (error) {
-        console.log("Failed to fetch brand data at: ", error);
-      }
-    };
-    fetchListUser();
-  }, []);
-
+  
+  
   return (
     <>
-
+      
       <div className="wapper_table row">
         <div className="col-10 offset-1">
           <h2 className="title_table">Danh sách tài khoản</h2>

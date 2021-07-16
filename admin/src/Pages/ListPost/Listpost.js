@@ -1,8 +1,10 @@
 import React,{ useEffect, useState }  from 'react';
 import donateEvensts from '../../Api/donateEvensts';
-import { Table  } from 'antd';
+import { Table,Tooltip  } from 'antd';
 import {Redirect,Link} from "react-router-dom";
-import { Input } from 'antd';
+import { Input, Button } from 'antd';
+import { EditOutlined } from '@ant-design/icons';
+
 import "./Listpost.scss"
 const { Search } = Input;
 
@@ -15,9 +17,11 @@ const Listpost = () => {
     const islogin= JSON.parse(localStorage.getItem("user"))
     const [searchTerm, setSearchTerm] = useState("");
     islogin ? <Redirect to="/admin/danh-sach-bai-viet" /> : <Redirect to="/" />
-    
-                                                     
-                                                     
+    const btnEdit = (e) => {
+      let id = e.currentTarget.dataset.id
+      console.log(id);
+  
+    }                                         
     const onSearch = (value) => {
       setSearchTerm(value.target.value);
       console.log(value.target.value);
@@ -37,37 +41,72 @@ const Listpost = () => {
         };
         fetchdonatesData();
     }, []);
-  console.log(listDonate);
+    const convertNumber = (x) => {
+              return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
+ 
     const columns = [
         {
           title: 'Tiêu đề bài viết',
           dataIndex: 'tieuDe',
           key: 'tieude',
+          ellipsis: {
+            showTitle: false,
+          },
+          render: tieuDe => (
+            <Tooltip placement="topLeft" title={tieuDe}>
+              {tieuDe}
+            </Tooltip>
+          ),
         },
-        {
+       /*  {
           title: 'Ngày bắt đầu',
-          dataIndex: 'ngayBatSau',
+          dataIndex: 'ngayBatDau',
           key: 'ngayBatSau',
         },
         {
           title: 'Ngày kết thúc',
           dataIndex: 'ngayKetThuc',
           key: 'ngayKetThuc',
-        },
+        }, */
         {
             title: 'Số tiền cần ủng hộ(VNĐ)',
             dataIndex: 'soTienCanDonate',
             key: 'soTienCanDonate',
+            render: text => (
+              <>{
+                convertNumber(text)
+              }
+                
+              </>
+            ),
           },
           {
             title: 'Số tiền đã quyên góp được(VNĐ)',
             dataIndex: 'soTienDonateHieTai',
             key: 'soTienDonateHieTai',
+            render: text => (
+              <>{
+                convertNumber(text)
+              }
+                
+              </>
+            ),
           },
           {
             title: 'Trạng thai',
             dataIndex: 'trangThai',
             key: 'trangThai',
+          },
+          {
+            title: 'Hành động',
+            dataIndex: '_id',
+            key: '_id',
+            render: text => (
+              <>
+                <Link to={`/admin/chinh-sua-bai-viet/${text}`}><Button><EditOutlined /></Button> </Link>
+              </>
+            ),
           },
       ];
       const results = !searchTerm

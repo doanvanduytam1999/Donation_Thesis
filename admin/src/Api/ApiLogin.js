@@ -9,6 +9,10 @@ const ApiLogin ={
     getLogout: ()=>{
         const url = '/admin/logout';
         return AxiosClient.get(url);
+    },
+    postAddUser: (values)=>{
+        const url ="/admin/addUserAdmin";
+        return AxiosClient.post(url,values);
     }
 }
 

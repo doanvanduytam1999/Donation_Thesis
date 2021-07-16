@@ -1,12 +1,10 @@
 import React from 'react';
 import { Menu, Row, Col,Dropdown } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
-
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/actions/auth.js";
 import "./Header.scss";
 import { Link,Redirect } from 'react-router-dom';
-//import  donateEvensts  from "../Api/donateEvensts";
 const handleClick = (e) => {
     console.log(e.target);
 }

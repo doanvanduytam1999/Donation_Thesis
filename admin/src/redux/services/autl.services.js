@@ -5,7 +5,11 @@ import { LoadingOutlined} from '@ant-design/icons';
  const API_URL = "http://localhost:4000/admin";
 //const API_URLRS ="http://localhost:4000/";
 const register = (values) => {
-  return axios.post(API_URL + "/signup", values);
+    return ApiLogin.postAddUser(values)/* .then((res)=>{
+      if( res.data.status === "success"){
+        message.success("Thêm tài khoản thành công !")
+      }
+    }); */
 };
 const login = (values) => {
   return ApiLogin.postLogin(values)

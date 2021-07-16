@@ -1,8 +1,8 @@
 import React from 'react';
-import { Form, Input, Button, message } from 'antd';
+import { Form, Input, Button } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { useDispatch,useSelector } from "react-redux";
-import {  useHistory,Redirect } from 'react-router-dom';
+import { useDispatch } from "react-redux";
+import {  useHistory } from 'react-router-dom';
 import "../../styles/bootstrap-grid.min.css";
 import { login } from "../../redux/actions/auth.js";
 import "./Login.scss"

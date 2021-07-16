@@ -5,7 +5,7 @@ import Editor from 'ckeditor5-custom-build/build/ckeditor';
 import Firebase from '../Js/Firebase';
 import donateEvensts from '../../Api/donateEvensts';
 import { useHistory } from "react-router-dom";
-import {Redirect,Link} from "react-router-dom";
+import {Redirect} from "react-router-dom";
 import axios from "axios";
 import "../Addpost/Addpost.scss";
 import moment from 'moment';
@@ -17,16 +17,6 @@ const layout = {
 const config = {
   rules: [{ required: true, message: 'Please select time!' }],
 };
-/* const validateMessages = {
-  required: '${label} is required!',
-  types: {
-    email: '${label} is not a valid email!',
-    number: '${label} is not a valid number!',
-  },
-  number: {
-    range: '${label} must be between ${min} and ${max}',
-  },
-}; */
 const Addpost = () => {
   const islogin= JSON.parse(localStorage.getItem("user"))
   islogin ? <Redirect to="/admin/them-bai-viet" /> : <Redirect to="/" />

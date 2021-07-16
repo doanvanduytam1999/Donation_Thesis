@@ -5,8 +5,8 @@ const donateEvensts ={
     const url = '/admin/allPost';
     return AxiosClient.get(url);
    },
-   get: (id)=>{
-    const url = `/donateEvenst/${id}`;
+   getPostID: (id)=>{
+    const url = `/admin/postID/${id}`;
     return AxiosClient.get(url);
    },
    getCategory: ()=>{
