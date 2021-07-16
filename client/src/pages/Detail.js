@@ -16,6 +16,9 @@ const layout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
 };
+const convertNumber1 = (x) => {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
 const columns = [
     {
         title: 'Tên ',
@@ -27,6 +30,13 @@ const columns = [
         title: 'Số tiền ủng hộ (VNĐ)',
         dataIndex: 'soTienDonate',
         key: 'soTienDonate',
+        render: text => (
+            <>{
+              convertNumber1(text)
+            }
+              
+            </>
+          ),
     }
 ];
 
@@ -93,7 +103,7 @@ const Detail = () => {
         element.soTienDonate = element.soTienDonate.replace(/\B(?=(\d{3})+(?!\d))/g, ".") + 'đ'
 
     });
-    console.log(AllDonator);
+  
     const phoneSelector = (
         <Form.Item name="prefix" noStyle>
             <Select style={{ width: 70 }}>
@@ -431,9 +441,6 @@ const Detail = () => {
 
     }
     let html = Donate.noiDung;
-
-
-    console.log(DonateID);
     return (
         <>
             <section className="detail_header">
@@ -443,9 +450,6 @@ const Detail = () => {
                             <h3 className="title">{Donate.tieuDe}</h3>
                             <h3 style={{ fontSize: "25px", fontFamily: "NunitoBold" }}>
                                 Số tiền cần quyên góp {convertNumber(Donate.soTienCanDonate)}VNĐ </h3>
-
-
-
                             <div class="fb-like" data-href="https://momo.vn/cong-dong/chung-tay-gay-quy-dung-truong-moi-tang-25-em-hoc-sinh-ban-huoi-chua" data-width="" data-layout="standard" data-action="like" data-size="small" data-share="true"></div>
                             <p style={{ fontSize: "20px" }}> {Donate.tomTat}</p>
                         </div>
@@ -485,7 +489,12 @@ const Detail = () => {
                             </div>
                             <div className="col-4">
                                 {
-                                    Number(Donate.soTienDonateHieTai) >= Number(Donate.soTienCanDonate) ? (
+                                    Donate.trangThai ==="Dừng nhận donate" ?(<>
+                                    <p className="tamngung" >Tạm ngưng</p>
+                                    
+                                    </>):(<>
+                                    {
+                                        Number(Donate.soTienDonateHieTai) >= Number(Donate.soTienCanDonate) ? (
                                         <div className="progress_detail_top">
                                             <p className="complete" >Đã hoàn thành</p>
                                             <p className="progress_detail_text">
@@ -544,7 +553,10 @@ const Detail = () => {
                                             </Tabs>
                                         </>
 
-                                    )}
+                                    )
+                                    }
+                                    </>)
+                                }
 
 
                             </div>

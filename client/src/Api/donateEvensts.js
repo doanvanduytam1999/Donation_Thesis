@@ -23,6 +23,10 @@ const donateEvensts ={
    getLogout:()=>{
        const url ="/logout";
        return AxiosClient.get(url)
+   },
+   postUpdateProfile:(values)=>{
+    const url ="/updateProfileUser";
+    return AxiosClient.post(url,values)
    }
 };
 

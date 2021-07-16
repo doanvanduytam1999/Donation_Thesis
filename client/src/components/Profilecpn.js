@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Avatar,Upload,  Form, Input, Button} from 'antd';
+import { Avatar,Upload,  Form, Input, Button, message} from 'antd';
 import {  UserOutlined, PlusOutlined } from '@ant-design/icons';
 import '../style/Profile.scss';
-
+import donateEvensts from '../Api/donateEvensts';
 const Profile = () => {
     const [file, setFile] = useState("");
     const normFile = (e) => {
@@ -16,6 +16,12 @@ const Profile = () => {
     };
     const onFinish = (values) => {
         console.log('Success:', values);
+        donateEvensts.postUpdateProfile(values).then((res)=>{
+        if(res.data.status ==="success"){
+            message.success("Cập nhật thông tin thành công !")
+            localStorage.setItem("user", JSON.stringify(res.data.User));
+        }
+        })
     };
 
     const onFinishFailed = (errorInfo) => {
@@ -33,7 +39,7 @@ const Profile = () => {
         <>
             <div className="row">
                 <div className="col-4">
-                    <div className="col-3 offset-1">
+                   {/*  <div className="col-3 offset-1">
                         <Upload style={{ textAlign: "center" }} onChange={normFile} name="avatar" action="/upload.do" listType="picture-card">
                             <br></br>
                             {file ? <><Avatar shape="square" size={200} icon={<UserOutlined />} /></> : uploadButton}
@@ -41,23 +47,32 @@ const Profile = () => {
 
                         <br></br>
                         <Button className="btn-update-img">Cập nhật</Button>
-                    </div>
+                    </div> */}
 
                 </div>
                 <div className="col-8">
+                    <div className="profile">
+
+                    
                     <Form
                         name="basic"
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 16 }}
-                        initialValues={{ username:`${user.username}`,name:`${user.hovaten}`,phone:`${user.phone}` }}
+                        initialValues={{ username:`${user.username}`,name:`${user.hovaten}`,phone:`${user.phone}`,email:`${user.email}`,id :`${user._id}` }}
                         onFinish={onFinish}
                         onFinishFailed={onFinishFailed}
                     >
+                          <Form.Item
+                            name="id"
+                            hidden
+                        >
+                            <Input readOnly autoComplete={"off"} />
+                        </Form.Item>
                         <p>Tên tài khoản:</p>
                         <Form.Item
                             name="username"
                         >
-                            <Input autoComplete={"off"} />
+                            <Input readOnly autoComplete={"off"} />
                         </Form.Item>
                         <p>Họ và tên:</p>
                         <Form.Item
@@ -73,23 +88,18 @@ const Profile = () => {
                         </Form.Item>
                         <p>Gmail:</p>
                         <Form.Item
-                            name="gmail"
+                            name="email"
                         >
                             <Input autoComplete={"off"} />
                         </Form.Item>
-                        <p>Địa chỉ:</p>
-                        <Form.Item
-                            name="adress"
-                        >
-                            <Input autoComplete={"off"} />
-                        </Form.Item>
+                      
                         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
                             <Button type="primary" htmlType="submit">
                                 Cập nhật
                             </Button>
                         </Form.Item>
                     </Form>
-
+                    </div>
                 </div>
             </div>
 

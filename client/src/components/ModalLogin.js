@@ -87,7 +87,7 @@ const ModalLogin = () => {
                 Đăng kí
             </Button> */}
             <Modal visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}
-                width={450} footer={null}
+                width={500} footer={null}
             >
                 <Row>
                     <Col span={16} offset={4}  >
@@ -99,7 +99,7 @@ const ModalLogin = () => {
                                     initialValues={{ remember: true }}
                                     onFinish={onFinish}
                                 >
-                                    <p>Tài khoảng </p>
+                                    <p>Tài khoản </p>
                                     <Form.Item
                                         name="username"
                                         rules={[{ required: true, message: 'Hãy nhập tài khoản!' }]}
@@ -198,15 +198,15 @@ const ModalLogin = () => {
                                 </Form>
                             </TabPane>
                         </Tabs>
-                        <div className="login-with">
+                        {/* <div className="login-with">
                             <label>Or sign in with:</label>
                             <div id="iconGroup">
-                               {/*  <Facebook />
+                                <Facebook />
                                 <Twitter />
-                                <Google /> */}
+                                <Google />
                                  <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
                             </div>
-                        </div>
+                        </div> */}
                     </Col>
                 </Row>
             </Modal>
