@@ -8,14 +8,14 @@ const userAdminSchema = new mongoose.Schema({
     minlength: 1,
     unique: true,
     type: String,
-    required: [true, 'Please tell us your name']
+    required: [true, 'Vui lòng cung cấp username']
   },
   email: {
     type: String,
-    required: [true, 'Please provide your email'],
+    required: [true, 'Vui lòng cung cấp email'],
     unique: true,
     lowercase: true,
-    validate: [validator.isEmail, 'Please provide a valid email']
+    validate: [validator.isEmail, 'Vui lòng nhập đúng định dạng email']
   },
   role: {
     type: String,
@@ -24,19 +24,19 @@ const userAdminSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: [true, 'Please provide a password'],
+    required: [true, 'Vui lòng cung cấp password'],
     minlength: 8,
     select: false
   },
   passwordConfirm: {
     type: String,
-    required: [true, 'Please confirm your password'],
+    required: [true, 'Vui lòng cung cấp passwordConfirm'],
     validate: {
       // This only works on CREATE and SAVE!!!
       validator: function (el) {
         return el === this.password;
       },
-      message: 'Passwords are not the same!'
+      message: 'passwordConfirm không trùng với password'
     }
   },
   passwordChangedAt: Date,
