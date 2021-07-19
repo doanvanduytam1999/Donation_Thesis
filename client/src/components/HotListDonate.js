@@ -41,6 +41,7 @@ const HotListDonate = (props) => {
     const [Listhost, setListhost] = useState(props.listDonates);
     const [Count, setCount] = useState(0);
     const order= JSON.parse(localStorage.getItem("user"))
+//console.log(order);
     useEffect(() => {
         setListhost(props.listDonates);
     }, [props.listDonates, licked,id])
@@ -235,7 +236,7 @@ const HotListDonate = (props) => {
                             </>
                         ) : (
                             <>
-                                {data !== [] ? (
+                                {data != [] ? (
                                     <>
                                         <Form
 

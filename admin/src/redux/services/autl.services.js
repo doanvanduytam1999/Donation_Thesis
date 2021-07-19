@@ -14,25 +14,20 @@ const register = (values) => {
 const login = (values) => {
   return ApiLogin.postLogin(values)
     .then(async( response) => {
-      if (await response.data.status === "success") {
-        if(await response.data.active === false ){
-          message.info("Tài khoản chưa được kích hoạt")
-          //localStorage.setItem("user", JSON.stringify([]));
-        }
-        else{
-          
-           //message.loading("Vui lòng đợi...")
-           await  message.success("Đăng nhập thành công")
+      if ( response.data.status === "success") {
+             message.success("Đăng nhập thành công")
           localStorage.setItem("user", JSON.stringify(response.data.data.user));
           console.log(response.data.data.user);
         }
-        
-        //Cookies.set('userKaca', response.data.data, {path: '/', maxAge: 30000, httpOnly: true });
-
-      }
-      
-
       return response.data.data.user;
+      
+    }).catch(err=>{
+      let data = {
+        status: "error",
+        error: err.response.data.error
+      };
+      return data;
+      //return
     });
 };
 const logout = () => {

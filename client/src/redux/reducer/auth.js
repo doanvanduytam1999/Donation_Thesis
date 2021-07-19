@@ -7,14 +7,16 @@ import {
   } from "../actions/type";
 
   const user =  JSON.parse(localStorage.getItem("user"));
+  
  
-  const initialState =user
+  const initialState = user !== null
     ? { isLoggedIn: true, user }
     : { isLoggedIn: false, user: null };
   
   export default function (state = initialState, action) {
     const { type, payload } = action;
-  
+  console.log("tets: ", user);
+  //console.log("login",user.isLoggedIn);
     switch (type) {
       case REGISTER_SUCCESS:
         return {

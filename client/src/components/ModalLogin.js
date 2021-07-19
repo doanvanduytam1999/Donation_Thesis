@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, Form, Input, Button, Row, Col, Tabs } from 'antd';
+import { Modal, Form, Input, Button, Row, Col, Tabs, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from "react-redux";
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
@@ -24,6 +24,7 @@ const { TabPane } = Tabs;
 const ModalLogin = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const { isLoggedIn } = useSelector(state => state.login);
+    const [Error, setError] = useState("");
     //const [Key, setKey] = useState("");
     //const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
@@ -44,14 +45,12 @@ const ModalLogin = () => {
     const onFinish = (values) => {
         //setLoading(true);
         dispatch(login(values))
-            .then(() => {
-                history.push("/");
-                //window.location.reload();
+            .then((res) => {
+               console.log(res);
+               setError(res)
+               //message.warning(res)
             })
-            .catch(() => {
-                //setLoading(false);
-                console.log("Loi đăng nhập");
-            });
+            
 
 
         console.log('Received values of form: ', values.username);
@@ -99,6 +98,9 @@ const ModalLogin = () => {
                                     initialValues={{ remember: true }}
                                     onFinish={onFinish}
                                 >
+                                     <p style={{color:"red"}} className="error">{Error}</p>
+                                     <br></br>
+                                     <br></br>
                                     <p>Tài khoản </p>
                                     <Form.Item
                                         name="username"
@@ -118,6 +120,7 @@ const ModalLogin = () => {
                                             autoComplete="off"
                                         />
                                     </Form.Item>
+
                                     <Form.Item >
                                         <Button type="primary" htmlType="submit" className="login-form-button">
                                             Đăng nhập
@@ -138,7 +141,7 @@ const ModalLogin = () => {
                                         name="username"
                                         rules={[{ required: true, message: 'Hãy nhập tài khoản!' }]}
                                     >
-                                        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Tài khoảng" autoComplete="off" />
+                                        <Input prefix={<UserOutlined className="site-form-item-icon" />}  autoComplete="off" />
                                     </Form.Item>
                                     <p>Mật khẩu</p>
                                     <Form.Item
@@ -148,7 +151,7 @@ const ModalLogin = () => {
                                         <Input
                                             prefix={<LockOutlined className="site-form-item-icon" />}
                                             type="password"
-                                            placeholder="Mật khẩu"
+                                           
                                             autoComplete="off"
                                         />
                                     </Form.Item>
@@ -172,7 +175,7 @@ const ModalLogin = () => {
                                         <Input
                                             prefix={<LockOutlined className="site-form-item-icon" />}
                                             type="password"
-                                            placeholder="Nhập lại mật khẩu"
+                                           
                                             autoComplete="off"
                                         />
                                     </Form.Item>
@@ -181,7 +184,7 @@ const ModalLogin = () => {
                                         name="name"
                                         rules={[{ required: true, message: 'Hãy nhập họ tên !' }]}
                                     >
-                                        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Họ tên" autoComplete="off" />
+                                        <Input prefix={<UserOutlined className="site-form-item-icon" />} autoComplete="off" />
                                     </Form.Item>
                                     <p>Số điện thoại</p>
                                     <Form.Item

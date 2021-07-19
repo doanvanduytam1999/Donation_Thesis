@@ -69,10 +69,10 @@ const Header = () => {
                             <Link to=""><img alt="logo" style={{ marginLeft: '30px' }} width="40px" src="../images/logo.png" ></img></Link>
                         </Menu.Item>
                         <Menu.Item key="app">
-                            <a href="#register">Gây quỷ</a>
+                            <a href="#register">Gây quỹ</a>
                         </Menu.Item>
                         <Menu.Item key="about">
-                            Về chúng thôi
+                            Về chúng tôi
                         </Menu.Item>
                         <Menu.Item key="contact">
                             <Link to="/lien-he">Liên hệ</Link>

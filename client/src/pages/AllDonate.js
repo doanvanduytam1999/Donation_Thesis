@@ -7,7 +7,7 @@ import "../style/Home.scss";
 import "../style/bootstrap-grid.min.css";
 //import PayPal from "../components/Paypal"
 import HotListDonate from "../components/HotListDonate"
-import ListDonate from '../components/ListDonate';
+import ListAll from '../components/ListALl';
 import ScrollToTop from "react-scroll-to-top";
 import { useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
@@ -21,6 +21,7 @@ const AllDonate = () => {
         const fetchdonatesData = async () => {
             try {
                 await donateEvensts.getAll().then((res) => {
+                    
                     setListdonates(res.data.DonateEnvents);
                     setListdonate(res.data.DonateEnvents)
                 });
@@ -129,7 +130,7 @@ const AllDonate = () => {
                             })}
                         </Tabs>
                         <div className="row" >
-                            {<ListDonate listDonate={listDonate} />}
+                            {<ListAll listDonate={listDonate} />}
                         </div>
                     </div>
                 </div>

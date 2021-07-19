@@ -30,10 +30,11 @@ function App() {
                 <Navigation />
               </div>
               <div className="col-10">
+            
               <Switch>
-                <Route path="/admin/dashboard">
+               <Route path="/admin/dashboard">
                   {islogin ? <Redirect to="/admin/dashboard" /> : <Redirect to="/" />}
-                  <Dashboard />
+                   <Dashboard />
                 </Route>
                 <Route path="/admin/them-bai-viet">
                   {islogin ? <Redirect to="/admin/them-bai-viet" /> : <Redirect to="/" />}
@@ -51,8 +52,8 @@ function App() {
                   {islogin ? <Redirect to="/admin/dang-ki-tai-khoan" /> : <Redirect to="/" />}
                   <Register />
                 </Route> */}
-                <Route path="/admin/danh-sach-tai-khoan">
-                  {islogin ? <Redirect to="/admin/danh-sach-tai-khoan" /> : <Redirect to="/" />}
+                <Route path="/admin/danh-sach-tai-khoan-admin">
+                  {islogin ? <Redirect to="/admin/danh-sach-tai-khoan-admin" /> : <Redirect to="/" />}
                   <ListUser />
                 </Route>
                 <Route exact path="/admin/chinh-sua-tai-khoan/:_id">

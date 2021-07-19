@@ -231,9 +231,9 @@ exports.loginCustomer = catchAsync(async (req, res, next) => {
   const password = req.body.password;
   //check if username & password exists
   if (!username || !password) {
-    return res.status(401).json({
+    return res.status(400).json({
       status: "error",
-      error: "Vui lòng cung cấp đầy đủ email và passwords"
+      error: "Vui lòng cung cấp đầy đủ tài khoản và mật khẩu"
     })
   }
   //2) check if user exist and passowrd is correct
@@ -241,7 +241,7 @@ exports.loginCustomer = catchAsync(async (req, res, next) => {
   if (!user || !(await user.correctPassword(password, user.password))) {
     return res.status(401).json({
       status: "error",
-      error: "Không đúng email, password hoặc tài khoản bị khóa, vui lòng kiểm tra lại thông tin"
+      error: "Tài khoản hoặc mật khẩu không đúng!"
     })
   }
   //3) If everything Ok

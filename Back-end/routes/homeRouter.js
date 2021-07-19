@@ -8,7 +8,7 @@ router.get('/donateEvensts', DonateEnvent.getDonateEvents);
 router.get('/categoryDonateEvents', DonateEnvent.getCategoryDonateEvents);
 router.get('/donateEvenst/:id', DonateEnvent.getDonateEvent);
 router.get('/logout', AuthController.checkUserLogin, AuthController.logoutCustomer);
-router.get('/allDonate', AuthController.checkUserLogin, DonateEnvent.getAllDonate);
+router.get('/allDonate', DonateEnvent.getAllDonate);
 router.get('/allDonater/:id', DonateEnvent.getAllDonater);
 
 router.post('/donate', DonateEnvent.postDonate);

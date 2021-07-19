@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{ useState} from 'react';
 import { Form, Input, Button } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useDispatch } from "react-redux";
@@ -12,11 +12,14 @@ const Login = () => {
     //const { isLoggedIn } = useSelector(state => state.auth);
     //const  message  = useSelector(state => state.auth.user);
     const history = useHistory();
-
+    const [Error, setError] = useState("");
     const onFinish = (values) => {
         dispatch(login(values))
-            .then(() => {
-                window.location.reload();
+            .then((res) => {
+                //history.push("/admin/dashboard")
+                setError(res)
+                console.log(res);
+                window.location.replace('/admin/dashboard');
             })
             .catch(() => {
                 //console.log(error);
@@ -31,7 +34,7 @@ const Login = () => {
                 <div className="row">
                     <div className="col-6 offset-3">
                         <h2 style={{ textAlign: "center" }}>Đăng nhập</h2>
-
+                        <p style={{color:"red"}} className="error">{Error}</p>
                         <Form
                             name="normal_login"
                             className="login-form"
@@ -56,9 +59,9 @@ const Login = () => {
                             </Form.Item>
                             <Form.Item >
                                 <Button type="primary" htmlType="submit" className="login-form-button">
-                                    Log in
+                                   Đăng nhập
                                 </Button>
-                                Or <a href="#/">register now!</a>
+                                
                             </Form.Item>
                         </Form>
                     </div>

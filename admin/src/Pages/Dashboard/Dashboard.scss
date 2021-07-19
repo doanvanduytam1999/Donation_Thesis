@@ -1,0 +1,61 @@
+.wapper_dashboard {
+    position: relative;
+    left: 50%;
+    top: 10px;
+    transform: translateX(-50%);
+    width: 90%;
+    margin-top: 100px;
+    border-radius: 10px;
+    min-height: 700px;
+    -webkit-box-shadow: 0px 0px 10px -5px rgba(71, 71, 71, 1);
+    -moz-box-shadow: 0px 0px 10px -5px rgba(71, 71, 71, 1);
+    box-shadow: 0px 0px 10px -5px rgba(71, 71, 71, 1);
+    .title_dashboard {
+        font-size: 25px;
+        text-align: center;
+        margin: 50px 0 50px 0;
+    }
+    //.container {
+        //width: 100%;
+        .row {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            .col {
+                .card{
+                    border: 0.5px solid;
+                    height: 150px;
+                    text-align: center;
+                    margin-top: 20px;
+                    border-radius: 20px;
+                    padding: 0 20px;
+                    -webkit-box-shadow: 0px 0px 10px -5px rgba(71, 71, 71, 1);
+                    -moz-box-shadow: 0px 0px 10px -5px rgba(71, 71, 71, 1);
+                    box-shadow: 0px 0px 10px -5px rgba(71, 71, 71, 1);
+                    .card__title{
+                        font-size: 18px;
+                        font-weight: 600;
+                    }
+                    .card__content{
+                        font-size: 16px;
+                        font-weight: 600;
+                       margin-top: 30px;
+                    }
+                }
+                
+            }
+        }
+    //}
+}
+.--green{
+    background: #54f767;
+}
+.--yellow{
+    background:#f9ff87;
+}
+.--blue{
+    background: #3355ff;
+}
+.--red{
+    background: #ff4242;
+}
