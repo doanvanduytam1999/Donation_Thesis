@@ -3,6 +3,7 @@ const DonateEvent = require('../models/donateEvent');
 const CategoryDonateEvent = require('../models/categoryDonateEvent');
 const AuthController = require('../controllers/authController');
 const UserAdmin = require('../models/userAdmin');
+const Donator = require('../models/Donator');
 
 exports.postAddpost = catchAsync(async (req, res, next) => {
     const admin = await AuthController.adminIsLoggedIn(req.cookies.jwtAdmin);
@@ -33,6 +34,30 @@ exports.postAddpost = catchAsync(async (req, res, next) => {
         Post: post
     })
 });
+
+exports.postHappiness = catchAsync(async (req, res, next) => {
+    const admin = await AuthController.adminIsLoggedIn(req.cookies.jwtAdmin);
+    if (admin.role === 'Admin') {
+        return res.status(403).json({
+            status: 'error',
+            error: 'Bạn không có quyền truy cập vào dữ liệu này!'
+        })
+    }
+    const id = req.params.id;
+    const data = req.body.data;
+    const post = await DonateEvent.findOneAndUpdate(id, {
+        happinessContent: data.happinessContent,
+        imageHappiness: data.imageHappiness
+    }, {
+        new: true,
+        runValidators: true
+    });
+
+    res.status(200).json({
+        status: 'success',
+        Post: post
+    })
+})
 
 exports.getAllPost = catchAsync(async (req, res, next) => {
     const admin = await AuthController.adminIsLoggedIn(req.cookies.jwtAdmin);
@@ -86,8 +111,32 @@ exports.getAdllUserAdmin = catchAsync(async (req, res, next) => {
     })
 });
 
+exports.getAdllUser = catchAsync(async (req, res, next) => {
+    const allUser = await Donator.find();
+    res.status(200).json({
+        status: 'success',
+        AllUser: allUser
+    })
+});
+
 exports.postAddUserAdmin = catchAsync(async (req, res, next) => {
     const data = req.body;
+    const error = [];
+    const username = await UserAdmin.findOne({username: data.username});
+    const email = await UserAdmin.findOne({email: data.email});
+    if(username){
+        error.push("Username đã tồn tại.");
+    }
+    if(email){
+        error.push("Email đã tồn tại.");
+    }
+    if(error.length != 0){
+        return res.status(400).json({
+            status: 'error',
+            error: error
+        })
+    }
+
     const addUserAdmin = await UserAdmin.create({
         username: data.username,
         email: data.email,
@@ -114,7 +163,17 @@ exports.getUserAdmin = catchAsync(async (req, res, next) => {
 exports.postEditUserAdmin = catchAsync(async (req, res, next) => {
     const id = req.params.id;
     const data = req.body;
-    console.log(id);
+    const error = [];
+    const email = await UserAdmin.findOne({email: data.email});
+    if(email){
+        error.push("Email đã tồn tại.");
+    }
+    if(error.length != 0){
+        return res.status(400).json({
+            status: 'error',
+            error: error
+        })
+    }
     const userAdmin = await UserAdmin.findByIdAndUpdate(id, {
         email: data.email,
         role: data.role,
@@ -147,9 +206,27 @@ exports.postChangeActive = catchAsync(async (req, res, next) => {
     })
 });
 
+exports.postChangeActiveDonator = catchAsync(async (req, res, next) => {
+    const id = req.params.id;
+    const userActive = await Donator.findById(id);
+    const Active = !userActive.active;
+
+    const userAdmin = await Donator.findByIdAndUpdate(id, {
+        active: Active
+    }, {
+        new: true,
+        runValidators: true
+    });
+
+    res.status(200).json({
+        status: 'success',
+        UserAdmin: userAdmin
+    })
+});
+
 exports.postChangeStatusPost = catchAsync(async (req, res, next) => {
     const userLogin = await AuthController.adminIsLoggedIn(req.body.jwtAdmin);
-    if(userLogin.role !== 'Manager'){
+    if (userLogin.role !== 'Manager') {
         return res.status(403).json({
             status: "Fail",
             error: "Bạn không có quyền thực hiện tính năng này!"
@@ -170,7 +247,7 @@ exports.postChangeStatusPost = catchAsync(async (req, res, next) => {
     })
 });
 
-exports.putChangePassword = catchAsync(async(req, res, next)=> {
+exports.putChangePassword = catchAsync(async (req, res, next) => {
     const userLogin = await AuthController.userIsLoggedIn(req.cookies.jwtAdmin);
     if (userLogin) {
         const user = await UserAdmin.find(userLogin.id).select('+password active');

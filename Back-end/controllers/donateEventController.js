@@ -99,7 +99,21 @@ exports.postDonate = catchAsync(async (req, res, next) => {
 });
 
 exports.postRegister = catchAsync(async (req, res, next) => {
-    console.log(req.body);
+    const error = [];
+    const username = await UserCustomer.findOne({username: req.body.username});
+    const email = await UserCustomer.findOne({email: req.body.email});
+    if(username){
+        error.push("Username đã tồn tại.");
+    }
+    if(email){
+        error.push("Email đã tồn tại.");
+    }
+    if(error.length != 0){
+        return res.status(400).json({
+            status: 'error',
+            error: error
+        })
+    }
     const user = await UserCustomer.create({
         username: req.body.username,
         fullName: req.body.fullName,
@@ -128,9 +142,18 @@ exports.getAllDonate = catchAsync(async (req, res, next) => {
     })
 });
 
+exports.get50Donater = catchAsync(async (req, res, next) => {
+    const idPost = req.params.id;
+    const allDonater = await DonateEvent.findById(idPost).populate({path: 'donateActions', options: { sort: { _id: -1 }, limit: 50 } } )
+    res.status(200).json({
+        status: 'success',
+        AllDonater: allDonater.donateActions
+    })
+});
+
 exports.getAllDonater = catchAsync(async (req, res, next) => {
     const idPost = req.params.id;
-    const allDonater = await DonateEvent.findById(idPost).populate('donateActions');
+    const allDonater = await DonateEvent.findById(idPost).populate('donateActions' );
     res.status(200).json({
         status: 'success',
         AllDonater: allDonater.donateActions
@@ -139,6 +162,17 @@ exports.getAllDonater = catchAsync(async (req, res, next) => {
 
 exports.postUpdateProfileUser = catchAsync(async (req, res, next) => {
     const data = req.body;
+    const error = [];
+    const email = await UserAdmin.findOne({email: data.email});
+    if(email){
+        error.push("Email đã tồn tại.");
+    }
+    if(error.length != 0){
+        return res.status(400).json({
+            status: 'error',
+            error: error
+        })
+    }
     const userLogin = await AuthController.userIsLoggedIn(req.cookies.jwt);
     const user = await UserCustomer.findByIdAndUpdate(userLogin.id, {
         fullName: data.fullName,

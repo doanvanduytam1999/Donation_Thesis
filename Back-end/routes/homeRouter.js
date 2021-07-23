@@ -194,7 +194,7 @@ const router = express.Router();
  *              - fullName
  *              - email
  *              - password
- *              - passwordcf
+ *              - passwordConfirm
  *          properties:
  *              username:
  *                  type: string
@@ -212,7 +212,7 @@ const router = express.Router();
  *                  type: string
  *                  description: Password
  *                  example: 123456789
- *              passwordcf:
+ *              passwordConfirm:
  *                  type: string
  *                  description: Password confirm
  *                  example: 123456789
@@ -415,6 +415,7 @@ const router = express.Router();
  */
 
 router.get('/donateEvents', DonateEnvent.getDonateEvents);
+
 /**
  * @swagger
  * /api/categoryDonateEvents:
@@ -549,7 +550,7 @@ router.get('/allDonate', DonateEnvent.getAllDonate);
  *          schema:
  *              type: string
  *          required: true
- *          example: 60d01d0c2d3f4512b0d2f9cc
+ *          example: 60fa709210dbfc3edc7264d3
  *      responses:
  *          200:
  *              description: Get success
@@ -567,6 +568,37 @@ router.get('/allDonate', DonateEnvent.getAllDonate);
  *                                      $ref: '#/components/schemas/DonateAction'
  */
 router.get('/allDonator/:id', DonateEnvent.getAllDonater);
+/**
+ * @swagger
+ * /api/50Donator/{id}:
+ *  get: 
+ *      summary: Return top 50 donater of donate event by id donate event
+ *      description: Return top 50 the donater of donate event
+ *      tags: [DonateEvents]
+ *      parameters:
+ *        - in: path
+ *          name: id
+ *          schema:
+ *              type: string
+ *          required: true
+ *          example: 60fa709210dbfc3edc7264d3
+ *      responses:
+ *          200:
+ *              description: Get success
+ *              content: 
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              status:
+ *                                  type: string
+ *                                  example: success
+ *                              AllDonater:
+ *                                  type: array
+ *                                  items:
+ *                                      $ref: '#/components/schemas/DonateAction'
+ */
+router.get('/50Donator/:id', DonateEnvent.get50Donater);
 
 /**
  * @swagger
