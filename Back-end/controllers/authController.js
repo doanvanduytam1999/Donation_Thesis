@@ -238,6 +238,7 @@ exports.loginCustomer = catchAsync(async (req, res, next) => {
   }
   //2) check if user exist and passowrd is correct
   const user = await User.findOne({ 'username': username }).select('+password');
+  console.log(user);
   if (!user || !(await user.correctPassword(password, user.password))) {
     return res.status(401).json({
       status: "error",

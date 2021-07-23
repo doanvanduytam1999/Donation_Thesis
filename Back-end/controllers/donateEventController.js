@@ -138,7 +138,8 @@ exports.getAllDonater = catchAsync(async (req, res, next) => {
 
 exports.postUpdateProfileUser = catchAsync(async (req, res, next) => {
     const data = req.body;
-    const user = await UserCustomer.findByIdAndUpdate(data.id, {
+    const userLogin = await AuthController.userIsLoggedIn(req.cookies.jwt);
+    const user = await UserCustomer.findByIdAndUpdate(userLogin.id, {
         fullName: data.fullName,
         email: data.email,
     }, {
@@ -154,9 +155,12 @@ exports.postUpdateProfileUser = catchAsync(async (req, res, next) => {
 
 exports.putChangePassword = catchAsync(async (req, res, next) => {
     const userLogin = await AuthController.userIsLoggedIn(req.cookies.jwt);
+    console.log(userLogin);
     if (userLogin) {
-        const user = await UserCustomer.find(userLogin.id).select('+password active');
-        if (!user || user.active !== false || !(await UserCustomer.correctPassword(req.body.password, user.password))) {
+        console.log("vo");
+        const user = await UserCustomer.findById(userLogin.id).select('+password');
+        console.log(user);
+        if (!user || user.active !== false || !(await UserCustomer.correctPassword(req.body.oldPassword, user.password))) {
             return res.status(401).json({
                 status: "error",
                 error: "Không đúng password hoặc tài khoản bị khóa, vui lòng kiểm tra lại thông tin"
@@ -168,7 +172,7 @@ exports.putChangePassword = catchAsync(async (req, res, next) => {
                     error: "Password Confirm không đúng, vui lòng kiểm tra lại thông tin"
                 })
             } else {
-                const password = await bcrypt.hash(req.body.password, 12);
+                const password = await bcrypt.hash(req.body.newPassword, 12);
                 const changePassword = await UserCustomer.findByIdAndUpdate(userLogin.id, {
                     password: password
                 }, {

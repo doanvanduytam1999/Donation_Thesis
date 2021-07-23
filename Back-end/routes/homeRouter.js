@@ -97,6 +97,58 @@ const router = express.Router();
  *              happinessContent: Các bệnh nhân đã được điều trị và có khởi sắc
  *              imageHappiness: [https://firebasestorage.googleapis.com/v0/b/fashionshop-11d42.appspot.com/o/img_post%2Fmomo-upload-api-210521141255-637572031756842528.jpg?alt=media&token=d3d543cd-26d7-4b8b-b7de-9c6df813ae30, https://firebasestorage.googleapis.com/v0/b/fashionshop-11d42.appspot.com/o/img_post%2Fmomo-upload-api-210521141310-637572031909191724.jpg?alt=media&token=a9e1677e-3b39-465c-a41e-1fa0f19cf715, https://firebasestorage.googleapis.com/v0/b/fashionshop-11d42.appspot.com/o/img_post%2Fmomo-upload-api-210521140734-637572028540633606.jpg?alt=media&token=9a7daa24-e204-4bd5-b9f6-089527d9817f]
  *              requestChangeStatus: false
+ *      DonateEventTodo:
+ *          type: object    
+ *          required:
+ *              - title
+ *              - image
+ *              - summary
+ *              - content
+ *              - startDay
+ *              - endDay
+ *              - setAmount
+ *              - categoryPost
+ *              - hotPost
+ *          properties:
+ *              title:
+ *                  type: string
+ *                  description: Title of the DonateEvent
+ *              image:
+ *                  type: array
+ *                  items:
+ *                      type: string
+ *                      description: URL image of DonateEvent
+ *              summary:
+ *                  type: string
+ *                  description: Content synopsis of DonateEvent
+ *              content:
+ *                  type: string
+ *                  description: Content of DonateEvent
+ *              startDay: 
+ *                  type: string
+ *                  description: Start day of DonateEvent
+ *              endDay: 
+ *                  type: string
+ *                  description: End day of DonateEvent
+ *              setAmount: 
+ *                  type: string
+ *                  description: Amount to donate
+ *              categoryPost:
+ *                  type: string
+ *                  description: Post type id
+ *              hotPost:
+ *                  type: boolean
+ *                  description: Hot post
+ *          example:
+ *              title: Chung tay viết tiếp “Ước mơ của Thúy” dành tặng các bệnh nhi ung thư
+ *              image: [https://firebasestorage.googleapis.com/v0/b/fashionshop-11d42.appspot.com/o/img_post%2Fmomo-upload-api-210521141255-637572031756842528.jpg?alt=media&token=d3d543cd-26d7-4b8b-b7de-9c6df813ae30, https://firebasestorage.googleapis.com/v0/b/fashionshop-11d42.appspot.com/o/img_post%2Fmomo-upload-api-210521141310-637572031909191724.jpg?alt=media&token=a9e1677e-3b39-465c-a41e-1fa0f19cf715, https://firebasestorage.googleapis.com/v0/b/fashionshop-11d42.appspot.com/o/img_post%2Fmomo-upload-api-210521140734-637572028540633606.jpg?alt=media&token=9a7daa24-e204-4bd5-b9f6-089527d9817f]
+ *              summary: Chương trình “Ước mơ của Thúy” chăm sóc và hỗ trợ bệnh nhi ung thư đang điều trị bệnh nhằm giúp các em có thêm niềm vui, động lực sống.
+ *              content: chương trình đã hỗ trợ kinh phí điều trị cho hàng ngàn bệnh nhi ung thư khó khăn khắp đất nước thông nhiều hoạt động như chạy bộ, bán đồ gây quỹ, triển lãm ảnh, hiến máu… nhằm vận động, quyên góp giúp đỡ các em. Không chỉ dừng lại ở đó, chương trình còn tổ chức thường niên các hoạt động hỗ trợ tinh thần cho các em vào các dịp Tết, Giáng Sinh, Quốc tế thiếu nhi, hay Sinh nhật… Bên cạnh đó, vô vàn những suất ăn trị giá từ 300,000 - 500,000 VNĐ và những món quà đặc biệt đều được trao tận tay các em và gia đình.
+ *              startDay: 2021-06-18
+ *              endDay: 2021-07-26
+ *              setAmount: 300000000
+ *              categoryPost: 60b7a9fe9a127331a8e5b085
+ *              hotPost: false
  *      Donator:
  *          type: object    
  *          required:
@@ -241,11 +293,37 @@ const router = express.Router();
  *              - username
  *              - email
  *              - password
- *              - passwordConfirm
  *          properties:
  *              id:
  *                  type: string
  *                  description: The auto-generated id of the UserCustomer
+ *              username:
+ *                  type: string
+ *                  description: Username
+ *                  example: "tam"
+ *              email:
+ *                  type: string
+ *                  description: Email of the UserCustomer
+ *                  example: tam123@gmail.com
+ *              role:
+ *                  type: string
+ *                  enum: [Admin, Manager, CTV]
+ *                  default: 'Manager'
+ *                  description: Role of User Admin
+ *                  example: Manager
+ *              password:
+ *                  type: string
+ *                  description: Password
+ *                  example: 123456789
+ *      UserAdminTodo:
+ *          type: object    
+ *          required:
+ *              - username
+ *              - email
+ *              - role
+ *              - password
+ *              - passwordConfirm
+ *          properties:
  *              username:
  *                  type: string
  *                  description: Username
@@ -283,6 +361,34 @@ const router = express.Router();
  * tags:
  *  name: UserCustomer
  *  description: The UserCustomer managing API
+ */
+
+/**
+ * @swagger
+ * tags:
+ *  name: Only Role Admin
+ *  description: The Role Admin managing API
+ */
+
+/**
+ * @swagger
+ * tags:
+ *  name: Only Role Manager
+ *  description: The Role Manager managing API
+ */
+
+/**
+ * @swagger
+ * tags:
+ *  name: Role Manager and CTV
+ *  description: The Role Manager managing API
+ */
+
+/**
+ * @swagger
+ * tags:
+ *  name: User Admin
+ *  description: The User Admin managing API
  */
 
 /**
@@ -604,8 +710,101 @@ router.post('/login', AuthController.loginCustomer);
  *                                  type: string
  */
 router.post('/signup', DonateEnvent.postRegister);
-
+/**
+ * @swagger
+ * /api/updateProfileUser:
+ *  put: 
+ *      summary: Update profile donator
+ *      description: Update profile donator
+ *      tags: [UserCustomer]
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                      properties:
+ *                          fullName:
+ *                              type: string
+ *                              example: Đoàn Văn Duy Tâm
+ *                          email:
+ *                              type: string
+ *                              example: tam1999@gmail.com
+ *      responses:
+ *          200:
+ *              description: Update success
+ *              content: 
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              status:
+ *                                  type: string
+ *                                  example: success
+ *                              user:
+ *                                  $ref: '#/components/schemas/Donator'
+ *                                  
+ *          400:
+ *              description: Update Fail
+ *              content: 
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              status:
+ *                                  type: string
+ *                                  example: error
+ *                              error:
+ *                                  type: string
+ */
 router.put('/updateProfileUser', AuthController.checkUserLogin, DonateEnvent.postUpdateProfileUser);
+/**
+ * @swagger
+ * /api/changePassword:
+ *  put: 
+ *      summary: Change password of donator
+ *      description: Change password of donator
+ *      tags: [UserCustomer]
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                      properties:
+ *                          oldPassword:
+ *                              type: string
+ *                              example: 123456789
+ *                          newPassword:
+ *                              type: string
+ *                              example: tam12346789
+ *                          passwordConfirm:
+ *                              type: string
+ *                              example: tam12346789
+ *      responses:
+ *          200:
+ *              description: Change password success
+ *              content: 
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              status:
+ *                                  type: string
+ *                                  example: success
+ *          401:
+ *              description: Change password Fail
+ *              content: 
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              status:
+ *                                  type: string
+ *                                  example: error
+ *                              error:
+ *                                  type: string
+ */
 router.put('/changePassword', AuthController.checkUserLogin, DonateEnvent.putChangePassword);
 
 module.exports = router;

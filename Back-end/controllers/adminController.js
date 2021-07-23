@@ -148,6 +148,13 @@ exports.postChangeActive = catchAsync(async (req, res, next) => {
 });
 
 exports.postChangeStatusPost = catchAsync(async (req, res, next) => {
+    const userLogin = await AuthController.adminIsLoggedIn(req.body.jwtAdmin);
+    if(userLogin.role !== 'Manager'){
+        return res.status(403).json({
+            status: "Fail",
+            error: "Bạn không có quyền thực hiện tính năng này!"
+        })
+    }
     const id = req.params.id;
     const data = req.body;
     const post = await DonateEvent.findByIdAndUpdate(id, {
@@ -167,7 +174,7 @@ exports.putChangePassword = catchAsync(async(req, res, next)=> {
     const userLogin = await AuthController.userIsLoggedIn(req.cookies.jwtAdmin);
     if (userLogin) {
         const user = await UserAdmin.find(userLogin.id).select('+password active');
-        if (!user || user.active !== false || !(await UserAdmin.correctPassword(req.body.password, user.password))) {
+        if (!user || user.active !== false || !(await UserAdmin.correctPassword(req.body.oldPassword, user.password))) {
             return res.status(401).json({
                 status: "error",
                 error: "Không đúng password hoặc tài khoản bị khóa, vui lòng kiểm tra lại thông tin"
@@ -179,7 +186,7 @@ exports.putChangePassword = catchAsync(async(req, res, next)=> {
                     error: "Password Confirm không đúng, vui lòng kiểm tra lại thông tin"
                 })
             } else {
-                const password = await bcrypt.hash(req.body.password, 12);
+                const password = await bcrypt.hash(req.body.newPassword, 12);
                 const changePassword = await UserAdmin.findByIdAndUpdate(userLogin.id, {
                     password: password
                 }, {
