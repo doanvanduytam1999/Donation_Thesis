@@ -2,7 +2,7 @@ const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
-const User = require('../models/user');
+const User = require('../models/Donator');
 const UserAdmin = require('../models/userAdmin');
 
 
@@ -285,7 +285,7 @@ exports.loginAdmin = catchAsync(async (req, res, next) => {
 //Allow user for access route
 exports.restrictTo = catchAsync(async (req, res, next) => {
   const userAdmin = await this.adminIsLoggedIn(req.cookies.jwtAdmin);
-  if (userAdmin.role === 'Admin' ||  userAdmin.role === 'Super Admin') {
+  if (userAdmin.role === 'Admin') {
     return next();
   } else {
     return res.status(403).json({

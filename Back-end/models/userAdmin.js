@@ -19,8 +19,8 @@ const userAdminSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['Super Admin', 'Admin', 'CTV'],
-    default: 'Admin'
+    enum: ['Admin', 'Manager', 'CTV'],
+    default: 'Manager'
   },
   password: {
     type: String,
@@ -51,7 +51,7 @@ const userAdminSchema = new mongoose.Schema({
 userAdminSchema.virtual('donateEnvents', {
     ref: 'DonateEnvent',
     localField: '_id',
-    foreignField: 'nguoiDang',
+    foreignField: 'poster',
 })
 
 

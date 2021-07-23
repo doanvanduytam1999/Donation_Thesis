@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 
 const CategoryDonateEventSchemea = new mongoose.Schema(
     {
-        tenLoai: {
+        CategoryName: {
             type: String,
             required: [true, 'Vui lòng cung cấp tên loại bài đăng']
         },
@@ -15,7 +15,7 @@ const CategoryDonateEventSchemea = new mongoose.Schema(
 CategoryDonateEventSchemea.virtual('donateEnvents', {
     ref: 'DonateEnvent',
     localField: '_id',
-    foreignField: 'loaibaidang',
+    foreignField: 'categoryPost',
 })
 
 

@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Vui lòng cung cấp username']
   },
-  hovaten: {
+  fullName: {
       type: String,
       required: [true, 'Vui lòng cung cấp họ và tên']
     },
@@ -36,22 +36,17 @@ const userSchema = new mongoose.Schema({
       message: 'Mật khẩu xác nhận không giống với mật khẩu'
     }
   },
-  phone: {
-    type: String,
-    unique: true,
-    required: [true, 'Vui lòng cung cấp số điện thoại'],
-    minlength: 10,
-    maxlength: 11,
+  active: {
+    type: Boolean,
+    default: true,
   },
   passwordChangedAt: Date,
-  passwordResetToken: String,
-  passwordResetExpires: Date,
 });
 
 userSchema.virtual('donateActions', {
   ref: 'DonateAction',
   localField: '_id', 
-  foreignField: 'userDonate',
+  foreignField: 'donator',
 });
 
 

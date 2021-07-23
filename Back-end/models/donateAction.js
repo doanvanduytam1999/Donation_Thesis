@@ -4,27 +4,28 @@ const mongoose = require('mongoose');
 
 const DonateActionSchemea = new mongoose.Schema(
     {
-        tenNguoiDonate: {
+        fullName: {
             type: String,
             default: "Nhà hảo tâm",
         },
-        soDienThoai: {
+        phone: {
             default: "",
             type: String,
         },
-        loiNhan: {
+        message: {
             default: "",
             type: String,
         },
-        soTienDonate: {
+        amountToDonate: {
             type: String,
-            required: [true, 'Vui lòng cung cấp ngày bắt đầu nhận donate']
+            required: [true, 'Vui lòng cung cấp số tiền donate']
         },
-        chuongTrinhQuyenGop:{
+        donateEvent:{
             type: mongoose.Schema.Types.ObjectId,
-            ref: "DonateEnvent"
+            ref: "DonateEnvent",
+            required: [true, 'Vui lòng cung cấp id chuong trình quyên góp']
         },
-        userDonate :{
+        donator :{
             type: mongoose.Schema.Types.ObjectId,
             ref: "User"
         }

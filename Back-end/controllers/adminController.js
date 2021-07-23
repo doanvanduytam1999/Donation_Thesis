@@ -5,20 +5,26 @@ const AuthController = require('../controllers/authController');
 const UserAdmin = require('../models/userAdmin');
 
 exports.postAddpost = catchAsync(async (req, res, next) => {
-    const dataPost = req.body.data;
     const admin = await AuthController.adminIsLoggedIn(req.cookies.jwtAdmin);
+    if (admin.role === 'Admin') {
+        return res.status(403).json({
+            status: 'error',
+            error: 'Bạn không có quyền truy cập vào dữ liệu này!'
+        })
+    }
+    const dataPost = req.body.data;
 
     const post = await DonateEvent.create({
-        tieuDe: dataPost.tieude,
-        hinhAnh: dataPost.img,
-        tomTat: dataPost.tomtat,
-        noiDung: dataPost.content,
-        ngayBatDau: dataPost.batdau,
-        ngayKetThuc: dataPost.ketthuc,
-        soTienCanDonate: dataPost.sotiencandonate,
-        loaiBaiDang: dataPost.loaibaidang,
-        tinNoiBat: dataPost.tinnoibat,
-        nguoiDang: admin.id
+        title: dataPost.title,
+        image: dataPost.image,
+        summary: dataPost.summary,
+        content: dataPost.content,
+        startDay: dataPost.startDay,
+        endDay: dataPost.endDay,
+        setAmount: dataPost.setAmount,
+        categoryPost: dataPost.categoryPost,
+        hotPost: dataPost.hotPost,
+        poster: admin.id
 
     })
 
@@ -34,8 +40,13 @@ exports.getAllPost = catchAsync(async (req, res, next) => {
     if (admin.role === 'CTV') {
         const ctv = await UserAdmin.findById(admin.id).populate('donateEnvents');
         allPost = ctv.donateEnvents;
-    } else {
+    } else if (admin.role === 'Manager') {
         allPost = await DonateEvent.find();
+    } else {
+        return res.status(403).json({
+            status: 'error',
+            error: 'Bạn không có quyền truy cập vào dữ liệu này!'
+        })
     }
 
     res.status(200).json({
@@ -43,7 +54,14 @@ exports.getAllPost = catchAsync(async (req, res, next) => {
         AllPost: allPost
     })
 });
-exports.getPostId = catchAsync(async(req, res, next)=>{
+exports.getPostId = catchAsync(async (req, res, next) => {
+    const admin = await AuthController.adminIsLoggedIn(req.cookies.jwtAdmin);
+    if (admin.role === 'Admin') {
+        return res.status(403).json({
+            status: 'error',
+            error: 'Bạn không có quyền truy cập vào dữ liệu này!'
+        })
+    }
     const id = req.params.id;
     const postId = await DonateEvent.findById(id);
     res.status(200).json({
@@ -51,13 +69,13 @@ exports.getPostId = catchAsync(async(req, res, next)=>{
         PostID: postId
     })
 })
-exports.getAdllCategoryDonateEvents = catchAsync(async (req, res, next) => {
+/* exports.getAdllCategoryDonateEvents = catchAsync(async (req, res, next) => {
     const allCategoryDonateEvent = await CategoryDonateEvent.find();
     res.status(200).json({
         status: 'success',
         AllCategory: allCategoryDonateEvent
     })
-});
+}); */
 
 exports.getAdllUserAdmin = catchAsync(async (req, res, next) => {
     const allUserAdmin = await UserAdmin.find();
@@ -70,13 +88,12 @@ exports.getAdllUserAdmin = catchAsync(async (req, res, next) => {
 
 exports.postAddUserAdmin = catchAsync(async (req, res, next) => {
     const data = req.body;
-    console.log(data);
     const addUserAdmin = await UserAdmin.create({
         username: data.username,
         email: data.email,
         role: data.role,
         password: data.password,
-        passwordConfirm: data.confirm,
+        passwordConfirm: data.passwordConfirm,
     });
     res.status(200).json({
         status: 'success',
@@ -133,9 +150,8 @@ exports.postChangeActive = catchAsync(async (req, res, next) => {
 exports.postChangeStatusPost = catchAsync(async (req, res, next) => {
     const id = req.params.id;
     const data = req.body;
-    console.log(data.trangThai);
     const post = await DonateEvent.findByIdAndUpdate(id, {
-        trangThai: data.trangThai
+        status: data.status
     }, {
         new: true,
         runValidators: true
@@ -146,3 +162,35 @@ exports.postChangeStatusPost = catchAsync(async (req, res, next) => {
         Post: post
     })
 });
+
+exports.putChangePassword = catchAsync(async(req, res, next)=> {
+    const userLogin = await AuthController.userIsLoggedIn(req.cookies.jwtAdmin);
+    if (userLogin) {
+        const user = await UserAdmin.find(userLogin.id).select('+password active');
+        if (!user || user.active !== false || !(await UserAdmin.correctPassword(req.body.password, user.password))) {
+            return res.status(401).json({
+                status: "error",
+                error: "Không đúng password hoặc tài khoản bị khóa, vui lòng kiểm tra lại thông tin"
+            })
+        } else {
+            if (req.body.newPassword !== req.body.passwordConfirm) {
+                return res.status(401).json({
+                    status: "error",
+                    error: "Password Confirm không đúng, vui lòng kiểm tra lại thông tin"
+                })
+            } else {
+                const password = await bcrypt.hash(req.body.password, 12);
+                const changePassword = await UserAdmin.findByIdAndUpdate(userLogin.id, {
+                    password: password
+                }, {
+                    new: true,
+                    runValidators: true
+                });
+
+                res.status(200).json({
+                    status: 'success'
+                })
+            }
+        }
+    }
+})

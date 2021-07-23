@@ -16,11 +16,32 @@ const AppError = require('././utils/appError');
 const cookieParser = require('cookie-parser');
 
 const globalErrorHandler = require('./controllers/errorController');
+const swaggerUI = require('swagger-ui-express');
+const swaggerJsDoc = require('swagger-jsdoc');
 
+const options = {
+    definition:{
+        openapi: "3.0.0",
+        info:{
+            title: "Libarary API",
+            version: "1.0.0",
+            description: "Libarary API for Donate Thesis"
+        },
+        server:[
+            {
+                url: "http://localhost:4000/"
+            }
+        ],
+    },
+    apis: ["./routes/*.js"]
+}
 
+const specs = swaggerJsDoc(options);
 
 
 const app = express();
+
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 
 // Middlewares 
 
