@@ -1,3 +1,4 @@
+$fz-text: 13px;
 .detail_header {
     .container {
         .introduce {
@@ -13,14 +14,14 @@
         }
         .slider {
             .ant-image {
-                    width:400px;
-                    height:215px;
-                    overflow: hidden;
-                .ant-image-img{
+                width: 400px;
+                height: 215px;
+                overflow: hidden;
+                .ant-image-img {
                     width: 100%;
-                    min-width:100%;
-                    min-height:100%;
-                    object-fit:cover;
+                    min-width: 100%;
+                    min-height: 100%;
+                    object-fit: cover;
                 }
             }
         }
@@ -30,30 +31,28 @@
     margin-top: 50px;
     .container {
         .row {
-            .col-8{
-                .ant-tabs-top{
-                    .ant-tabs-nav{
-                        .ant-tabs-nav-wrap{
-                            .ant-tabs-nav-list{
-                                .ant-tabs-tab{
-                                    .ant-tabs-tab-btn{
+            .col-8 {
+                .ant-tabs-top {
+                    .ant-tabs-nav {
+                        .ant-tabs-nav-wrap {
+                            .ant-tabs-nav-list {
+                                .ant-tabs-tab {
+                                    .ant-tabs-tab-btn {
                                         font-family: NunitoBold;
                                         font-size: 20px;
                                     }
                                 }
                             }
                         }
-                        
                     }
-                  
                 }
-                .ant-tabs-content-holder{
-                    .ant-tabs-content-top{
-                        .ant-tabs-tabpane{
-                            h2{
+                .ant-tabs-content-holder {
+                    .ant-tabs-content-top {
+                        .ant-tabs-tabpane {
+                            h2 {
                                 font-family: NunitoBold;
                             }
-                            p{
+                            p {
                                 color: #000;
                                 font-weight: 500;
                                 font-family: Nunito;
@@ -64,22 +63,83 @@
                 }
             }
             .col-4 {
-                .ant-tabs {
-                    .ant-tabs-content {
-                        .ant-tabs-tabpane {
-                            .ant-steps {
-                                margin-bottom: 20px;
+                .card_infoDonate {
+                    margin-top: 50px;
+                    padding: 20px;
+                    border-radius: 10px;
+                    -webkit-box-shadow: 0px 0px 10px -5px rgba(71, 71, 71, 1);
+                    -moz-box-shadow: 0px 0px 10px -5px rgba(71, 71, 71, 1);
+                    box-shadow: 0px 0px 10px -5px rgba(71, 71, 71, 1);
+                    .card_infoDonate_title {
+                        text-align: center;
+                        font-size: 20px;
+                        font-weight: bolder;
+                    }
+                    .progress_detail_top {
+                        display: flex;
+                        justify-content: space-between;
+                        flex-direction: column;
+                        .progress_detail_text {
+                            font-size: 15px;
+                            font-weight: 700;
+                            color: #000;
+                        }
+                        .progress_detail_number {
+                            font-size: $fz-text;
+                            font-weight: 700;
+                            color: #616161;
+                        }
+                    }
+
+                    .progress_detail_bot {
+                        //margin-top: 10px;
+                        .row {
+                            .col {
+                                .progress_detail_text {
+                                    font-size: $fz-text;
+                                    font-weight: 100;
+                                    text-align: center;
+                                    color: #000;
+                                }
+                                .progress_detail_number {
+                                    font-size: 14px;
+                                    font-weight: 100;
+                                    color: #616161;
+                                    text-align: center;
+                                }
                             }
-                            .steps-content {
-                                .ant-form {
-                                    .ant-radio-group {
-                                        margin-bottom: 10px;
-                                        .ant-radio-button-wrapper {
-                                            margin-left: 20px;
+                        }
+                    }
+                }
+                .card_donate{
+                    margin-top: 50px;
+                    padding: 20px;
+                    border-radius: 10px;
+                    -webkit-box-shadow: 0px 0px 10px -5px rgba(71, 71, 71, 1);
+                    -moz-box-shadow: 0px 0px 10px -5px rgba(71, 71, 71, 1);
+                    box-shadow: 0px 0px 10px -5px rgba(71, 71, 71, 1);
+                    .card_donate_title{
+                        text-align: center;
+                        font-size: 20px;
+                        font-weight: bolder;
+                    }
+                    .ant-tabs {
+                        .ant-tabs-content {
+                            .ant-tabs-tabpane {
+                                .ant-steps {
+                                    margin-bottom: 20px;
+                                }
+                                .steps-content {
+                                    .ant-form {
+                                        .ant-radio-group {
+                                            margin-bottom: 10px;
+                                            .ant-radio-button-wrapper {
+                                                margin-left: 20px;
+                                            }
                                         }
-                                    }
-                                    .ant-form-item {
-                                        margin-bottom: 10px;
+                                        .ant-form-item {
+                                            margin-bottom: 10px;
+                                        }
                                     }
                                 }
                             }

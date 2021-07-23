@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, /* useEffect */ } from 'react';
 import { Card, Form, Input, Button,message } from 'antd';
 import { init, sendForm } from 'emailjs-com';
 import "../style/bootstrap-grid.min.css";
@@ -7,7 +7,7 @@ import "../style/Contact.scss"
 import { PhoneOutlined, HomeOutlined, SendOutlined } from '@ant-design/icons';
 init('user_34PJkVJOxKj7nBHxWBCKl');
 const Contact = () => {
-    const [contactNumber, setContactNumber] = useState("000000");
+    const [/* contactNumber */, setContactNumber] = useState("000000");
 
     const generateContactNumber = () => {
         const numStr = "000000" + (Math.random() * 1000000 | 0);
@@ -32,7 +32,7 @@ const Contact = () => {
           message.error("Gửi gmail không  thành công:",error)
         });
     };
-   let day ="2018-04-04"
+   //let day ="2018-04-04"
     return (
 
         <>

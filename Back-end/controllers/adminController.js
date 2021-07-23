@@ -44,7 +44,9 @@ exports.postHappiness = catchAsync(async (req, res, next) => {
         })
     }
     const id = req.params.id;
-    const data = req.body.data;
+    console.log(req.body);
+    const data = req.body;
+    
     const post = await DonateEvent.findOneAndUpdate(id, {
         happinessContent: data.happinessContent,
         imageHappiness: data.imageHappiness
@@ -128,7 +130,7 @@ exports.postAddUserAdmin = catchAsync(async (req, res, next) => {
         error.push("Username đã tồn tại.");
     }
     if(email){
-        error.push("Email đã tồn tại.");
+        error.push(" Email đã tồn tại.");
     }
     if(error.length != 0){
         return res.status(400).json({

@@ -5,8 +5,8 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from "react-redux";
 import store from "./store";
-import { useEffect } from 'react';
-import ScrollToTop from "react-scroll-to-top";
+//import { useEffect } from 'react';
+//import ScrollToTop from "react-scroll-to-top";
 import { CookiesProvider } from 'react-cookie';
 ReactDOM.render(
   <CookiesProvider>

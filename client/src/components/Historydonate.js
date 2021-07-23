@@ -1,11 +1,11 @@
 import React from 'react';
-import {Table} from "antd"
+/* import {Table} from "antd"
 const layout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
-  };
+  }; */
 const Historydonate = (props) => {
-    const columns = [
+   /*  const columns = [
         {
           title: 'Tiêu đề bài viết',
           dataIndex: 'tieuDe',
@@ -36,7 +36,7 @@ const Historydonate = (props) => {
             dataIndex: 'trangThai',
             key: 'trangThai',
           },
-      ];
+      ]; */
 console.log(props.Historydonate);
     return (
        <>

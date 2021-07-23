@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Tabs, Table, message, Button } from 'antd';
+import { Tabs, Table, Button } from 'antd';
 import "../style/bootstrap-grid.min.css";
 import ProFile from '../components/Profilecpn';
-import HistoryDonate from "../components/Historydonate"
+//import HistoryDonate from "../components/Historydonate"
 import donateEvensts from '../Api/donateEvensts';
 import { Link, Redirect } from 'react-router-dom'
 const layout = {
@@ -14,9 +14,9 @@ const Profile = () => {
     const islogin = JSON.parse(localStorage.getItem("user"))
 
     const [AllDonate, setAllDonate] = useState([]);
-    const [listDonates, setListdonates] = useState([]);
+    const [/* listDonates */, setListdonates] = useState([]);
     const [History, setHistory] = useState([]);
-    const [state, setstate] = useState([]);
+    //const [state, setstate] = useState([]);
     const DonateHistory = []
     useEffect(() => {
         const fetchdonatesData = async () => {
@@ -44,14 +44,14 @@ const Profile = () => {
     const columns = [
         {
             title: 'Tiêu đề bài viết',
-            dataIndex: 'tieuDe',
-            key: 'tieude',
+            dataIndex: 'title',
+            key: 'title',
         },
         
         {
             title: 'Số tiền đã ủng hộ(VNĐ)',
-            dataIndex: 'sotiendonate',
-            key: 'sotiendonate',
+            dataIndex: 'amountToDonate',
+            key: 'amountToDonate',
             render: text => (
                 <>{
                     convertNumber(text)
@@ -74,7 +74,7 @@ const Profile = () => {
     console.log(AllDonate);
 
     AllDonate.forEach(element => {
-        a.push(element.chuongTrinhQuyenGop)
+        a.push(element.donateEvent)
     });
 
     for (let i = 0; i < a.length; i++) {
@@ -90,9 +90,9 @@ const Profile = () => {
     DonateHistory.forEach((e) => {
         for (let i = 0; i < e.length; i++) {
             for (let j = 0; j < AllDonate.length; j++) {
-                if (e[i]._id === AllDonate[j].chuongTrinhQuyenGop) {
-                    e[i].sotiendonate = AllDonate[j].soTienDonate;
-                    console.log(e);
+                if (e[i]._id === AllDonate[j].donateEvent) {
+                    e[i].amountToDonate = AllDonate[j].amountToDonate;
+                    console.log(e);     
                 }
             }
         }

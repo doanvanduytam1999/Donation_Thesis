@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input, Button, Tabs } from 'antd';
+import { Form, Input, Button, Tabs,Spin } from 'antd';
 import { CheckOutlined } from '@ant-design/icons';
 import donateEvensts from '../Api/donateEvensts';
 //import { Link } from "react-router-dom";
@@ -20,19 +20,21 @@ const Home = () => {
     const [listDonate, setListdonate] = useState([]);
     const [listCategory, setListCategory] = useState([]); 
     const { isLoggedIn } = useSelector(state => state.login);
-    const [Count, setCount] = useState(0);
+    const [loadingSum, setLoadingSum] = useState(false);
+    //const [Count, /* setCount */] = useState(0);
     //const  data  = useSelector(state => state.auth.user);
-    const order= JSON.parse(localStorage.getItem("orderStatus"))
+    //const order= JSON.parse(localStorage.getItem("orderStatus"))
         //console.log(data);
-        window.scrollTo({ behavior: 'smooth' });
+        //window.scrollTo({ behavior: 'smooth' });
     useEffect(() => {
-
+        window.scrollTo(0, 0);
         const fetchdonatesData = async () => {
             try {
                 await donateEvensts.getAll().then((res) => {
                     setListdonates(res.data.DonateEnvents);
                     setListdonate(res.data.DonateEnvents)
                 });
+                setLoadingSum(true)
             } catch (error) {
                 console.log("Failed to fetch brand data at: ", error);
             }
@@ -51,7 +53,9 @@ const Home = () => {
         fetchCategory();
         fetchdonatesData();
 
-    }, [Count]);
+    }, []);
+    console.log(listDonate);
+    console.log(listDonates);
     const handleClick = (e) => {
         setListdonate(listDonates);
         let filterProduct = [];
@@ -60,7 +64,7 @@ const Home = () => {
         } else {
 
             filterProduct = listDonates.filter(
-                listDonates => listDonates.loaiBaiDang === e
+                listDonates => listDonates.categoryPost === e
             )
             setListdonate(filterProduct)
             console.log(filterProduct);
@@ -70,9 +74,9 @@ const Home = () => {
     };
     for (let i = 0; i < listDonate.length; i++) {
         for (let j = 0; j < listCategory.length; j++) {
-            if (listDonate[i].loaiBaiDang === listCategory[j]._id) {
+            if (listDonate[i].categoryPost === listCategory[j]._id) {
                 //console.log(listCategory[j].tenloai);
-                listDonate[i].tenLoai = listCategory[j].tenloai;
+                listDonate[i].categoryName = listCategory[j].CategoryName;
                 //console.log(listDonate);
             }
 
@@ -94,12 +98,13 @@ const Home = () => {
     const sumConinDonate = ()=>{
         let sum = 0
         for (let i = 0; i < listDonate.length; i++) {
-             sum =sum+  Number(listDonate[i].soTienDonateHieTai);
+             sum =sum+  Number(listDonate[i].currentAmount);
             
         }
+        
         return sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
     }
-    console.log(listDonate);
+    //console.log(listDonate);
     if(isLoggedIn){
         <Redirect to="/" />
     
@@ -128,7 +133,11 @@ const Home = () => {
                     </div>
                     <div className="text_wapper">
                         <p className="text-bold ">Chúng tôi đã quyên góp được</p>
-                        <h2 className="text-bold"><span>{sumConinDonate()} VNĐ</span></h2>
+                        <h2 className="text-bold"><span>
+                            { sumConinDonate()} VNĐ 
+
+
+                            </span></h2>
                         <div className="icon-micro-heart"><img width="50px" alt="Heart" src="../images/hands.svg" /></div>
                         <div className="mb-1x"><span className="text-medium"><div className="html-sanitizer">Hãy giúp chúng thôi một tay</div></span></div>
                         <div className="text_wapper-about"><a href="/about-us"><span className="text-bold text-uppercase">Tìm hiểu về chúng tôi</span></a></div>
@@ -154,7 +163,7 @@ const Home = () => {
                     </div>
                     <div className="list_card col-10 offset-1">
                         <div className="row">
-                            {<HotListDonate listDonates={listDonates}/>}
+                            {loadingSum ? <HotListDonate listDonates={listDonates}/> : <Spin size="large" />}
                         </div>
                     </div>
                 </div>
@@ -173,7 +182,7 @@ const Home = () => {
                             {listCategory.map((category) => {
                                 return (
                                     <>
-                                        <TabPane tab={category.tenloai} key={category._id}>
+                                        <TabPane tab={category.CategoryName} key={category._id}>
 
                                         </TabPane>
                                     </>
@@ -181,10 +190,12 @@ const Home = () => {
                             })}
 
                         </Tabs>
-                        <div className="row" >
-                            {<ListDonate listDonate={listDonate} />}  
-                            <Link className="ant-btn ant-btn-primary bnt-load-more" to="/tat-ca-chuong-trinh" >Xem tất cả </Link>                       
+                        <div className="row all-donate1" >
+                            
+                            {loadingSum ? <ListDonate listDonate={listDonate} /> : <Spin size="large" />}
+                                                 
                         </div>
+                        <Link className="ant-btn ant-btn-primary bnt-load-more" to="/tat-ca-chuong-trinh" >Xem tất cả </Link> 
                     </div>
                 </div>
             </div>
@@ -206,11 +217,11 @@ const Home = () => {
                     <div className="register_text col-10 offset-1 ">
                         <h2 className="text-bold text-wh ">Hãy tham gia cùng với chúng tôi</h2>
                         <p className="text-bold text-wh ">Cùng nhau chia sẽ và giúp đỡ những hoàn cảnh khó khăn</p>
-                        <div className="form_rs">
+                        {/* <div className="form_rs">
                             <Form form={form}
                                 name="horizontal_login"
                                 layout="inline"
-                        /* onFinish={onFinish} */>
+                        onFinish={onFinish}>
                                 <Form.Item
                                     name="username"
                                     rules={[{ required: true, message: 'Please input your username!' }]}
@@ -248,7 +259,7 @@ const Home = () => {
                             <div className="btn_frm_rs">
                                 <Button style={{ width: "500px", height: "45px", fontSize: "20px", fontWeight: "700" }}> Tham gia ngay</Button>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>
@@ -336,9 +347,6 @@ const Home = () => {
                                 </div>
                             </div>
                         </div>
-
-
-
                     </div>
                 </div>
             </div>

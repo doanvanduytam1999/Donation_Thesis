@@ -1,11 +1,11 @@
 import React, { useRef, useEffect, useState } from "react";
 import axios from "axios";
 import { Modal,Result,Button } from 'antd';
-import {Link} from "react-router-dom"
+//import {Link} from "react-router-dom"
 const Paypal = () => {
     const paypal = useRef();
     const getData = JSON.parse(localStorage.getItem("data"))
-    const vndToUsd = (getData.coin / 23000).toFixed(2);
+    const vndToUsd = (getData.amountToDonate / 23000).toFixed(2);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const showModal = () => {
         setIsModalVisible(true);
@@ -14,9 +14,9 @@ const Paypal = () => {
         setIsModalVisible(false);
         window.location.reload();
     };
-    const handleCancel = () => {
+   /*  const handleCancel = () => {
         setIsModalVisible(false);
-    };
+    }; */
     console.log(vndToUsd);
     useEffect(() => {
         window.paypal
@@ -38,9 +38,10 @@ const Paypal = () => {
                 onApprove: async (data, actions) => {
                     const order = await actions.order.capture();
                     console.log(order.status);
-                    const url = 'http://localhost:4000/donate';
+                    const url = 'http://localhost:4000/api/donate';
                     if (order.status === "COMPLETED") {
                         console.log(order.status);
+                        console.log(getData);
                         axios.post(url, {
                             data: getData
                         }, {
@@ -48,6 +49,8 @@ const Paypal = () => {
                                 'Content-Type': 'application/json'
                             },
                             withCredentials: true
+                        }).then((res)=>{
+                            console.log(res.data);
                         })
                         showModal();
 
@@ -61,7 +64,7 @@ const Paypal = () => {
                 },
             })
             .render(paypal.current);
-    }, []);
+    }, [getData, vndToUsd]);
     return (
         <div>
             <div>

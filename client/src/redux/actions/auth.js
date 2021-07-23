@@ -11,17 +11,20 @@ import AuthService from "../services/autl.services";
 
 export const register = (values) => (dispatch) => {
   return AuthService.register(values).then(
-    (response) => {
-      dispatch({
-        type: REGISTER_SUCCESS,
-      });
-
-      dispatch({
-        type: SET_MESSAGE,
-        payload: response.data.message,
-      });
-
-      return Promise.resolve();
+    (data) => {
+      if (data.status !== 'error') {
+        dispatch({
+          type: REGISTER_SUCCESS,
+          //payload: { user: data },
+        });
+        dispatch({
+          type: SET_MESSAGE,
+          payload: data.data.message,
+        });
+        return Promise.resolve();
+      } else {
+        return data.error;
+      }
     },
     (error) => {
       const message =
@@ -47,17 +50,17 @@ export const register = (values) => (dispatch) => {
 export const login = (values) => (dispatch) => {
   return AuthService.login(values).then(
     (data) => {
-      if(data.status != 'error'){
+      if (data.status !== 'error') {
         dispatch({
           type: LOGIN_SUCCESS,
           payload: { user: data },
         });
-  
+
         return Promise.resolve();
-      }else{
-        return data.error ;
+      } else {
+        return data.error;
       }
-      
+
     },
     (error) => {
       const message =
@@ -79,7 +82,7 @@ export const login = (values) => (dispatch) => {
       return Promise.reject();
     }
   );
-  
+
 };
 
 export const logout = () => (dispatch) => {

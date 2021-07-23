@@ -6,8 +6,8 @@ import { UsergroupAddOutlined } from '@ant-design/icons';
 import { Link } from "react-router-dom";
 import PayPal from "../components/Paypal"
 import { useSelector } from "react-redux";
-import ListDonate from "./ListDonate";
-import donateEvensts from "../Api/donateEvensts";
+//import ListDonate from "./ListDonate";
+//import donateEvensts from "../Api/donateEvensts";
 //import { logout } from "../redux/actions/auth.js";
 import "../style/HotListDonate.scss";
 const { Option } = Select;
@@ -39,8 +39,8 @@ const HotListDonate = (props) => {
     const { isLoggedIn } = useSelector(state => state.login);
     const data = useSelector(state => state.login.user);
     const [Listhost, setListhost] = useState(props.listDonates);
-    const [Count, setCount] = useState(0);
-    const order= JSON.parse(localStorage.getItem("user"))
+    //const [Count, setCount] = useState(0);
+    //const order= JSON.parse(localStorage.getItem("user"))
 //console.log(order);
     useEffect(() => {
         setListhost(props.listDonates);
@@ -117,7 +117,7 @@ const HotListDonate = (props) => {
                     console.log('Success:', values);
                     checkBtn();
                     values['checked'] = checked;
-                    values['id'] = id;
+                    values['donateEvent'] = id;
                     const data = JSON.stringify(values)
                     localStorage.setItem("data", data);
                 };
@@ -131,7 +131,7 @@ const HotListDonate = (props) => {
                                 <Form
                                     {...layout}
                                     name="basic"
-                                    initialValues={{ prefix: "84", coin: "10000" }}
+                                    initialValues={{ prefix: "84", amountToDonate: "10000" }}
                                     onFinish={onFinish}
                                     onFinishFailed={onFinishFailed}
                                 >
@@ -142,7 +142,7 @@ const HotListDonate = (props) => {
                                         <>
                                             <Form.Item
                                                 label="Họ và tên"
-                                                name="name"
+                                                name="fullName"
                                                 rules={[{ required: true, message: 'Hãy nhập họ tên của bạn !' }]}
                                                 
                                             >
@@ -162,7 +162,7 @@ const HotListDonate = (props) => {
                                                         message: 'Hãy nhập số tiền ủng hộ',
                                                     },
                                                 ]}
-                                                name="coin">
+                                                name="amountToDonate">
                                                 <InputNumber
                                                     onChange={onChange}
                                                     style={{ width: "200px" }}
@@ -173,7 +173,7 @@ const HotListDonate = (props) => {
                                                 />
                                             </Form.Item>
                                             <Form.Item
-                                                name="content"
+                                                name="message"
                                                 label="Lời nhắn"
                                             >
                                                 <TextArea placeholder="Lời nhắn (không bắt buộc)" autoSize={{ minRows: 3 }} />
@@ -204,7 +204,7 @@ const HotListDonate = (props) => {
                                                         message: 'Hãy nhập số tiền ủng hộ',
                                                     },
                                                 ]}
-                                                name="coin">
+                                                name="amountToDonate">
                                                 <InputNumber
                                                     onChange={onChange}
                                                     style={{ width: "200px" }}
@@ -216,7 +216,7 @@ const HotListDonate = (props) => {
                                             </Form.Item>
                                             <Form.Item
                                                 label='Lời nhắn'
-                                                name="content"
+                                                name="message"
                                             >
                                                 <TextArea placeholder="Lời nhắc (không bắt buộc)" autoSize={{ minRows: 3 }} />
                                             </Form.Item>
@@ -236,13 +236,13 @@ const HotListDonate = (props) => {
                             </>
                         ) : (
                             <>
-                                {data != [] ? (
+                                {data !== [] ? (
                                     <>
                                         <Form
 
                                             {...layout}
                                             name="basic"
-                                            initialValues={{ prefix: "84", coin: "10000", name: `${data.username}`, phone: "0849119919" }}
+                                            initialValues={{ prefix: "84", amountToDonate: "10000", fullName: `${data.username}`, phone: "0849119919" }}
                                             onFinish={onFinish}
                                             onFinishFailed={onFinishFailed}
                                         >
@@ -261,7 +261,7 @@ const HotListDonate = (props) => {
                                                 <>
                                                     <Form.Item
                                                         label="Họ và tên"
-                                                        name="name"
+                                                        name="fullName"
                                                         rules={[{ required: true, message: 'Hãy nhập họ tên của bạn !' }]}
                                                     >
                                                         <Input style={{ background: "#5858583b" }} readOnly />
@@ -283,7 +283,7 @@ const HotListDonate = (props) => {
                                                                 message: 'Hãy nhập số tiền ủng hộ',
                                                             },
                                                         ]}
-                                                        name="coin">
+                                                        name="amountToDonate">
                                                         <InputNumber
                                                             onChange={onChange}
                                                             style={{ width: "200px" }}
@@ -294,7 +294,7 @@ const HotListDonate = (props) => {
                                                         />
                                                     </Form.Item>
                                                     <Form.Item
-                                                        name="content"
+                                                        name="message"
                                                         label="Lời nhắn"
                                                     >
                                                         <TextArea placeholder="Lời nhắn (không bắt buộc)" autoSize={{ minRows: 3 }} />
@@ -326,7 +326,7 @@ const HotListDonate = (props) => {
                                                                 message: 'Hãy nhập số tiền ủng hộ',
                                                             },
                                                         ]}
-                                                        name="coin">
+                                                        name="amountToDonate">
                                                         <InputNumber
                                                             onChange={onChange}
                                                             style={{ width: "200px" }}
@@ -338,7 +338,7 @@ const HotListDonate = (props) => {
                                                     </Form.Item>
                                                     <Form.Item
                                                         label='Lời nhắn'
-                                                        name="content"
+                                                        name="message"
                                                     >
                                                         <TextArea placeholder="Lời nhắc (không bắt buộc)" autoSize={{ minRows: 3 }} />
                                                     </Form.Item>
@@ -375,9 +375,9 @@ const HotListDonate = (props) => {
 
                 return (
                     <>
-                        <p>Số tiền ủng hộ: {convertNumber(coin.coin)}</p>
+                        <p>Số tiền ủng hộ: {convertNumber(coin.amountToDonate)}</p>
                         <p>Lời nhắn:</p>
-                        <p>{coin.content}</p>
+                        <p>{coin.amountToDonate}</p>
                         <PayPal />
                     </>
                 )
@@ -407,45 +407,47 @@ console.log(licked);
 
     return (
         <>
-            {Listhost.map((item) => {
-                if (item.tinNoiBat === true) {
+            {Listhost
+            .filter(Listhost => Listhost.hotPost === true)
+            .map((item) => {
+                /* if (item.tinNoiBat === true) { */
                     return (
                         <>
-                            <div key='1' className="col-6 card">
+                            <div key={item._id} className="col-6 card">
                                 <Card
                                     key='1'
                                     hoverable
                                     style={{ borderRadius: 10, height: 260, width: "100%" }}
-                                    cover={<img height="100%" alt="example" src={item.hinhAnh[0]} />}
+                                    cover={<img height="100%" alt="example" src={item.image[0]} />}
                                 >
                                     <p style={{ display: "none" }} data-id={item._id}></p>
                                     <div className="detail">
                                         <Link to={`thong-tin-chi-tiet/${item._id}`} >
                                             <Text className="title-text" style={ellipsis ? { width: 200 } : undefined, {  color: "#1890ff" }}
-                                                ellipsis={ellipsis ? { tooltip: `${item.tieuDe}` } : false} >
-                                                {item.tieuDe} </Text>
+                                                ellipsis={ellipsis ? { tooltip: `${item.title}` } : false} >
+                                                {item.title} </Text>
                                         </Link>
                                         <div className="progress">
                                             <div className="progress_detail_top">
                                                 <p className="progress_detail_text">
 
-                                                    {convertNumber(item.soTienDonateHieTai)
+                                                    {convertNumber(item.currentAmount)
                                                     } VNĐ quyên góp
                                                 </p>
-                                                <p className="progress_detail_number">{((item.soTienDonateHieTai / item.soTienCanDonate) * 100).toFixed(3)}%</p>
+                                                <p className="progress_detail_number">{((item.currentAmount / item.setAmount) * 100).toFixed(3)}%</p>
 
                                             </div>
-                                            <Progress percent={Math.floor((item.soTienDonateHieTai / item.soTienCanDonate) * 100)} showInfo={Math.floor((item.soTienDonateHieTai / item.soTienCanDonate) * 100) === 100 ? (true) : (false)} status={Math.floor((item.soTienDonateHieTai / item.soTienCanDonate) * 100) === 100 ? ("success") : ("normal")} />
+                                            <Progress percent={Math.floor((item.currentAmount / item.setAmount) * 100)} showInfo={Math.floor((item.currentAmount / item.setAmount) * 100) === 100 ? (true) : (false)} status={Math.floor((item.currentAmount / item.setAmount) * 100) === 100 ? ("success") : ("normal")} />
 
                                             <div className="progress_detail_bot">
                                                 <p className="progress_detail_text">
-                                                    <UsergroupAddOutlined />{item.luotDonate} lượt quyên góp
+                                                    <UsergroupAddOutlined />{item.numberOfDonations} lượt quyên góp
                                                 </p>
-                                                <p className="progress_detail_number">{dayEnd(item.ngayKetThuc)} ngày còn lại</p>
+                                                <p className="progress_detail_number">{Number(dayEnd(item.endDay))===0 ||Number(dayEnd(item.endDay))<0 ?(<>Đã hết hạn</>):(<>{dayEnd(item.endDay)} ngày còn lại</>) } </p>
                                             </div>
                                         </div>
                                         {
-                                            Number(item.soTienDonateHieTai) >= Number(item.soTienCanDonate) ? (<p className="complete" >Đã hoàn thành</p>) : (<p className="ant-btn ant-btn-primary " data-id={item._id} onClick={showModal}>Ủng hộ ngay</p>)
+                                            Number(item.currentAmount) >= Number(item.setAmount) ? (<p className="complete" >Đã hoàn thành</p>) : (<p className="ant-btn ant-btn-primary " data-id={item._id} onClick={showModal}>Ủng hộ ngay</p>)
 
                                         }
 
@@ -453,13 +455,13 @@ console.log(licked);
                                 </Card>
                             </div>
                         </>)
-                }
+                /* } */
             })
             }
             {donator != null ? (
                 <>
 
-                    <Modal title={donator[0].tieuDe} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+                    <Modal title={donator[0].title} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
                         <Steps current={current}>
                             {steps.map(item => (
                                 <Step key={item.title} title={item.title} />
@@ -469,7 +471,7 @@ console.log(licked);
                         <div className="steps-action">
                             {current < steps.length - 1 && (
                                 <>
-                                    {<Button disabled={
+                                    {<Button className="btn-disabled" disabled={
                                         licked ===true?(false):(true) } 
                                         type="primary" onClick={() => next()}>
                                         Tiếp theo

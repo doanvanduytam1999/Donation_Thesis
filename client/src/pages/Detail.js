@@ -5,9 +5,10 @@ import "../style/bootstrap-grid.min.css";
 import "../style/Detail.scss";
 import { useParams } from "react-router-dom";
 import donateEvensts from '../Api/donateEvensts';
+import { UsergroupAddOutlined } from '@ant-design/icons';
 import PayPal from "../components/Paypal";
 import { useSelector } from "react-redux";
-import ListDonate from '../components/ListDonate';
+//import ListDonate from '../components/ListDonate';
 const { TabPane } = Tabs;
 const { Option } = Select;
 const { Step } = Steps;
@@ -16,29 +17,8 @@ const layout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
 };
-const convertNumber1 = (x) => {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-}
-const columns = [
-    {
-        title: 'Tên ',
-        dataIndex: 'tenNguoiDonate',
-        key: 'tenNguoiDonate',
 
-    },
-    {
-        title: 'Số tiền ủng hộ (VNĐ)',
-        dataIndex: 'soTienDonate',
-        key: 'soTienDonate',
-        render: text => (
-            <>{
-              convertNumber1(text)
-            }
-              
-            </>
-          ),
-    }
-];
+
 
 
 const Detail = () => {
@@ -53,6 +33,9 @@ const Detail = () => {
     const [value, setValue] = useState(1);
     const [current, setCurrent] = React.useState(0);
     const [AllDonator, setAllDonator] = useState([]);
+    const [ AllDonates, setAllDonates] = useState([]);
+    const [ArrayDonateCategory, setArrayDonateCategory] = useState([]);
+    //const [count, setCurrent] = React.useState(0);
     const [Count, setCount] = useState(0);
     const data = useSelector(state => state.login.user);
     const showModal = () => {
@@ -66,7 +49,7 @@ const Detail = () => {
         setIsModalVisible(false);
     };
     useEffect(() => {
-      
+
         window.scrollTo(0, 0)
         const fetchData = async () => {
             try {
@@ -75,11 +58,22 @@ const Detail = () => {
                     //res.data.DonateEnvent.soTienCanDonate = res.data.DonateEnvent.soTienCanDonate.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
                     setDonate(res.data.DonateEnvent);
                     //console.log('ádas',res.data.DonateEnvent);
-                    setImg(res.data.DonateEnvent.hinhAnh)
+                    setImg(res.data.DonateEnvent.image)
 
                 });
             } catch (error) {
                 console.log("Failed to fetch Donate data at: ", error);
+            }
+        };
+        const fetchdonatesData = async () => {
+            try {
+                await donateEvensts.getAll().then((res) => {
+                    setAllDonates(res.data.DonateEnvents);
+                    
+                });
+              
+            } catch (error) {
+                console.log("Failed to fetch brand data at: ", error);
             }
         };
         const fetchAllDonater = async () => {
@@ -95,15 +89,28 @@ const Detail = () => {
                 console.log("Failed to fetch AllDonator data at: ", error);
             }
         }
+        const radomDonateEvent= (a)=>{
+           for (let i = 0; i <= 2; i++) {
+               //const element = array[i];
+               let rand = a[Math.floor(Math.random() * a.length)];
+               setArrayDonateCategory(oldArray => [...oldArray, rand])
+           }
+        
+       
+     
+        
+        }
+        fetchdonatesData();
         fetchData();
         fetchAllDonater();
-    }, [licked]);
+        //radomDonateEvent()
+    }, [licked, _id]);
+console.log(AllDonates);
+    /* AllDonator.forEach(element => {
+        element.amountToDonate = element.amountToDonate.replace(/\B(?=(\d{3})+(?!\d))/g, ".") + 'đ'
 
-    AllDonator.forEach(element => {
-        element.soTienDonate = element.soTienDonate.replace(/\B(?=(\d{3})+(?!\d))/g, ".") + 'đ'
-
-    });
-  
+    }); */
+    console.log(ArrayDonateCategory);
     const phoneSelector = (
         <Form.Item name="prefix" noStyle>
             <Select style={{ width: 70 }}>
@@ -122,7 +129,7 @@ const Detail = () => {
     }
     const next = () => {
         setCurrent(current + 1);
-        
+
     };
     const prev = () => {
         setCurrent(current - 1);
@@ -142,7 +149,7 @@ const Detail = () => {
                     console.log('Success:', values);
                     checkBtn();
                     values['checked'] = checked;
-                    values['id'] = _id;
+                    values['donateEvent'] = _id;
                     const data = JSON.stringify(values)
                     localStorage.setItem("data", data);
                 };
@@ -156,7 +163,7 @@ const Detail = () => {
                                 <Form
                                     {...layout}
                                     name="basic"
-                                    initialValues={{ prefix: "84", coin: "10000" }}
+                                    initialValues={{ prefix: "84", amountToDonate: "10000" }}
                                     onFinish={onFinish}
                                     onFinishFailed={onFinishFailed}
                                 >
@@ -167,9 +174,9 @@ const Detail = () => {
                                         <>
                                             <Form.Item
                                                 label="Họ và tên"
-                                                name="name"
+                                                name="fullName"
                                                 rules={[{ required: true, message: 'Hãy nhập họ tên của bạn !' }]}
-                                                
+
                                             >
                                                 <Input autoComplete="off" placeholder="Họ và tên của bạn" />
                                             </Form.Item>
@@ -187,7 +194,7 @@ const Detail = () => {
                                                         message: 'Hãy nhập số tiền ủng hộ',
                                                     },
                                                 ]}
-                                                name="coin">
+                                                name="amountToDonate">
                                                 <InputNumber
                                                     onChange={onChange}
                                                     style={{ width: "200px" }}
@@ -198,7 +205,7 @@ const Detail = () => {
                                                 />
                                             </Form.Item>
                                             <Form.Item
-                                                name="content"
+                                                name="message"
                                                 label="Lời nhắn"
                                             >
                                                 <TextArea placeholder="Lời nhắn (không bắt buộc)" autoSize={{ minRows: 3 }} />
@@ -229,7 +236,7 @@ const Detail = () => {
                                                         message: 'Hãy nhập số tiền ủng hộ',
                                                     },
                                                 ]}
-                                                name="coin">
+                                                name="amountToDonate">
                                                 <InputNumber
                                                     onChange={onChange}
                                                     style={{ width: "200px" }}
@@ -241,7 +248,7 @@ const Detail = () => {
                                             </Form.Item>
                                             <Form.Item
                                                 label='Lời nhắn'
-                                                name="content"
+                                                name="message"
                                             >
                                                 <TextArea placeholder="Lời nhắc (không bắt buộc)" autoSize={{ minRows: 3 }} />
                                             </Form.Item>
@@ -267,7 +274,7 @@ const Detail = () => {
 
                                             {...layout}
                                             name="basic"
-                                            initialValues={{ prefix: "84", coin: "10000", name: `${data.username}`, phone: "0849119919" }}
+                                            initialValues={{ prefix: "84", amountToDonate: "10000", name: `${data.username}`, phone: "0849119919" }}
                                             onFinish={onFinish}
                                             onFinishFailed={onFinishFailed}
                                         >
@@ -308,7 +315,7 @@ const Detail = () => {
                                                                 message: 'Hãy nhập số tiền ủng hộ',
                                                             },
                                                         ]}
-                                                        name="coin">
+                                                        name="amountToDonate">
                                                         <InputNumber
                                                             onChange={onChange}
                                                             style={{ width: "200px" }}
@@ -319,7 +326,7 @@ const Detail = () => {
                                                         />
                                                     </Form.Item>
                                                     <Form.Item
-                                                        name="content"
+                                                        name="message"
                                                         label="Lời nhắn"
                                                     >
                                                         <TextArea placeholder="Lời nhắn (không bắt buộc)" autoSize={{ minRows: 3 }} />
@@ -351,7 +358,7 @@ const Detail = () => {
                                                                 message: 'Hãy nhập số tiền ủng hộ',
                                                             },
                                                         ]}
-                                                        name="coin">
+                                                        name="amountToDonate">
                                                         <InputNumber
                                                             onChange={onChange}
                                                             style={{ width: "200px" }}
@@ -400,7 +407,7 @@ const Detail = () => {
 
                 return (
                     <>
-                        <p>Số tiền ủng hộ: {convertNumber(coin.coin)}</p>
+                        <p>Số tiền ủng hộ: {convertNumber(coin.amountToDonate)}</p>
                         <p>Lời nhắn:</p>
                         <p>{coin.content}</p>
                         <PayPal />
@@ -428,30 +435,56 @@ const Detail = () => {
         },
     ];
     const convertNumber = (x) => {
-        if (Donate == []) {
-            if (Donate.soTienCanDonate) {
+        if (Donate === []) {
+            if (Donate.setAmount) {
                 return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
             }
         }
         else {
-            if (Donate.soTienCanDonate) {
+            if (Donate.setAmount) {
                 return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
             }
         }
 
     }
-    let html = Donate.noiDung;
+    const dayEnd = (day) => {
+        const currentDay = new Date();
+        let endtDay = Date.parse(day)
+        let ngayconlai = (endtDay - currentDay.getTime()) / 1000;
+        return Math.floor((ngayconlai / 60) / 60 / 24)
+
+    }
+    const columns = [
+        {
+            title: 'Tên ',
+            dataIndex: 'fullName',
+            key: 'fullName',
+    
+        },
+        {
+            title: 'Số tiền ủng hộ (VNĐ)',
+            dataIndex: 'amountToDonate',
+            key: 'amountToDonate',
+            render: text => (
+                <>
+                {convertNumber(text)} đ
+                </>
+            ),
+        }
+    ];
+    let html = Donate.content;
+    let happinessContent = Donate.happinessContent
     return (
         <>
             <section className="detail_header">
                 <div className="container">
                     <div className="">
                         <div className="introduce">
-                            <h3 className="title">{Donate.tieuDe}</h3>
+                            <h3 className="title">{Donate.title}</h3>
                             <h3 style={{ fontSize: "25px", fontFamily: "NunitoBold" }}>
-                                Số tiền cần quyên góp {convertNumber(Donate.soTienCanDonate)}VNĐ </h3>
+                                Số tiền cần quyên góp {convertNumber(Donate.setAmount)}VNĐ </h3>
                             <div class="fb-like" data-href="https://momo.vn/cong-dong/chung-tay-gay-quy-dung-truong-moi-tang-25-em-hoc-sinh-ban-huoi-chua" data-width="" data-layout="standard" data-action="like" data-size="small" data-share="true"></div>
-                            <p style={{ fontSize: "20px" }}> {Donate.tomTat}</p>
+                            <p style={{ fontSize: "20px" }}> {Donate.summary}</p>
                         </div>
                         <div className="slider">
                             <div style={{ justifyContent: "space-between", display: "flex" }}>
@@ -480,95 +513,143 @@ const Detail = () => {
                                         {parse(parse(html))}
                                     </TabPane>
                                     <TabPane tab="Nhà hảo tâm" key="3">
+                                        <p>Top 50 lần ủng hộ gần nhất</p>
                                         <Table columns={columns} dataSource={AllDonator} />
+                                        <Button >Xem tất cả</Button>
                                     </TabPane>
-                                    <TabPane tab="Các quyên góp khác" key="4">
-                                        Content of Tab Pane 3
+                                    <TabPane tab="Trao yêu thương" key="4">
+                                        {parse(parse(happinessContent))}
                                     </TabPane>
                                 </Tabs>
                             </div>
                             <div className="col-4">
-                                {
-                                    Donate.trangThai ==="Dừng nhận donate" ?(<>
-                                    <p className="tamngung" >Tạm ngưng</p>
-                                    
-                                    </>):(<>
-                                    {
-                                        Number(Donate.soTienDonateHieTai) >= Number(Donate.soTienCanDonate) ? (
-                                        <div className="progress_detail_top">
-                                            <p className="complete" >Đã hoàn thành</p>
-                                            <p className="progress_detail_text">
-                                                Đã quyên góp: {convertNumber(DonateID.soTienDonateHieTai)} VNĐ
-                                            </p>
-                                            <p className="progress_detail_number">
+                                <div className="card_infoDonate">
+                                    <h3 className="card_infoDonate_title">Thông tin quyên góp</h3>
 
-                                                {Math.floor((DonateID.soTienDonateHieTai / DonateID.soTienCanDonate) * 100) === 100 ? (
-                                                    <p>Hoàn thành</p>
+                                    <div className="progress_detail_top">
+                                        <p className="progress_detail_text">
+                                            Đã quyên góp: {convertNumber(DonateID.currentAmount)}VNĐ/{convertNumber(DonateID.setAmount)}VNĐ
+                                        </p>
+                                        <Progress percent={Math.floor((Donate.currentAmount / Donate.setAmount) * 100)} showInfo={Math.floor((Donate.currentAmount / Donate.setAmount) * 100) === 100 ? (true) : (false)} status={Math.floor((Donate.currentAmount / Donate.setAmount) * 100) === 100 ? ("success") : ("normal")} />
+                                        <div className="progress_detail_bot ">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <p className="progress_detail_text">
+                                                        <UsergroupAddOutlined /> Lượt quyên góp
+                                                    </p>
+                                                </div>
+                                                <div class="col">
+                                                    <p className="progress_detail_text">
+                                                        <UsergroupAddOutlined /> Đạt được
+                                                    </p>
+                                                </div>
+                                                <div class="col">
+                                                    <p className="progress_detail_text">
+                                                        <UsergroupAddOutlined /> Thời hạn còn
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <p className="progress_detail_text">
+                                                        {Donate.numberOfDonations}
+                                                    </p>
+                                                </div>
+                                                <div class="col">
+                                                    <p className="progress_detail_text">
+                                                        {((DonateID.currentAmount / DonateID.setAmount) * 100).toFixed(3)}%
+                                                    </p>
+                                                </div>
+                                                <div class="col">
+                                                    <p className="progress_detail_text">
+                                                        {Number(dayEnd(Donate.endDay)) === 0 || Number(dayEnd(Donate.endDay)) < 0 ? (<>Đã hết hạn</>) : (<> {dayEnd(Donate.endDay)} ngày </>)}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="card_donate">
+                                    <h3 className="card_donate_title">Quyên góp ngay</h3>
+                                    {
+                                        Donate.status === "Dừng nhận donate" ? (<>
+                                            <p className="tamngung" >Tạm ngưng</p>
+
+                                        </>) : (<>
+                                            {
+                                                Number(Donate.currentAmount) >= Number(Donate.setAmount) ? (
+                                                    <div className="progress_detail_top">
+                                                        <p className="complete" >Đã hoàn thành</p>
+                                                        <p className="progress_detail_text">
+                                                            Đã quyên góp: {convertNumber(DonateID.currentAmount)} VNĐ
+                                                        </p>
+                                                        <p className="progress_detail_number">
+                                                            {Math.floor((DonateID.currentAmount / DonateID.setAmount) * 100) === 100 ? (
+                                                                <p>Hoàn thành</p>
+                                                            ) : (
+                                                                <>
+                                                                    <p className="progress_detail_number">{((DonateID.currentAmount / DonateID.setAmount) * 100).toFixed(3)}%</p>
+                                                                </>
+                                                            )}
+                                                        </p>
+                                                        <Progress percent={Math.floor((Donate.currentAmount / Donate.setAmount) * 100)} showInfo={Math.floor((Donate.currentAmount / Donate.setAmount) * 100) === 100 ? (true) : (false)} status={Math.floor((Donate.currentAmount / Donate.setAmount) * 100) === 100 ? ("success") : ("normal")} />
+                                                    </div>
+
                                                 ) : (
                                                     <>
-                                                        <p className="progress_detail_number">{((DonateID.soTienDonateHieTai / DonateID.soTienCanDonate) * 100).toFixed(3)}%</p>
-
+                                                        <Tabs defaultActiveKey="1" type="card" /* size={size} */>
+                                                            <TabPane tab="PayPal" key="1">
+                                                                <Steps current={current}>
+                                                                    {steps.map(item => (
+                                                                        <Step key={item.title} title={item.title} />
+                                                                    ))}
+                                                                </Steps>
+                                                                <div className="steps-content">{steps[current].content()}</div>
+                                                                <div className="steps-action">
+                                                                    {current < steps.length - 1 && (
+                                                                        <Button disabled={
+                                                                            licked === true ? (false) : (true)} type="primary" onClick={() => next()}>
+                                                                            Tiếp theo
+                                                                        </Button>
+                                                                    )}
+                                                                    {current === steps.length - 1 && (
+                                                                        <Button type="primary" onClick={showModal}>
+                                                                            Xác nhận
+                                                                        </Button>
+                                                                    )}
+                                                                    {current > 0 && (
+                                                                        <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
+                                                                            Trở lại
+                                                                        </Button>
+                                                                    )}
+                                                                </div>
+                                                            </TabPane>
+                                                            <TabPane tab="Momo" key="2">
+                                                                Content of card tab 2
+                                                            </TabPane>
+                                                        </Tabs>
                                                     </>
 
-                                                )}
-
-                                            </p>
-
-
-                                            <Progress percent={Math.floor((Donate.soTienDonateHieTai / Donate.soTienCanDonate) * 100)} showInfo={Math.floor((Donate.soTienDonateHieTai / Donate.soTienCanDonate) * 100) === 100 ? (true) : (false)} status={Math.floor((Donate.soTienDonateHieTai / Donate.soTienCanDonate) * 100) === 100 ? ("success") : ("normal")} />
-                                        </div>
-
-                                    ) : (
-                                        <>
-                                            <Tabs defaultActiveKey="1" type="card" /* size={size} */>
-                                                <TabPane tab="Chuyển khoản" key="1">
-                                                    <Steps current={current}>
-                                                        {steps.map(item => (
-                                                            <Step key={item.title} title={item.title} />
-                                                        ))}
-                                                    </Steps>
-                                                    <div className="steps-content">{steps[current].content()}</div>
-                                                    <div className="steps-action">
-                                                        {current < steps.length - 1 && (
-                                                            <Button disabled={
-                                                                licked ===true?(false):(true) }  type="primary" onClick={() => next()}>
-                                                                Tiếp theo
-                                                            </Button>
-                                                        )}
-                                                        {current === steps.length - 1 && (
-                                                            <Button type="primary" onClick={showModal}>
-                                                                Xác nhận
-                                                            </Button>
-                                                        )}
-                                                        {current > 0 && (
-                                                            <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
-                                                                Trở lại
-                                                            </Button>
-                                                        )}
-                                                    </div>
-                                                </TabPane>
-                                                <TabPane tab="Momo" key="2">
-                                                    Content of card tab 2
-                                                </TabPane>
-                                            </Tabs>
-                                        </>
-
-                                    )
+                                                )
+                                            }
+                                        </>)
                                     }
-                                    </>)
-                                }
-
-
+                                </div>
                             </div>
                         </div>
                     </div>
+                </div>
+            </section>
+            <section className="detail_footer">
+                <div className="container">
+
                 </div>
             </section>
             <Modal title="Cám ơn" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
                 <Result
                     status="success"
                     title="Cám ơn bạn đã quyên góp!"
-                    subTitle="Số tiền sẽ được gửI ngay khi hoàn thành mục tiêu !!!"
+                    subTitle="Số tiền sẽ được gửi ngay khi chương trình kết thúc !!!"
 
                 />
             </Modal>

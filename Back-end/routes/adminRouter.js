@@ -530,7 +530,7 @@ router.post('/addUserAdmin', AuthController.checkAdminLogin, AuthController.rest
  *                                  type: string
  *                                  example: No Login
  */
-router.post('/addHappiness/id', AuthController.checkAdminLogin, AdminController.postHappiness);
+router.post('/addHappiness/:id', AuthController.checkAdminLogin, AdminController.postHappiness);
 /**
  * @swagger
  * /api/admin/editUserAdmin/{id}:

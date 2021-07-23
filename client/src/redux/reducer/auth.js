@@ -13,9 +13,8 @@ import {
     ? { isLoggedIn: true, user }
     : { isLoggedIn: false, user: null };
   
-  export default function (state = initialState, action) {
+  export default function test (state = initialState, action) {
     const { type, payload } = action;
-  console.log("tets: ", user);
   //console.log("login",user.isLoggedIn);
     switch (type) {
       case REGISTER_SUCCESS:

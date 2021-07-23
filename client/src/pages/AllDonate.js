@@ -1,23 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input, Button, Tabs } from 'antd';
+import {  Spin, Tabs } from 'antd';
 import { CheckOutlined } from '@ant-design/icons';
 import donateEvensts from '../Api/donateEvensts';
 //import { Link } from "react-router-dom";
 import "../style/Home.scss";
 import "../style/bootstrap-grid.min.css";
 //import PayPal from "../components/Paypal"
-import HotListDonate from "../components/HotListDonate"
+//import HotListDonate from "../components/HotListDonate"
 import ListAll from '../components/ListALl';
 import ScrollToTop from "react-scroll-to-top";
-import { useSelector } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+//import { useSelector } from 'react-redux';
+//import { Redirect } from 'react-router-dom';
+import ScrollToTopApi from '../Api/ScrollToTop';
 const { TabPane } = Tabs;
 const AllDonate = () => {
     const [listDonates, setListdonates] = useState([]);
     const [listDonate, setListdonate] = useState([]);
     const [listCategory, setListCategory] = useState([]);
+    const [loadingSum, setLoadingSum] = useState(false);
     useEffect(() => {
-
+        window.scrollTo(0, 0);
         const fetchdonatesData = async () => {
             try {
                 await donateEvensts.getAll().then((res) => {
@@ -25,6 +27,7 @@ const AllDonate = () => {
                     setListdonates(res.data.DonateEnvents);
                     setListdonate(res.data.DonateEnvents)
                 });
+                setLoadingSum(true)
             } catch (error) {
                 console.log("Failed to fetch brand data at: ", error);
             }
@@ -52,7 +55,7 @@ const AllDonate = () => {
         } else {
 
             filterProduct = listDonates.filter(
-                listDonates => listDonates.loaiBaiDang === e
+                listDonates => listDonates.categoryPost === e
             )
             setListdonate(filterProduct)
             console.log(filterProduct);
@@ -62,10 +65,8 @@ const AllDonate = () => {
     };
     for (let i = 0; i < listDonate.length; i++) {
         for (let j = 0; j < listCategory.length; j++) {
-            if (listDonate[i].loaiBaiDang === listCategory[j]._id) {
-                //console.log(listCategory[j].tenloai);
-                listDonate[i].tenLoai = listCategory[j].tenloai;
-                //console.log(listDonate);
+            if (listDonate[i].categoryPost === listCategory[j]._id) {
+                listDonate[i].categoryName = listCategory[j].CategoryName;
             }
 
         }
@@ -73,7 +74,7 @@ const AllDonate = () => {
     const sumConinDonate = ()=>{
         let sum = 0
         for (let i = 0; i < listDonates.length; i++) {
-             sum =sum+  Number(listDonates[i].soTienDonateHieTai);
+             sum =sum+  Number(listDonates[i].currentAmount);
             
         }
         return sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
@@ -84,6 +85,7 @@ const AllDonate = () => {
     return (
         <>
             <ScrollToTop smooth={true} />
+          
             <div className="homepage container-sm">
                 <div className="homepage_content col-10 offset-1 ">
                     <div>
@@ -122,15 +124,16 @@ const AllDonate = () => {
                             {listCategory.map((category) => {
                                 return (
                                     <>
-                                        <TabPane tab={category.tenloai} key={category._id}>
+                                        <TabPane tab={category.CategoryName} key={category._id}>
 
                                         </TabPane>
                                     </>
                                 )
                             })}
                         </Tabs>
-                        <div className="row" >
-                            {<ListAll listDonate={listDonate} />}
+                        <div className="row all-donate" >
+                           
+                            {loadingSum ? <ListAll listDonate={listDonate} /> : <Spin size="large" />}
                         </div>
                     </div>
                 </div>

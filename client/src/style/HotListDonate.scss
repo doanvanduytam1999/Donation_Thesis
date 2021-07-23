@@ -10,3 +10,16 @@
     font-weight: bold;
     font-family: NunitoBold;
 }
+
+.ant-modal-content {
+    
+    .ant-modal-body {
+        height: 100%;
+       
+    }
+}
+.btn-disabled{
+    position: relative;
+    left: 100%;
+    transform: translateX(-100%);
+}

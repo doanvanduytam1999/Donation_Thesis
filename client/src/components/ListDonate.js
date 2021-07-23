@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, /* useEffect */ } from 'react';
 import { Card, Progress, Typography, Badge, Input } from 'antd';
 import { UsergroupAddOutlined } from '@ant-design/icons';
 import { Link } from "react-router-dom";
@@ -7,16 +7,16 @@ import "../style/bootstrap-grid.min.css";
 const { Search } = Input;
 const ListDonate = (props) => {
 
-    const [list, setlist] = useState([props.listDonate]);
+    const [list, /* setlist */] = useState([props.listDonate]);
     const { Text } = Typography;
-    const [ellipsis, setEllipsis] = React.useState(true);
-    const [visible, setVisible] = useState(9);
+    const [ellipsis, /* setEllipsis */] = React.useState(true);
+    const [visible, /* setVisible */] = useState(9);
     const [searchTerm, setSearchTerm] = useState("");
 
 
-    const convertNumber = (x) => {
+  /*   const convertNumber = (x) => {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    }
+    } */
     const onSearch = (value) => {
         setSearchTerm(value.target.value);
         console.log(value.target.value);
@@ -38,7 +38,7 @@ const ListDonate = (props) => {
     const results = !searchTerm
         ? props.listDonate
         : props.listDonate.filter(list =>
-            list.tieuDe.toLowerCase().includes(searchTerm.toLocaleLowerCase())
+            list.title.toLowerCase().includes(searchTerm.toLocaleLowerCase())
         );
     //setSearchResults(results)
     console.log(searchTerm);
@@ -53,58 +53,47 @@ const ListDonate = (props) => {
                 return (
                     <>
                         <div className="col-4 " >
-                            <Badge count={item.tenLoai}>
+                            <Badge count={item.categoryName}>
                                 <Link to={`thong-tin-chi-tiet/${item._id}`} >
                                     <Card className="margin-top"
                                         style={{ borderRadius: 10, height: 460 }}
                                         hoverable
-                                        cover={<img alt="example" src={item.hinhAnh[0]} />}>
+                                        cover={<img alt="example" src={item.image[0]} />}>
                                         <Text className="title-text" style={ellipsis ? { width: 250 } : undefined}
-                                            ellipsis={ellipsis ? { tooltip: 'Xem chi tiết !' } : false} >
-                                            {item.tieuDe} </Text>
+                                            ellipsis={ellipsis ? { tooltip: `${item.title}` } : false} >
+                                            {item.title} </Text>
                                         <Text className="title-tomtat"
                                             style={ellipsis ? { width: 250 } : undefined}
-                                            ellipsis={ellipsis ? { tooltip: 'Xem chi tiết !' } : false} >
-                                            {item.tomTat}
+                                            ellipsis={ellipsis ? { tooltip: `${item.summary}` } : false} >
+                                            {item.summary}
                                         </Text>
                                         {
-                                            item.trangThai === "Dừng nhận donate" ? (<><p className="tamngung" >Tạm ngưng</p></>) : (<>
-
+                                            item.status === "Dừng nhận donate" ? (<><p className="tamngung" >Tạm ngưng</p></>) : (<>
                                                 <div className="progress">
                                                     <div className="progress_detail_top">
                                                         <p className="progress_detail_text">
-                                                            {convertNumber(item.soTienDonateHieTai)} vnđ quyên góp
+                                                            {/* convertNumber */(item.currentAmount)} vnđ quyên góp
                                                         </p>
                                                         <p className="progress_detail_number">
-
-                                                            {Math.floor((item.soTienDonateHieTai / item.soTienCanDonate) * 100) === 100 ? (
+                                                            {Math.floor((item.currentAmount / item.setAmount) * 100) === 100 ? (
                                                                 <p>Hoàn thành</p>
                                                             ) : (
                                                                 <>
-                                                                    <p className="progress_detail_number">{((item.soTienDonateHieTai / item.soTienCanDonate) * 100).toFixed(3)}%</p>
-
+                                                                    <p className="progress_detail_number">{((item.currentAmount / item.setAmount) * 100).toFixed(3)}%</p>
                                                                 </>
-
                                                             )}
-
                                                         </p>
                                                     </div>
-
-                                                    <Progress percent={Math.floor((item.soTienDonateHieTai / item.soTienCanDonate) * 100)} showInfo={Math.floor((item.soTienDonateHieTai / item.soTienCanDonate) * 100) === 100 ? (true) : (false)} status={Math.floor((item.soTienDonateHieTai / item.soTienCanDonate) * 100) === 100 ? ("success") : ("normal")} />
+                                                    <Progress percent={Math.floor((item.currentAmount / item.setAmount) * 100)} showInfo={Math.floor((item.currentAmount / item.setAmount) * 100) === 100 ? (true) : (false)} status={Math.floor((item.currentAmount / item.setAmount) * 100) === 100 ? ("success") : ("normal")} />
                                                     <div className="progress_detail_bot">
                                                         <p className="progress_detail_text">
-                                                            <UsergroupAddOutlined /> {item.luotDonate} lượt quyên góp
+                                                            <UsergroupAddOutlined /> {item.numberOfDonations} lượt quyên góp
                                                         </p>
-                                                        <p className="progress_detail_number">{dayEnd(item.ngayKetThuc)} ngày còn lại</p>
+                                                        <p className="progress_detail_number">{Number(dayEnd(item.endDay))===0 ||Number(dayEnd(item.endDay))<0 ?(<>Đã hết hạn</>):(<> {dayEnd(item.endDay)} ngày còn lại</>) } </p>
                                                     </div>
                                                 </div>
-
-
-
                                             </>)
                                         }
-
-
                                     </Card>
 
                                 </Link>

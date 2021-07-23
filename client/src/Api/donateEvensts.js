@@ -1,15 +1,16 @@
 import AxiosClient from "./AxiosClient"
 const donateEvensts ={  
    getAll: ()=>{
-    const url = '/donateEvensts';
+    //http://localhost:4000/api/donateEvents
+    const url = '/donateEvents';
     return AxiosClient.get(url);
    },
    get: (id)=>{
-    const url = `/donateEvenst/${id}`;
+    const url = `/donateEvent/${id}`;
     return AxiosClient.get(url);
    },
    getCategory: ()=>{
-       const url ="/categoryDonateEvents";
+       const url ="/categoryDonateEvents";  
        return AxiosClient.get(url);
    },
    getListdonateUser:()=>{
@@ -17,16 +18,16 @@ const donateEvensts ={
        return AxiosClient.get(url)
    },
    getAllDonater:(id)=>{
-    const url = `/allDonater/${id}`;
+    const url = `/50Donator/${id}`;
     return AxiosClient.get(url);
    },
    getLogout:()=>{
        const url ="/logout";
        return AxiosClient.get(url)
    },
-   postUpdateProfile:(values)=>{
+   putUpdateProfile:(values)=>{
     const url ="/updateProfileUser";
-    return AxiosClient.post(url,values)
+    return AxiosClient.put(url,values)
    }
 };
 

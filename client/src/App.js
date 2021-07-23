@@ -9,13 +9,14 @@ import Detail from './pages/Detail';
 import Resgister from './pages/Resgister';
 import Profile from './pages/Profile'
 import React, { useState, useEffect } from 'react';
-import ScrollToTop from "react-scroll-to-top";
+//import ScrollToTop from "react-scroll-to-top";
 import firebase from 'firebase';
 import { useDispatch, useSelector } from "react-redux";
 import { unwrapResult } from '@reduxjs/toolkit';
 import { getMe } from './redux/reducer/UserSlice';
 import Contact from './pages/Contact';
 import AllDonate from './pages/AllDonate';
+import ScrollToTop from './Api/ScrollToTop';
 // Configure Firebase.
 const config = {
   apiKey: 'AIzaSyBuvMsY6qXN0XOR2pjo9g0YJ9JC5yfh9rE',
@@ -25,7 +26,7 @@ const config = {
 firebase.initializeApp(config);
 function App() {
   
-  const [isSignedIn, setIsSignedIn] = useState(false); // Local signed-in state.
+  const [/* isSignedIn */, setIsSignedIn] = useState(false); // Local signed-in state.
   const { isLoggedIn } = useSelector(state => state.login);
   const dispatch = useDispatch();
   // Listen to the Firebase Auth state and set the local state.
@@ -60,15 +61,15 @@ function App() {
     <Router>
      
         <Header />
-        <Route exact path="/">
-          <Home />
+        <Route onUpdate={() => window.scrollTo(0, 0)} exact path="/">
+          <Home onUpdate={() => window.scrollTo(0, 0)} />
 
         </Route>
         <Route exact path="/lien-he">
           <Contact />
 
         </Route>
-        <Route exact path="/tat-ca-chuong-trinh">
+        <Route onUpdate={() => window.scrollTo(0, 0)} exact path="/tat-ca-chuong-trinh">
           <AllDonate />
 
         </Route>
@@ -86,7 +87,7 @@ function App() {
             <Resgister />
           </Route>
         </Switch>
-        <Footer />
+        <Footer  onUpdate={() => window.scrollTo(0, 0)} />
     
     </Router>
 

@@ -1,169 +1,142 @@
 .ant-modal-content {
     border-radius: 10px !important;
-    height: 600px;
+    height: 650px;
     display: flex;
     justify-content: space-between;
     flex-direction: column;
     .ant-modal-body {
         height: 100%;
-        .ant-row {
+        .ant-tabs {
             height: 100%;
-            .ant-col {  
+            .ant-tabs-content-holder {
                 height: 100%;
-                h3 {
-                    text-align: center;
-                    font-size: 26px;
-                    font-weight: bold;
-                    font-family: Arial, Helvetica, sans-serif;
-                    padding-bottom: 40px;
-
-                }
-                .login-form {
-/*                     position: absolute;
-                    top:50;
-                    left: 40;
-                    transform: translate(15%,50%); */
-                    p {
-                        font-size: 16px;
-                        margin-bottom: 2px;
-                    }
-                    .ant-form-item{
-                        margin-bottom: 10px;
-                        .ant-form-item-control{
-                            min-height: 50px;
-                            .ant-form-item-control-input {
-                                .ant-form-item-control-input-content {
-                                   
-                                    .ant-input-affix-wrapper-focused {
-                                        border: none !important;
-                                  
-                                        box-shadow: none;
+                .ant-tabs-content {
+                    height: 100%;
+                    .ant-tabs-tabpane {
+                        height: 100%;
+                        .row {
+                            height: 100%;
+                            .bg-login {
+                                background: url(../style/images/img-login.jpg);
+                                background-repeat: no-repeat;
+                                background: cover;
+                            }
+                            .bg-register{
+                                background: url(../style/images/img-res.jpg);
+                                background-repeat: no-repeat;
+                                background: cover;
+                            }
+                            .frm {
+                                h3 {
+                                    text-align: center;
+                                    font-size: 20px;
+                                    font-weight: bold;
+                                    font-family: Arial, Helvetica, sans-serif;
+                                }
+                                .login-form {
+                                    p {
+                                        font-size: 16px;
+                                        margin-bottom: 2px;
+                                        
                                     }
-                                    .ant-input-affix-wrapper {
-                                        border: none;
-                                        outline: none;
-                                        .ant-input,
-                                        .ant-input:focus {
-                                            width: 100%;
-                                            box-sizing: border-box;
-                                            border: none;
-                                            font-size: 16px;
-                                            padding-left: 10px;
-                                            padding-bottom: 2px;
-                                            box-shadow: inset 0px -1px 0px 0px;
-                                            outline: none;
-                                            transition: opacity 0.5s ease-out;
-                                            
-                                        }
-                                        .ant-input:-internal-autofill-selected{
-                                            background-color: none;
-                                        } 
-                                        .ant-input:hover::-webkit-input-placeholder {
-                                            opacity: 0;
-                                        }
-                                        .ant-input::-webkit-input-placeholder {
-                                            transition: opacity 0.5s ease-out;
+                                    .ant-form-item {
+                                        margin-bottom: 10px;
+                                        .ant-form-item-control {
+                                            min-height: 50px;
+                                            .ant-form-item-control-input {
+                                                .ant-form-item-control-input-content {
+                                                    .ant-input-affix-wrapper-focused {
+                                                        //border: none !important;
+
+                                                        //box-shadow: none;
+                                                    }
+                                                }
+                                                .login-form-button{
+                                                    position: relative;
+                                                    left: 50%;
+                                                    transform: translateX(-50%);
+                                                }    
+                                            }
                                         }
                                     }
                                 }
                             }
+                            
                         }
-                        
                     }
                 }
-                .login-with{
-                    #facebookIcon{
-                        background-image:      url("https://image.flaticon.com/icons/svg/145/145802.svg");
+            }
+        }
+        .ant-row {
+            height: 100%;
+            .ant-col {
+                height: 100%;
+
+                .login-with {
+                    #facebookIcon {
+                        background-image: url("https://image.flaticon.com/icons/svg/145/145802.svg");
                         background-repeat: no-repeat;
-                        width:2rem;
+                        width: 2rem;
                         height: 2rem;
-                      }
-                      
-                      #twitterIcon{
+                    }
+
+                    #twitterIcon {
                         background-image: url("https://image.flaticon.com/icons/svg/145/145812.svg");
                         background-repeat: no-repeat;
                         width: 2rem;
                         height: 2rem;
-                      }
-                      
-                      #googleIcon{
+                    }
+
+                    #googleIcon {
                         background-image: url("https://image.flaticon.com/icons/svg/145/145804.svg");
                         background-repeat: no-repeat;
                         width: 2rem;
                         height: 2rem;
-                      }
-                      
-                      #iconGroup{
+                    }
+
+                    #iconGroup {
                         display: flex;
                         justify-content: center;
                         padding: 1rem 0;
-                      }
-                      
-                      #iconGroup a{
+                    }
+
+                    #iconGroup a {
                         margin: 0 0.6rem;
-                      }
-                      
-                      #alternativeLogin {
-                         text-align: center;
-                         padding-top: 1rem;
-                         margin-top: 1.5rem;
-                      }
-                      
-                      
+                    }
+
+                    #alternativeLogin {
+                        text-align: center;
+                        padding-top: 1rem;
+                        margin-top: 1.5rem;
+                    }
                 }
             }
         }
     }
 }
-.ant-btn-resgister{
+.ant-btn-resgister {
     margin-left: 10px;
 }
 .resgiter-form {
     p {
         font-size: 16px;
         margin-bottom: 2px;
+        span{
+            color: red;
+        }
     }
-    .ant-form-item{
-        margin-bottom: 10px;
-        .ant-form-item-control{
-            min-height: 50px;
+    .ant-form-item {
+       
+        .ant-form-item-control {
+           
             .ant-form-item-control-input {
                 .ant-form-item-control-input-content {
-                   
                     .ant-input-affix-wrapper-focused {
-                        border: none !important;
-                  
-                        box-shadow: none;
+                       
                     }
-                    .ant-input-affix-wrapper {
-                        border: none;
-                        outline: none;
-                        .ant-input,
-                        .ant-input:focus {
-                            width: 100%;
-                            box-sizing: border-box;
-                            border: none;
-                            font-size: 16px;
-                            padding-left: 10px;
-                            padding-bottom: 2px;
-                            box-shadow: inset 0px -1px 0px 0px;
-                            outline: none;
-                            transition: opacity 0.5s ease-out;
-                            
-                        }
-                        .ant-input:-internal-autofill-selected{
-                            background-color: none;
-                        } 
-                        .ant-input:hover::-webkit-input-placeholder {
-                            opacity: 0;
-                        }
-                        .ant-input::-webkit-input-placeholder {
-                            transition: opacity 0.5s ease-out;
-                        }
-                    }
+                   
                 }
             }
         }
-        
     }
 }

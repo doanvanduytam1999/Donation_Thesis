@@ -106,7 +106,7 @@ exports.postRegister = catchAsync(async (req, res, next) => {
         error.push("Username đã tồn tại.");
     }
     if(email){
-        error.push("Email đã tồn tại.");
+        error.push(" Email đã tồn tại.");
     }
     if(error.length != 0){
         return res.status(400).json({

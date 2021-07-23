@@ -269,7 +269,8 @@ exports.loginAdmin = catchAsync(async (req, res, next) => {
   }
   //2) check if user exist and passowrd is correct
   const Admin = await UserAdmin.findOne({ 'username': username }).select('+password');
-  if (Admin.active === false ||!Admin || !(await Admin.correctPassword(password, Admin.password))) {
+  console.log(Admin);
+  if (!Admin || Admin.active === false || !(await Admin.correctPassword(password, Admin.password))) {
     return res.status(401).json({
       status: "error",
       error: "Không đúng email, password hoặc tài khoản bị khóa, vui lòng kiểm tra lại thông tin"
