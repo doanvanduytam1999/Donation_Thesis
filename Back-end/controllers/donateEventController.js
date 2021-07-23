@@ -36,10 +36,10 @@ exports.getCategoryDonateEvents = catchAsync(async (req, res, next) => {
 exports.postDonate = catchAsync(async (req, res, next) => {
     const data = req.body.data;
     const user = await AuthController.userIsLoggedIn(req.cookies.jwt);
-    let donateEvent = await DonateEvent.findById(data.id);
+    let donateEvent = await DonateEvent.findById(data.donateEvent);
     let currentAmount = donateEvent.currentAmount;
     let numberOfDonations = donateEvent.numberOfDonations;
-    let amountToDonate = data.coin.toString();
+    let amountToDonate = data.amountToDonate.toString();
 
     let content = "";
     if (typeof data.content !== 'undefined') {
@@ -47,7 +47,7 @@ exports.postDonate = catchAsync(async (req, res, next) => {
     }
     numberOfDonations = numberOfDonations + 1;
     currentAmount = (Number(currentAmount) + Number(amountDonate)).toString();
-    const updateTienDaDonate = await DonateEvent.findByIdAndUpdate(data.id, {
+    const updateTienDaDonate = await DonateEvent.findByIdAndUpdate(data.donateEvent, {
         currentAmount: currentAmount,
         numberOfDonations: numberOfDonations
     }, {
@@ -59,7 +59,7 @@ exports.postDonate = catchAsync(async (req, res, next) => {
             const donateAnDanh = await DonateAction.create({
                 amountToDonate: amountToDonate,
                 message: content,
-                donateEvent: data.id,
+                donateEvent: data.donateEvent,
                 donator: user.id
             })
         } else {
@@ -68,7 +68,7 @@ exports.postDonate = catchAsync(async (req, res, next) => {
                 phone: data.phone,
                 message: content,
                 amountToDonate: amountToDonate,
-                donateEvent: data.id,
+                donateEvent: data.donateEvent,
                 donator: user.id
             })
         }
@@ -78,7 +78,7 @@ exports.postDonate = catchAsync(async (req, res, next) => {
 
                 amountToDonate: amountToDonate,
                 message: content,
-                donateEvent: data.id
+                donateEvent: data.donateEvent
             })
         } else {
             const donateAction = await DonateAction.create({
@@ -86,7 +86,7 @@ exports.postDonate = catchAsync(async (req, res, next) => {
                 phone: data.phone,
                 message: content,
                 amountToDonate: amountToDonate,
-                donateEvent: data.id
+                donateEvent: data.donateEvent
             })
         }
     }
