@@ -35,6 +35,7 @@ exports.getCategoryDonateEvents = catchAsync(async (req, res, next) => {
 
 exports.postDonate = catchAsync(async (req, res, next) => {
     const data = req.body.data;
+    console.log(data);
     const user = await AuthController.userIsLoggedIn(req.cookies.jwt);
     let donateEvent = await DonateEvent.findById(data.donateEvent);
     let currentAmount = donateEvent.currentAmount;
@@ -42,11 +43,11 @@ exports.postDonate = catchAsync(async (req, res, next) => {
     let amountToDonate = data.amountToDonate.toString();
 
     let content = "";
-    if (typeof data.content !== 'undefined') {
-        content = data.content;
+    if (typeof data.message !== 'undefined') {
+        content = data.message;
     }
     numberOfDonations = numberOfDonations + 1;
-    currentAmount = (Number(currentAmount) + Number(amountDonate)).toString();
+    currentAmount = (Number(currentAmount) + Number(amountToDonate)).toString();
     const updateTienDaDonate = await DonateEvent.findByIdAndUpdate(data.donateEvent, {
         currentAmount: currentAmount,
         numberOfDonations: numberOfDonations

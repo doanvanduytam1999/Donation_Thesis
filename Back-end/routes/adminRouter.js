@@ -406,7 +406,7 @@ router.post('/login', AuthController.loginAdmin);
  *                                  type: string
  *                                  example: No Login
  */
-router.post('/addUserAdmin', AdminController.postAddUserAdmin);
+router.post('/addUserAdmin', AuthController.checkAdminLogin, AuthController.restrictTo,AdminController.postAddUserAdmin);
 /**
  * @swagger
  * /api/admin/editUserAdmin/{id}:
