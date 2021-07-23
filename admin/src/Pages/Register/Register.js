@@ -2,7 +2,8 @@ import React from 'react';
 import { Form, Input,  Select, Button,message} from 'antd';
 import { useDispatch } from "react-redux";
 import { register } from "../../redux/actions/auth";
-
+import "./Register.scss"
+import { useHistory } from 'react-router-dom';
 
 const formItemLayout = {
     labelCol: {
@@ -30,20 +31,22 @@ const { Option } = Select;
 const Register = () => {
     const dispatch = useDispatch();
     const [form] = Form.useForm();
+    const history = useHistory()
     const onFinish = (values) => {
         console.log('Received values of form: ', values);
-        dispatch(register(values)).then(()=>{
-            console.log("dăng kí");
-            message.success("Thêm tài khoản thành công !")
+        dispatch(register(values)).then((res)=>{
+            console.log(res);
+            message.error(res)
+           
 
         })
-        .catch(()=>{
-            console.log("dang ki that bai");
-        })
+        
     };
     return (
         <>
-            <h2 style={{ textAlign: "center", marginTop: "100px" }}>Thêm tài khoản</h2>
+        <div className="wapper_register row">
+        <div className="col-10 offset-1">
+            <h2 className="title_register">Thêm tài khoản</h2>
             <Form
                 style={{ marginTop: "50px" }}
                 {...formItemLayout}
@@ -78,7 +81,7 @@ const Register = () => {
                         },
                         {
                             required: true,
-                            message: 'Please input your E-mail!',
+                            message: 'Hãy nhập E-mail',
                         },
                     ]}
                 >
@@ -93,6 +96,7 @@ const Register = () => {
                             required: true,
                             message: 'Please input your password!',
                         },
+                        {min:8, message:'Mật khẩu phải đủ 8 kí tự'}
                     ]}
                     hasFeedback
                 >
@@ -100,21 +104,21 @@ const Register = () => {
                 </Form.Item>
 
                 <Form.Item
-                    name="confirm"
+                    name="passwordConfirm"
                     label="Xác nhận mật khẩu"
                     dependencies={['password']}
                     hasFeedback
                     rules={[
                         {
                             required: true,
-                            message: 'Please confirm your password!',
+                            message: 'Hãy xác nhận mật khẩu!',
                         },
                         ({ getFieldValue }) => ({
                             validator(_, value) {
                                 if (!value || getFieldValue('password') === value) {
                                     return Promise.resolve();
                                 }
-                                return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                                return Promise.reject(new Error('Hai mật khẩu không giống nhau!'));
                             },
                         }),
                     ]}
@@ -124,9 +128,9 @@ const Register = () => {
                 <Form.Item name="role"
                     label="Loại tài khoản"
                 >
-                    <Select style={{ width: 170 }} defaultValue="Admin">
-                        <Option value="Super Admin">Super Admin</Option>
-                        <Option value="Admin">Admin</Option>
+                    <Select style={{ width: 170 }} defaultValue="CTV">
+                        <Option value="Manager">Manager</Option>
+                       
                         <Option value="CTV">Cộng tác viên</Option>
                     </Select>
                 </Form.Item>
@@ -136,6 +140,8 @@ const Register = () => {
                     </Button>
                 </Form.Item>
             </Form>
+       </div>
+       </div>
         </>
     );
 }

@@ -30,7 +30,7 @@ const Header = () => {
                 <Link to="">Trang chủ</Link>
             </Menu.Item>
             <Menu.Item >
-                <Link to="/thong-tin-tai-khoan">Thông tin tài khoản</Link>
+                <Link to="/admin/thong-tin-tai-khoan">Thông tin tài khoản</Link>
             </Menu.Item>
             <Menu.Item danger >
                 <Link onClick={logOut}>Đăng xuất</Link>

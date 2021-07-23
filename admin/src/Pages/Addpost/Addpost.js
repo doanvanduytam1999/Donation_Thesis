@@ -38,11 +38,11 @@ const Addpost = () => {
     
   const onFinish = (values) => {
     values['content'] = text;
-    values['batdau'] = dateStart;
-    values['ketthuc'] = dateEnd;
-    values['img'] = img;
+    values['startDay'] = dateStart;
+    values['endDay'] = dateEnd;
+    values['image'] = img;
 
-    console.log(values); const url = "http://localhost:4000/admin/addPost"
+    console.log(values); const url = "http://localhost:4000/api/admin/addPost"
      axios.post(url, {
        data: values
      }, {headers: {
@@ -54,9 +54,9 @@ const Addpost = () => {
         message.success(`Thêm bài viết thành công !`)
     
         setTimeout(() => {
-          history.push("/them-bai-viet")
+          history.push("/admin/them-bai-viet")
          window.location.reload()
-      }, 2000)
+      }, 1000)
       }
     })
     .catch((err) => {
@@ -177,13 +177,13 @@ const Addpost = () => {
         initialValues={{
           content: `${text}`
         }}>
-        <Form.Item name='tieude' label="Tiêu đề bài viết " rules={[{ required: true }]}>
+        <Form.Item name='title' label="Tiêu đề bài viết " rules={[{ required: true }]}>
           <Input.TextArea />
         </Form.Item>
-        <Form.Item name='tomtat' label="Tóm tắt" rules={[{ required: true }]}>
+        <Form.Item name='summary' label="Tóm tắt" rules={[{ required: true }]}>
           <Input.TextArea />
         </Form.Item>
-        <Form.Item name='sotiencandonate' label="Số tiền cần ủng hộ (VNĐ)" rules={[{ required: true }]}>
+        <Form.Item name='setAmount' label="Số tiền cần ủng hộ (VNĐ)" rules={[{ required: true }]}>
           <InputNumber
           style={{width:"200px"}}
             defaultValue={10000}
@@ -198,7 +198,7 @@ const Addpost = () => {
         <Form.Item label="Ngày kết thúc" {...config}>
           <DatePicker disabledDate={disabledDate1} onChange={onChangeEnd} />
         </Form.Item>
-        <Form.Item name='loaibaidang' label="Loại bài đăng" >
+        <Form.Item name='categoryPost' label="Loại bài đăng" >
           <Select placeholder="Chọn loại bài đăng" >
             {Category.map((i)=>{
               return(
@@ -209,7 +209,7 @@ const Addpost = () => {
            
           </Select>
         </Form.Item>
-        <Form.Item name='tinnoibat' label="Tin nổi bật" >
+        <Form.Item name='hotPost' label="Tin nổi bật" >
           <Select defaultValue={0}>
                 <Option value='false'>Không</Option>
                 <Option value='true'>Có</Option>

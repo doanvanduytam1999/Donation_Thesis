@@ -4,21 +4,29 @@ const userAdmin = {
         const url = '/admin/allUserAdmin';
         return AxiosClient.get(url);
     },
+    getAllDonator: () => {
+        const url = '/admin/allUser';
+        return AxiosClient.get(url);
+    },
     getUserAdmin: (id) => {
         const url = `/admin/userAdmin/${id}`;
         return AxiosClient.get(url);
     },
 
-    postEditUserAdmin: (id, values) => {
+    putEditUserAdmin: (id, values) => {
         const url = `/admin/editUserAdmin/${id}`;
-        return AxiosClient.post(url, values);
+        return AxiosClient.put(url, values);
     },
-    postChangeActive: (id) => {
+    putChangeActive: (id) => {
         const url = `/admin/changeActiveUserAdmin/${id}`;
-        return AxiosClient.post(url);
+        return AxiosClient.put(url);
     },
-    postchangeStatus: (id, values) => {
-        const url = `/admin/changeStatusPost/${id}`;
+    putChangeActiveDonator: (id) => {
+        const url = `/admin/changeActiveUser/${id}`;
+        return AxiosClient.put(url);
+    },
+    postAddHappiness: (id, values) => {
+        const url = `/admin/addHappiness/${id}`;
         return AxiosClient.post(url, values);
     }
 

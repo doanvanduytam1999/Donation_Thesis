@@ -12,6 +12,9 @@ import Register from "./Pages/Register/Register"
 import ListUser from "./Pages/ListUser/ListUser"
 import EditAccount from "./Pages/EditAccount/EditAccount.js";
 import EditPost from "./Pages/EditPost/EditPost.js";
+import ListDonator from "./Pages/ListDonator/ListDonator.js";
+
+import Profile from "./Pages/Profile/Profile.js";
 function App() {
   const islogin = JSON.parse(localStorage.getItem("user"))
 
@@ -36,6 +39,11 @@ function App() {
                   {islogin ? <Redirect to="/admin/dashboard" /> : <Redirect to="/" />}
                    <Dashboard />
                 </Route>
+                <Route path="/admin/thong-tin-tai-khoan">
+                  {islogin ? <Redirect to="/admin/thong-tin-tai-khoan" /> : <Redirect to="/" />}
+                   <Profile />
+                </Route>
+               
                 <Route path="/admin/them-bai-viet">
                   {islogin ? <Redirect to="/admin/them-bai-viet" /> : <Redirect to="/" />}
                   <Addpost />
@@ -47,11 +55,11 @@ function App() {
                 <Route path="/admin/dang-ki-tai-khoan">
                   {islogin ? <Redirect to="/admin/dang-ki-tai-khoan" /> : <Redirect to="/" />}
                   <Register />
+                </Route>/
+                <Route path="/admin/danh-sach-tai-khoan-user">
+                  {islogin ? <Redirect to="/admin/danh-sach-tai-khoan-user" /> : <Redirect to="/" />}
+                  <ListDonator />
                 </Route>
-             {/*    <Route path="/admin/dang-ki-tai-khoan">
-                  {islogin ? <Redirect to="/admin/dang-ki-tai-khoan" /> : <Redirect to="/" />}
-                  <Register />
-                </Route> */}
                 <Route path="/admin/danh-sach-tai-khoan-admin">
                   {islogin ? <Redirect to="/admin/danh-sach-tai-khoan-admin" /> : <Redirect to="/" />}
                   <ListUser />

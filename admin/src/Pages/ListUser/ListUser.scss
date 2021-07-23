@@ -1,10 +1,11 @@
-.wapper_table{
+.wapper_table_post{
     position: relative;
     left: 50%;
     transform: translateX(-50%);
     width: 90%;
     margin-top: 90px;
     border-radius: 10px;
+    min-height: 500px;
     -webkit-box-shadow: 0px 0px 10px -5px rgba(71, 71, 71, 1);
     -moz-box-shadow: 0px 0px 10px -5px rgba(71, 71, 71, 1);
     box-shadow: 0px 0px 10px -5px rgba(71, 71, 71, 1);
@@ -13,4 +14,10 @@
         text-align: center;
         margin: 50px 0 50px 0;
     }
+}
+.ant-spin{
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999;
 }

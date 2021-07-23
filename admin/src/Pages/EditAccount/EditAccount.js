@@ -55,7 +55,7 @@ const EditAccount = (props) => {
 
     const onEdit = (values) => {
         console.log('Received values of form: ', values);
-        userAdmin.postEditUserAdmin(_id,values).then((res)=>{
+        userAdmin.putEditUserAdmin(_id,values).then((res)=>{
          if (res.data.status == "success") {
                 message.success("Chỉnh sửa thành công !")
                 
@@ -76,6 +76,7 @@ const EditAccount = (props) => {
                 initialValues={{
                     username: `${Accout.username}`,
                     email: `${Accout.email}`,
+                    role :`${Accout.role}`
 
                 }}
                 scrollToFirstError
@@ -112,8 +113,8 @@ const EditAccount = (props) => {
                 <Form.Item name="role"
                     label="Loại tài khoản"
                 >
-                    <Select style={{ width: 170 }} defaultValue="Admin">
-                        <Option value="Admin">Admin</Option>
+                    <Select style={{ width: 170 }}>
+                        <Option value="Manager">Manager</Option>
                         <Option value="CTV">Cộng tác viên</Option>
 
                     </Select>

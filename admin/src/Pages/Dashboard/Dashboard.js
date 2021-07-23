@@ -68,22 +68,22 @@ useEffect(() => {
       const columns1 = [
         {
           title: 'Tiêu đề bài viết',
-          dataIndex: 'tieuDe',
-          key: 'tieude',
+          dataIndex: 'title',
+          key: 'title',
           ellipsis: {
             showTitle: false,
           },
-          render: tieuDe => (
-            <Tooltip placement="topLeft" title={tieuDe}>
-              {tieuDe}
+          render: title => (
+            <Tooltip placement="topLeft" title={title}>
+              {title}
             </Tooltip>
           ),
         },
       
         {
             title: 'Số tiền cần ủng hộ(VNĐ)',
-            dataIndex: 'soTienCanDonate',
-            key: 'soTienCanDonate',
+            dataIndex: 'setAmount',
+            key: 'setAmount',
             render: text => (
               <>{
                 convertNumber(text)
@@ -94,8 +94,8 @@ useEffect(() => {
           },
           {
             title: 'Số tiền đã quyên góp được(VNĐ)',
-            dataIndex: 'soTienDonateHieTai',
-            key: 'soTienDonateHieTai',
+            dataIndex: 'currentAmount',
+            key: 'currentAmount',
             render: text => (
               <>{
                 convertNumber(text)
@@ -106,8 +106,8 @@ useEffect(() => {
           },
           {
             title: 'Trạng thai',
-            dataIndex: 'trangThai',
-            key: 'trangThai',
+            dataIndex: 'status',
+            key: 'status',
           }
       ];
     const islogin = JSON.parse(localStorage.getItem("user"))

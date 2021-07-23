@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Tag, message, Select, Button } from 'antd';
+import { Table, Tag, message, Select, Button,Spin } from 'antd';
 import userAdmin from "../../Api/userAdmin";
 import { EditOutlined } from '@ant-design/icons';
 //import { responsiveArray } from 'antd/lib/_util/responsiveObserve';
@@ -13,10 +13,11 @@ const ListUser = () => {
   const [ListUser, setListUser] = useState([]);
   //const [Account, setAccount] = useState([]);
   const [count, setCount]= useState(0)
-  //const history= useHistory();
+  const [loading,setLoading] = useState(false)
+  const history= useHistory();
   const btnClick = (e) => {
     let id = e.currentTarget.dataset.id
-    userAdmin.postChangeActive(id).then((res)=>{
+    userAdmin.putChangeActive(id).then((res)=>{
       if (res.data.status == "success") {
              message.success("Chỉnh sửa thành công !")
              let i=0;
@@ -32,20 +33,24 @@ const ListUser = () => {
         await userAdmin.getAllUser().then((res) => {
           if (res.data.status == "success") {
             setListUser(res.data.AllUserAdmin);
+           
           }
-          else {
-            console.log("Loi lay du lieu");
-          }
-
-
+         
+          
         });
+        setLoading(true)
       } catch (error) {
-        console.log("Failed to fetch brand data at: ", error);
+        console.log("Heloo ", error);
+        message.info("Bạn không có quyền xem!")
+        setTimeout(()=>{
+         
+          history.push("/admin/dashboard")
+        },2000)
       }
     };
     fetchListUser();
   }, [count]);
-  
+  ListUser.shift();
  
   const columns = [
     {
@@ -63,8 +68,8 @@ const ListUser = () => {
       dataIndex: 'role',
       filters: [
         {
-          text: 'Super Admin',
-          value: 'Super Admin',
+          text: 'Manager',
+          value: 'Manager',
         },
         {
           text: 'Admin',
@@ -106,7 +111,9 @@ const ListUser = () => {
       dataIndex: '_id',
       
       render: (text) => (
+        
         <>
+        
               <Button data-id={text} onClick={btnClick}><EditOutlined /> Thay đổi trạng thái</Button>
             
         </>
@@ -124,8 +131,7 @@ const ListUser = () => {
     },
     
   ]
-
-  
+  //call t nói cho nghe
   
   return (
     <>
@@ -133,7 +139,8 @@ const ListUser = () => {
       <div className="wapper_table row">
         <div className="col-10 offset-1">
           <h2 className="title_table">Danh sách tài khoản</h2>
-          <Table columns={columns} dataSource={ListUser} />
+          { loading ? <Table columns={columns} dataSource={ListUser} /> :  <Spin size="large" /> }
+          
         </div>
 
       </div>

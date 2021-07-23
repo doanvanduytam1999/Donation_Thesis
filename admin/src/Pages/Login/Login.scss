@@ -1,8 +1,51 @@
-.container {
-    .row {
-        position: relative;
-        top: 0;
-       
-        transform: translateY(100%);
+.cover {
+  height: 730px;
+    .bg {
+        height:100%;
+        background-image: url("./image/bg-login.jpg");
+        background-size: cover;
+        background-repeat: no-repeat;
+        .container {
+            .row {
+                .col-8 {
+                    height: 100%;
+                    .content {
+                        background-color: #ffffff6b;
+                        height: 100%;
+                        position: relative;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, 50%);
+                        width: 500px;
+                        .title-login {
+                            text-align: center;
+                            font-size: 26px;
+                            padding-top: 20px;
+                            text-transform: uppercase;
+                        }
+                        .error{
+                            text-align: center;
+                            color: red;
+                        }
+                        .login-form {
+                            width: 100%;
+                            padding: 40px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+.login-form-button {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+    background: #c25843;
+    border-color: #c25843;
+    &:hover {
+        background: #c25843ad;
+        border-color: #c25843;
     }
 }
