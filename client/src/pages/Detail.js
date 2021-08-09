@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Progress, Table, Modal, Form, Input, Tabs, Steps, Checkbox, Select, Result, InputNumber, Image } from 'antd';
+import { Button, Progress, Table, Modal, Form, Input, Tabs, Steps, Checkbox, Select, Result, InputNumber, Image, Card, Typography, Badge, Divider, Spin } from 'antd';
 import parse from 'react-html-parser';
 import "../style/bootstrap-grid.min.css";
 import "../style/Detail.scss";
-import { useParams } from "react-router-dom";
+import { useParams, Link, useHistory } from "react-router-dom";
 import donateEvensts from '../Api/donateEvensts';
 import { UsergroupAddOutlined } from '@ant-design/icons';
 import PayPal from "../components/Paypal";
+import Momo from "../components/Momo";
 import { useSelector } from "react-redux";
-//import ListDonate from '../components/ListDonate';
+import axios from "axios" 
+
 const { TabPane } = Tabs;
 const { Option } = Select;
 const { Step } = Steps;
@@ -33,11 +35,14 @@ const Detail = () => {
     const [value, setValue] = useState(1);
     const [current, setCurrent] = React.useState(0);
     const [AllDonator, setAllDonator] = useState([]);
-    const [ AllDonates, setAllDonates] = useState([]);
+    const [AllDonates, setAllDonates] = useState([]);
     const [ArrayDonateCategory, setArrayDonateCategory] = useState([]);
-    //const [count, setCurrent] = React.useState(0);
-    const [Count, setCount] = useState(0);
+    const [ReleatedPost, setReleatedPost] = useState([]);
+    const [loading, setloading] = useState(false);
     const data = useSelector(state => state.login.user);
+    const { Text } = Typography;
+    const [ellipsis, /* setEllipsis */] = React.useState(true);
+    const history = useHistory()
     const showModal = () => {
         setIsModalVisible(true);
         setCurrent(0)
@@ -48,6 +53,7 @@ const Detail = () => {
     const handleCancel = () => {
         setIsModalVisible(false);
     };
+    const idCategoryPost = Donate.categoryPost
     useEffect(() => {
 
         window.scrollTo(0, 0)
@@ -69,16 +75,16 @@ const Detail = () => {
             try {
                 await donateEvensts.getAll().then((res) => {
                     setAllDonates(res.data.DonateEnvents);
-                    
+
                 });
-              
+
             } catch (error) {
                 console.log("Failed to fetch brand data at: ", error);
             }
         };
         const fetchAllDonater = async () => {
             try {
-                await donateEvensts.getAllDonater(_id).then((res) => {
+                await donateEvensts.get50Donater(_id).then((res) => {
                     if (res.data.status === "success") {
                         /* res.data.AllDonater.soTienDonate = res.data.AllDonater.soTienDonate.replace(/\B(?=(\d{3})+(?!\d))/g, "."); */
                         setAllDonator(res.data.AllDonater)
@@ -89,28 +95,31 @@ const Detail = () => {
                 console.log("Failed to fetch AllDonator data at: ", error);
             }
         }
-        const radomDonateEvent= (a)=>{
-           for (let i = 0; i <= 2; i++) {
-               //const element = array[i];
-               let rand = a[Math.floor(Math.random() * a.length)];
-               setArrayDonateCategory(oldArray => [...oldArray, rand])
-           }
-        
-       
-     
-        
-        }
+
         fetchdonatesData();
         fetchData();
         fetchAllDonater();
         //radomDonateEvent()
     }, [licked, _id]);
-console.log(AllDonates);
-    /* AllDonator.forEach(element => {
-        element.amountToDonate = element.amountToDonate.replace(/\B(?=(\d{3})+(?!\d))/g, ".") + 'đ'
+    console.log(idCategoryPost);
+    console.log(Donate);
+    useEffect(() => {
 
-    }); */
-    console.log(ArrayDonateCategory);
+        window.scrollTo(0, 0)
+        const fetchCategoryPost = async () => {
+            try {
+                await donateEvensts.getPostCategory(_id).then((res) => {
+                    setReleatedPost(res.data.ReleatedPost)
+                });
+                setloading(true)
+            } catch (error) {
+                console.log("Failed to fetch Donate data at: ", error);
+            }
+        };
+        fetchCategoryPost();
+    }, [idCategoryPost]);
+
+    console.log(ReleatedPost);
     const phoneSelector = (
         <Form.Item name="prefix" noStyle>
             <Select style={{ width: 70 }}>
@@ -459,7 +468,7 @@ console.log(AllDonates);
             title: 'Tên ',
             dataIndex: 'fullName',
             key: 'fullName',
-    
+
         },
         {
             title: 'Số tiền ủng hộ (VNĐ)',
@@ -467,13 +476,43 @@ console.log(AllDonates);
             key: 'amountToDonate',
             render: text => (
                 <>
-                {convertNumber(text)} đ
+                    {convertNumber(text)} đ
                 </>
             ),
         }
     ];
     let html = Donate.content;
     let happinessContent = Donate.happinessContent
+    const viewAll = () => {
+        history.push(`/xem-tat-ca-nguoi-ung-ho/${_id}`)
+    }
+
+    const onFinishMomo=(values)=>{
+        console.log("momo",values);
+        checkBtn();
+
+        let ms = Date.now()
+        values['orderId'] ="MM"+ms;
+        values['requestId'] ="MM"+ms;
+        values['checked'] = checked;
+        values['orderInfo']=Donate.title;
+        values['donateEvent'] = _id;
+        donateEvensts.postPayMomo(values).then((res)=>{
+            console.log("data",res.data);
+            if(res.data.MomoPay.errorCode==0)
+            {
+                let url = res.data.MomoPay.payUrl
+                console.log("url",url);
+                window.open(url)
+            }
+        });
+
+        console.log("Day",ms);
+    }
+    const callApi = ()=>{
+        let data ="Test api";
+        axios.post("http://localhost:4000/api/payMomoSusess",data);
+    }
     return (
         <>
             <section className="detail_header">
@@ -515,7 +554,7 @@ console.log(AllDonates);
                                     <TabPane tab="Nhà hảo tâm" key="3">
                                         <p>Top 50 lần ủng hộ gần nhất</p>
                                         <Table columns={columns} dataSource={AllDonator} />
-                                        <Button >Xem tất cả</Button>
+                                        <Button onClick={viewAll} >Xem tất cả</Button>
                                     </TabPane>
                                     <TabPane tab="Trao yêu thương" key="4">
                                         {parse(parse(happinessContent))}
@@ -571,6 +610,8 @@ console.log(AllDonates);
                                 </div>
                                 <div className="card_donate">
                                     <h3 className="card_donate_title">Quyên góp ngay</h3>
+                                    
+                                    <Button onClick={callApi}>Test</Button>
                                     {
                                         Donate.status === "Dừng nhận donate" ? (<>
                                             <p className="tamngung" >Tạm ngưng</p>
@@ -625,7 +666,246 @@ console.log(AllDonates);
                                                                 </div>
                                                             </TabPane>
                                                             <TabPane tab="Momo" key="2">
-                                                                Content of card tab 2
+                                                            <>
+                        {isLoggedIn === false ? (
+                            <>
+                                <Form
+                                    {...layout}
+                                    name="basic"
+                                    initialValues={{ prefix: "84", amountToDonate: "10000" }}
+                                    onFinish={onFinishMomo}
+                                    ///onFinishFailed={onFinishFailed}
+                                >
+                                    <Form.Item label='Ủng hộ ẩn danh' onChange={handlechecked}>
+                                        <Checkbox />
+                                    </Form.Item>
+                                    {checked === false ? (
+                                        <>
+                                            <Form.Item
+                                                label="Họ và tên"
+                                                name="fullName"
+                                                rules={[{ required: true, message: 'Hãy nhập họ tên của bạn !' }]}
+
+                                            >
+                                                <Input autoComplete="off" placeholder="Họ và tên của bạn" />
+                                            </Form.Item>
+                                            <Form.Item
+                                                label="Số điện thoại"
+                                                name="phone"
+                                            >
+                                                <Input autoComplete="off" placeholder="Nhập số điện thoại của bạn " addonBefore={phoneSelector} style={{ width: '100%' }} />
+                                            </Form.Item>
+                                            <Form.Item
+                                                label="Số tiền ủng hộ"
+                                                rules={[
+                                                    {
+                                                        required: true,
+                                                        message: 'Hãy nhập số tiền ủng hộ',
+                                                    },
+                                                ]}
+                                                name="amountToDonate">
+                                                <InputNumber
+                                                    onChange={onChange}
+                                                    style={{ width: "200px" }}
+                                                    defaultValue={10000}
+                                                    formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                                    parser={value => value.replace(/\$\s?|(,*)/g, '')}
+
+                                                />
+                                            </Form.Item>
+                                            <Form.Item
+                                                name="message"
+                                                label="Lời nhắn"
+                                            >
+                                                <TextArea placeholder="Lời nhắn (không bắt buộc)" autoSize={{ minRows: 3 }} />
+                                            </Form.Item>
+                                            <Form.Item hidden name="id">
+                                                <Input />
+                                            </Form.Item>
+                                            <Form.Item wrapperCol={{
+                                                xs: { span: 24, offset: 0 },
+                                                sm: { span: 16, offset: 8 },
+                                            }} >
+                                                <Button type="primary" htmlType="submit">
+                                                    Xác nhận
+                                                </Button>
+                                            </Form.Item>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Form.Item hidden name="andanh">
+                                                <Input />
+                                            </Form.Item>
+                                            <Form.Item
+                                                label="Số tiền ủng hộ"
+                                                rules={[
+
+                                                    {
+                                                        required: true,
+                                                        message: 'Hãy nhập số tiền ủng hộ',
+                                                    },
+                                                ]}
+                                                name="amountToDonate">
+                                                <InputNumber
+                                                    onChange={onChange}
+                                                    style={{ width: "200px" }}
+                                                    defaultValue={10000}
+                                                    formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                                    parser={value => value.replace(/\$\s?|(,*)/g, '')}
+
+                                                />
+                                            </Form.Item>
+                                            <Form.Item
+                                                label='Lời nhắn'
+                                                name="message"
+                                            >
+                                                <TextArea placeholder="Lời nhắc (không bắt buộc)" autoSize={{ minRows: 3 }} />
+                                            </Form.Item>
+                                            <Form.Item hidden name="id">
+                                                <Input />
+                                            </Form.Item>
+                                            <Form.Item >
+                                                <Button type="primary" htmlType="submit">
+                                                    Xác nhận
+                                                </Button>
+                                            </Form.Item>
+
+                                        </>
+                                    )}
+
+                                </Form>
+                            </>
+                        ) : (
+                            <>
+                                {data !== [] ? (
+                                    <>
+                                        <Form
+
+                                            {...layout}
+                                            name="basic"
+                                            initialValues={{ prefix: "84", amountToDonate: "10000", name: `${data.username}`, phone: "0849119919" }}
+                                            onFinish={onFinishMomo}
+                                            //onFinishFailed={onFinishFailed}
+                                        >
+                                            {/*  <Radio.Group onChange={onChange} buttonStyle="solid" defaultValue="a">
+<Radio.Button value="a">Cá nhân</Radio.Button>
+<Radio.Button value="b">Tổ chức</Radio.Button>
+
+</Radio.Group> */}
+                                            <Form.Item label='Ủng hộ ẩn danh' onChange={handlechecked}>
+                                                <Checkbox />
+
+                                            </Form.Item>
+
+
+                                            {checked === false ? (
+                                                <>
+                                                    <Form.Item
+                                                        label="Họ và tên"
+                                                        name="name"
+                                                        rules={[{ required: true, message: 'Hãy nhập họ tên của bạn !' }]}
+                                                    >
+                                                        <Input style={{ background: "#5858583b" }} readOnly />
+                                                    </Form.Item>
+                                                    <Form.Item
+                                                        label="Số điện thoại"
+                                                        name="phone"
+
+                                                    >
+                                                        <Input style={{ width: '100%', backgroundColor: "#5858583b" }} readOnly />
+                                                    </Form.Item>
+
+                                                    <Form.Item
+                                                        label="Số tiền ủng hộ"
+                                                        rules={[
+
+                                                            {
+                                                                required: true,
+                                                                message: 'Hãy nhập số tiền ủng hộ',
+                                                            },
+                                                        ]}
+                                                        name="amountToDonate">
+                                                        <InputNumber
+                                                            onChange={onChange}
+                                                            style={{ width: "200px" }}
+                                                            defaultValue={10000}
+                                                            formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                                            parser={value => value.replace(/\$\s?|(,*)/g, '')}
+
+                                                        />
+                                                    </Form.Item>
+                                                    <Form.Item
+                                                        name="message"
+                                                        label="Lời nhắn"
+                                                    >
+                                                        <TextArea placeholder="Lời nhắn (không bắt buộc)" autoSize={{ minRows: 3 }} />
+                                                    </Form.Item>
+                                                    <Form.Item hidden name="id">
+                                                        <Input />
+                                                    </Form.Item>
+                                                    <Form.Item wrapperCol={{
+                                                        xs: { span: 24, offset: 0 },
+                                                        sm: { span: 16, offset: 8 },
+                                                    }} >
+                                                        <Button onClick={checkBtn} type="primary" htmlType="submit">
+                                                            Xác nhận
+                                                        </Button>
+                                                    </Form.Item>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Form.Item hidden name="andanh">
+                                                        <Input />
+                                                    </Form.Item>
+                                                    <Form.Item
+
+                                                        label="Số tiền ủng hộ"
+                                                        rules={[
+
+                                                            {
+                                                                required: true,
+                                                                message: 'Hãy nhập số tiền ủng hộ',
+                                                            },
+                                                        ]}
+                                                        name="amountToDonate">
+                                                        <InputNumber
+                                                            onChange={onChange}
+                                                            style={{ width: "200px" }}
+                                                            defaultValue={10000}
+                                                            formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                                            parser={value => value.replace(/\$\s?|(,*)/g, '')}
+
+                                                        />
+                                                    </Form.Item>
+                                                    <Form.Item
+                                                        label='Lời nhắn'
+                                                        name="content"
+                                                    >
+                                                        <TextArea placeholder="Lời nhắc (không bắt buộc)" autoSize={{ minRows: 3 }} />
+                                                    </Form.Item>
+                                                    <Form.Item hidden name="id">
+                                                        <Input />
+                                                    </Form.Item>
+                                                    <Form.Item >
+                                                        <Button type="primary" htmlType="submit">
+                                                            Xác nhận
+                                                        </Button>
+                                                    </Form.Item>
+
+                                                </>
+                                            )}
+
+                                        </Form>
+                                    </>
+                                ) : (<><p></p></>)}
+
+                            </>
+                        )
+                        }
+
+
+                    </>
+                                                                <Momo />
                                                             </TabPane>
                                                         </Tabs>
                                                     </>
@@ -640,9 +920,72 @@ console.log(AllDonates);
                     </div>
                 </div>
             </section>
+            <Divider></Divider>
             <section className="detail_footer">
                 <div className="container">
+                    <h3 className="detail_footer_title">Chương trình liên quan</h3>
+                    <div className="row">
+                        {loading ? (<>
+                            {ReleatedPost.map((item) => {
+                                return (
+                                    <>
 
+                                        <div className="col-3 " >
+                                            <Badge >
+                                                <Link to={`${item._id}`} >
+                                                    <Card className="margin-top"
+                                                        style={{ borderRadius: 10, height: 460 }}
+                                                        hoverable
+                                                        cover={<img alt="example" src={item.image[0]} />}>
+                                                        <Text className="title-text" style={ellipsis ? { width: 250 } : undefined}
+                                                            ellipsis={ellipsis ? { tooltip: `${item.title}` } : false} >
+                                                            {item.title} </Text>
+                                                        <Text className="title-tomtat"
+                                                            style={ellipsis ? { width: 250 } : undefined}
+                                                            ellipsis={ellipsis ? { tooltip: `${item.summary}` } : false} >
+                                                            {item.summary}
+                                                        </Text>
+                                                        {
+                                                            item.status === "Dừng nhận donate" ? (<><p className="tamngung" >Tạm ngưng</p></>) : (<>
+                                                                <div className="progress">
+                                                                    <div className="progress_detail_top">
+                                                                        <p className="progress_detail_text">
+                                                                            {/* convertNumber */(item.currentAmount)} vnđ quyên góp
+                                                                        </p>
+                                                                        <p className="progress_detail_number">
+                                                                            {Math.floor((item.currentAmount / item.setAmount) * 100) === 100 ? (
+                                                                                <p>Hoàn thành</p>
+                                                                            ) : (
+                                                                                <>
+                                                                                    <p className="progress_detail_number">{((item.currentAmount / item.setAmount) * 100).toFixed(3)}%</p>
+                                                                                </>
+                                                                            )}
+                                                                        </p>
+                                                                    </div>
+                                                                    <Progress percent={Math.floor((item.currentAmount / item.setAmount) * 100)} showInfo={Math.floor((item.currentAmount / item.setAmount) * 100) === 100 ? (true) : (false)} status={Math.floor((item.currentAmount / item.setAmount) * 100) === 100 ? ("success") : ("normal")} />
+                                                                    <div className="progress_detail_bot">
+                                                                        <p className="progress_detail_text">
+                                                                            <UsergroupAddOutlined /> {item.numberOfDonations} lượt quyên góp
+                                                                        </p>
+                                                                        <p className="progress_detail_number">{Number(dayEnd(item.endDay)) === 0 || Number(dayEnd(item.endDay)) < 0 ? (<>Đã hết hạn</>) : (<> {dayEnd(item.endDay)} ngày còn lại</>)} </p>
+                                                                    </div>
+                                                                </div>
+                                                            </>)
+                                                        }
+                                                    </Card>
+
+                                                </Link>
+                                            </Badge>
+                                        </div>
+
+                                    </>
+                                )
+
+                            })}
+
+                        </>) : (<><Spin size="large" /></>)}
+
+                    </div>
                 </div>
             </section>
             <Modal title="Cám ơn" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>

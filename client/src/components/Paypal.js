@@ -53,11 +53,7 @@ const Paypal = () => {
                             console.log(res.data);
                         })
                         showModal();
-
                     }
-
-
-
                 },
                 onError: (err) => {
                     console.log(err);

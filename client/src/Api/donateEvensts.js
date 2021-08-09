@@ -13,12 +13,20 @@ const donateEvensts ={
        const url ="/categoryDonateEvents";  
        return AxiosClient.get(url);
    },
+   getPostCategory: (id)=>{
+    const url =`/relatedPost/${id}`;  
+    return AxiosClient.get(url);
+},
    getListdonateUser:()=>{
        const url ="/allDonate";
        return AxiosClient.get(url)
    },
-   getAllDonater:(id)=>{
+   get50Donater:(id)=>{
     const url = `/50Donator/${id}`;
+    return AxiosClient.get(url);
+   },
+   getAllDonater:(id)=>{
+    const url = `/allDonator/${id}`;
     return AxiosClient.get(url);
    },
    getLogout:()=>{
@@ -28,6 +36,14 @@ const donateEvensts ={
    putUpdateProfile:(values)=>{
     const url ="/updateProfileUser";
     return AxiosClient.put(url,values)
+   },
+   putChangePasss:(values)=>{
+    const url ="/changePassword";
+    return AxiosClient.put(url,values)
+   },
+   postPayMomo:(values)=>{
+       const url ="/payMomo";
+       return AxiosClient.post(url,values)
    }
 };
 

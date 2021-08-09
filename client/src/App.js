@@ -17,6 +17,7 @@ import { getMe } from './redux/reducer/UserSlice';
 import Contact from './pages/Contact';
 import AllDonate from './pages/AllDonate';
 import ScrollToTop from './Api/ScrollToTop';
+import ListDonator from './pages/ListDonator';
 // Configure Firebase.
 const config = {
   apiKey: 'AIzaSyBuvMsY6qXN0XOR2pjo9g0YJ9JC5yfh9rE',
@@ -77,6 +78,10 @@ function App() {
           <Route exact path="/thong-tin-chi-tiet/:_id">
             <Detail />
           </Route>
+          <Route exact path="/xem-tat-ca-nguoi-ung-ho/:_id">
+            <ListDonator />
+          </Route>
+          
           <Route exact path="/thong-tin-tai-khoan">
             <Profile />
           </Route>

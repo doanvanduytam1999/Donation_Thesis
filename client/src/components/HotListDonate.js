@@ -377,7 +377,7 @@ const HotListDonate = (props) => {
                     <>
                         <p>Số tiền ủng hộ: {convertNumber(coin.amountToDonate)}</p>
                         <p>Lời nhắn:</p>
-                        <p>{coin.amountToDonate}</p>
+                        <p>{coin.message}</p>
                         <PayPal />
                     </>
                 )
