@@ -69,10 +69,11 @@ app.use(
 app.use(flash());
 
 app.use(cors({
-    origin: ['http://localhost:3000','http://localhost:3002'],
+    origin: ['http://localhost:3000','http://localhost:3002','https://test-payment.momo.vn', 'https://example.com/momo_ipn'],
     methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD'],
     credentials: true
 }));
+//app.use(cors());
 
 app.options('*', cors());
 app.use(xss());

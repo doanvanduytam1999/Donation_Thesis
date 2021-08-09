@@ -439,6 +439,9 @@ router.get('/donateEvents', DonateEnvent.getDonateEvents);
  *                                      $ref: '#/components/schemas/CategoryDonateEvent'
  */
 router.get('/categoryDonateEvents', DonateEnvent.getCategoryDonateEvents);
+router.post('/payMomo', DonateEnvent.postPayMomo);
+router.get('/payMomoSusess', DonateEnvent.postPayMomoSusess);
+
 /**
  * @swagger
  * /api/donateEvent/{id}:
@@ -599,7 +602,7 @@ router.get('/allDonator/:id', DonateEnvent.getAllDonater);
  *                                      $ref: '#/components/schemas/DonateAction'
  */
 router.get('/50Donator/:id', DonateEnvent.get50Donater);
-
+router.get('/relatedPost/:id', DonateEnvent.getRelatedPost);
 /**
  * @swagger
  * /api/donate:

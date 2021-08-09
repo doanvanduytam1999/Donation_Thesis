@@ -4,6 +4,8 @@ const CategoryDonateEvent = require('../models/categoryDonateEvent');
 const AuthController = require('../controllers/authController');
 const UserAdmin = require('../models/userAdmin');
 const Donator = require('../models/Donator');
+const bcrypt = require('bcryptjs');
+
 
 exports.postAddpost = catchAsync(async (req, res, next) => {
     const admin = await AuthController.adminIsLoggedIn(req.cookies.jwtAdmin);
@@ -44,10 +46,11 @@ exports.postHappiness = catchAsync(async (req, res, next) => {
         })
     }
     const id = req.params.id;
-    console.log(req.body);
+    console.log(id);
+    //console.log(req.body);
     const data = req.body;
     
-    const post = await DonateEvent.findOneAndUpdate(id, {
+    const post = await DonateEvent.findByIdAndUpdate(id, {
         happinessContent: data.happinessContent,
         imageHappiness: data.imageHappiness
     }, {
@@ -250,10 +253,12 @@ exports.postChangeStatusPost = catchAsync(async (req, res, next) => {
 });
 
 exports.putChangePassword = catchAsync(async (req, res, next) => {
-    const userLogin = await AuthController.userIsLoggedIn(req.cookies.jwtAdmin);
+    const userLogin = await AuthController.adminIsLoggedIn(req.cookies.jwtAdmin);
     if (userLogin) {
-        const user = await UserAdmin.find(userLogin.id).select('+password active');
-        if (!user || user.active !== false || !(await UserAdmin.correctPassword(req.body.oldPassword, user.password))) {
+        console.log(userLogin);
+        const user = await UserAdmin.findById(userLogin.id).select('+password active');
+        console.log();
+        if (!user || user.active === false || !(await user.correctPassword(req.body.oldPassword, user.password))) {
             return res.status(401).json({
                 status: "error",
                 error: "Không đúng password hoặc tài khoản bị khóa, vui lòng kiểm tra lại thông tin"
@@ -280,3 +285,4 @@ exports.putChangePassword = catchAsync(async (req, res, next) => {
         }
     }
 })
+

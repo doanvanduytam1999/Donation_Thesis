@@ -5,6 +5,11 @@ const AppError = require('../utils/appError');
 const User = require('../models/Donator');
 const UserAdmin = require('../models/userAdmin');
 
+///momo
+
+
+
+
 
 const signToken = id => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -51,13 +56,11 @@ exports.userIsLoggedIn = async (cookie) => {
         cookie,
         process.env.JWT_SECRET
       );
-
       // 2) Check if user still exists
       const currentUser = await User.findById(decoded.id);
       if (!currentUser) {
         return next();
       }
-
       // 3) Check if user changed password after the token was issued
       if (currentUser.changedPasswordAfter(decoded.iat)) {
         return next();
@@ -239,7 +242,7 @@ exports.loginCustomer = catchAsync(async (req, res, next) => {
   //2) check if user exist and passowrd is correct
   const user = await User.findOne({ 'username': username }).select('+password');
   console.log(user);
-  if (!user || !(await user.correctPassword(password, user.password))) {
+  if (!user || user.active === false || !(await user.correctPassword(password, user.password))) {
     return res.status(401).json({
       status: "error",
       error: "Tài khoản hoặc mật khẩu không đúng!"
