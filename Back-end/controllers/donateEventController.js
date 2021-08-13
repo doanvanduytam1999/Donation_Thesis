@@ -199,17 +199,18 @@ exports.getAllDonater = catchAsync(async (req, res, next) => {
 
 exports.postUpdateProfileUser = catchAsync(async (req, res, next) => {
     const data = req.body;
+    console.log(data);
     const error = [];
-    const email = await UserAdmin.findOne({ email: data.email });
+    const email = await UserCustomer.findOne({ email: data.email });
     if (email) {
         error.push("Email đã tồn tại.");
     }
-    if (error.length != 0) {
+  /*   if (error.length != 0) {
         return res.status(400).json({
             status: 'error',
             error: error
         })
-    }
+    } */
     const userLogin = await AuthController.userIsLoggedIn(req.cookies.jwt);
     const user = await UserCustomer.findByIdAndUpdate(userLogin.id, {
         fullName: data.fullName,
@@ -286,7 +287,7 @@ exports.postPayMomo = catchAsync(async(req,res, next)=>{
                    .digest('hex');
 console.log("--------------------SIGNATURE----------------")
 console.log(signature)
-    var body = JSON.stringify({
+    /* var body = JSON.stringify({
         partnerCode : partnerCode,
         accessKey : accessKey,
         requestId : requestId,
@@ -330,9 +331,9 @@ console.log(signature)
       
       
       req.write(body);
-      req.end();
+      req.end(); */
 
-    /* let momo={};
+    let momo={};
     const url = "https://test-payment.momo.vn/gw_payment/transactionProcessor"
     const data = {
         "accessKey": accessKey,
@@ -346,15 +347,15 @@ console.log(signature)
         "requestId": requestId,
         "extraData": extraData,
         "signature": signature,
-    } */
-    /* const header =  {
+    }
+    const header =  {
         'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(data)
-    } */
+        //'Content-Length': Buffer.byteLength(data)
+    }
 
     //const option = 
 
-   /*  axios.post(url,data, {
+    axios.post(url,data, {
         headers:header
     }).then((respont)=>{
         momo = respont.data
@@ -375,7 +376,7 @@ console.log(signature)
             console.log("truong hop khac");
         }
         
-    }) */
+    })
 
   
 })
