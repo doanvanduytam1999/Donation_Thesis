@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 //import donateEvensts from "../Api/donateEvensts";
 //import { logout } from "../redux/actions/auth.js";
 import "../style/HotListDonate.scss";
+import Momo from "./Momo";
 const { Option } = Select;
 const { Step } = Steps;
 const { Text } = Typography;
@@ -80,7 +81,7 @@ const HotListDonate = (props) => {
     const handleCancel = () => {
         setIsModalVisible(false);
         setLicked(false)
-       
+        setCurrent(0)
     };
     const next = () => {
         setCurrent(current + 1);
@@ -118,6 +119,7 @@ const HotListDonate = (props) => {
                     checkBtn();
                     values['checked'] = checked;
                     values['donateEvent'] = id;
+                    values['orderInfo']= donator[0].title;
                     const data = JSON.stringify(values)
                     localStorage.setItem("data", data);
                 };
@@ -378,6 +380,9 @@ const HotListDonate = (props) => {
                         <p>Số tiền ủng hộ: {convertNumber(coin.amountToDonate)}</p>
                         <p>Lời nhắn:</p>
                         <p>{coin.message}</p>
+                        <p>Gửi tiền bằng</p>
+                        <Momo></Momo>
+                        <p>Hoặc</p>
                         <PayPal />
                     </>
                 )
@@ -461,7 +466,7 @@ console.log(licked);
             {donator != null ? (
                 <>
 
-                    <Modal title={donator[0].title} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+                    <Modal title={donator[0].title} visible={isModalVisible}footer={null} onCancel={handleCancel}>
                         <Steps current={current}>
                             {steps.map(item => (
                                 <Step key={item.title} title={item.title} />
@@ -494,7 +499,7 @@ console.log(licked);
                 </>
             ) : (
                 <>
-                    <Modal title={"ủng hộ"} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+                    <Modal title={"ủng hộ"} visible={isModalVisible}  onCancel={handleCancel}>
                         <Steps current={current}>
                             {steps.map(item => (
                                 <Step key={item.title} title={item.title} />

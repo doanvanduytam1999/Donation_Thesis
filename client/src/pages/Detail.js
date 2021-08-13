@@ -10,7 +10,7 @@ import PayPal from "../components/Paypal";
 import Momo from "../components/Momo";
 import { useSelector } from "react-redux";
 import axios from "axios" 
-
+import "../style/Momo.scss"
 const { TabPane } = Tabs;
 const { Option } = Select;
 const { Step } = Steps;
@@ -723,11 +723,10 @@ const Detail = () => {
                                                 <Input />
                                             </Form.Item>
                                             <Form.Item wrapperCol={{
-                                                xs: { span: 24, offset: 0 },
-                                                sm: { span: 16, offset: 8 },
+                                               
                                             }} >
-                                                <Button type="primary" htmlType="submit">
-                                                    Xác nhận
+                                                <Button type="primary" className="checkout-title" htmlType="submit">
+                                                    Gửi tiền bằng Ví MoMo
                                                 </Button>
                                             </Form.Item>
                                         </>
@@ -765,8 +764,8 @@ const Detail = () => {
                                                 <Input />
                                             </Form.Item>
                                             <Form.Item >
-                                                <Button type="primary" htmlType="submit">
-                                                    Xác nhận
+                                                <Button type="primary" className="checkout-title" htmlType="submit">
+                                                Gửi tiền bằng Ví MoMo
                                                 </Button>
                                             </Form.Item>
 
@@ -844,11 +843,10 @@ const Detail = () => {
                                                         <Input />
                                                     </Form.Item>
                                                     <Form.Item wrapperCol={{
-                                                        xs: { span: 24, offset: 0 },
-                                                        sm: { span: 16, offset: 8 },
+                                                       
                                                     }} >
-                                                        <Button onClick={checkBtn} type="primary" htmlType="submit">
-                                                            Xác nhận
+                                                        <Button onClick={checkBtn} className="checkout-title" type="primary" htmlType="submit">
+                                                        Gửi tiền bằng Ví MoMo
                                                         </Button>
                                                     </Form.Item>
                                                 </>
@@ -887,8 +885,8 @@ const Detail = () => {
                                                         <Input />
                                                     </Form.Item>
                                                     <Form.Item >
-                                                        <Button type="primary" htmlType="submit">
-                                                            Xác nhận
+                                                        <Button className="checkout-title" type="primary" htmlType="submit">
+                                                        Gửi tiền bằng Ví MoMo
                                                         </Button>
                                                     </Form.Item>
 
@@ -902,10 +900,8 @@ const Detail = () => {
                             </>
                         )
                         }
-
-
                     </>
-                                                                <Momo />
+                                                              
                                                             </TabPane>
                                                         </Tabs>
                                                     </>

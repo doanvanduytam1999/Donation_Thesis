@@ -16,7 +16,8 @@ const Profile = () => {
     }; */
     const onFinish = (values) => {
         console.log('Success:', values);
-        donateEvensts.putUpdateProfile(values).then((res) => {
+        donateEvensts.putUpdateProfile(values)
+        .then((res) => {
             if (res.data.status === "success") {
                 message.success("Cập nhật thông tin thành công !")
                 localStorage.setItem("user", JSON.stringify(res.data.User));
@@ -24,6 +25,16 @@ const Profile = () => {
                     window.location.reload();
                 }, 1000)
             }
+            if (res.data.status === "error") {
+                message.success("Cập nhật thông tin thành công !")
+                localStorage.setItem("user", JSON.stringify(res.data.User));
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000)
+            }
+        })
+        .catch((error)=>{
+            console.log("Loi nè: ",error);
         })
     };
     const [isModalVisible, setIsModalVisible] = useState(false);
