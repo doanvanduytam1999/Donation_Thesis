@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Tabs, Table, Button } from 'antd';
-import "../style/bootstrap-grid.min.css";
-import ProFile from '../components/Profilecpn';
+import { Button, Table, Tabs } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Link, Redirect } from 'react-router-dom';
 //import HistoryDonate from "../components/Historydonate"
 import donateEvensts from '../Api/donateEvensts';
-import { Link, Redirect } from 'react-router-dom'
+import ProFile from '../components/EditProfile';
+import ProfileUser from '../components/ProfileUser';
+import {EditOutlined,ProfileOutlined,HistoryOutlined} from '@ant-design/icons';
+import "../style/bootstrap-grid.min.css";
 const layout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
@@ -40,14 +42,14 @@ const Profile = () => {
     }, []);
     const convertNumber = (x) => {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-}
+    }
     const columns = [
         {
             title: 'Tiêu đề bài viết',
             dataIndex: 'title',
             key: 'title',
         },
-        
+
         {
             title: 'Số tiền đã ủng hộ(VNĐ)',
             dataIndex: 'amountToDonate',
@@ -65,9 +67,9 @@ const Profile = () => {
             key: '_id',
             render: text => (
                 <>
-                  <Link to={`/thong-tin-chi-tiet/${text}`}><Button>Xem chi tiết</Button> </Link>
+                    <Link to={`/thong-tin-chi-tiet/${text}`}><Button>Xem chi tiết</Button> </Link>
                 </>
-              ),
+            ),
         }
     ];
     const a = [];
@@ -92,7 +94,7 @@ const Profile = () => {
             for (let j = 0; j < AllDonate.length; j++) {
                 if (e[i]._id === AllDonate[j].donateEvent) {
                     e[i].amountToDonate = AllDonate[j].amountToDonate;
-                    console.log(e);     
+                    console.log(e);
                 }
             }
         }
@@ -109,25 +111,26 @@ const Profile = () => {
         <>
 
             <div className="container">
-                <div className='col-6 offset-6'>
-                    <h3 style={{ fontSize: "30px" }}>Thông tin tài khoản</h3>
-                </div>
-                <div>
-                    <Tabs defaultActiveKey="1"  >
-                        <TabPane tab="Thông tin cá nhân" key="1">
-
+                <div className="profile_user">
+                    <h3 className="profile_user_title">
+                        Thông tin tài khoản
+                    </h3>
+                    <Tabs tabPosition="left" defaultActiveKey="1"  >
+                        <TabPane tab={ <span><ProfileOutlined />Thông tin cá nhân</span>} key="1">
+                            <ProfileUser></ProfileUser>
+                        </TabPane>
+                        <TabPane tab={ <span><EditOutlined />Chinh sửa thông tin</span>} key="2">
                             <ProFile></ProFile>
                         </TabPane>
 
-                        <TabPane tab="Lịch sử ủng hộ" key="2">
-                            <div style={{ textAlign: "center" }}>
+                        <TabPane  tab={ <span><HistoryOutlined />Lịch sử ủng hộ</span>} key="3">
+                            <div className="tbl_history" style={{ textAlign: "center" }}>
 
                                 <Table {...layout}
+
                                     dataSource={
                                         merge3
-
                                     }
-
                                     columns={columns} />;
                             </div>
                         </TabPane>

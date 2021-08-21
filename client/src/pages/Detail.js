@@ -1,16 +1,15 @@
+import { UsergroupAddOutlined } from '@ant-design/icons';
+import { Badge, Button, Card, Checkbox, Divider, Form, Image, Input, InputNumber, Modal, Progress, Result, Select, Spin, Steps, Table, Tabs, Typography } from 'antd';
+import axios from "axios";
 import React, { useEffect, useState } from 'react';
-import { Button, Progress, Table, Modal, Form, Input, Tabs, Steps, Checkbox, Select, Result, InputNumber, Image, Card, Typography, Badge, Divider, Spin } from 'antd';
 import parse from 'react-html-parser';
+import { useSelector } from "react-redux";
+import { Link, useHistory, useParams,useLocation } from "react-router-dom";
+import donateEvensts from '../Api/donateEvensts';
+import PayPal from "../components/Paypal";
 import "../style/bootstrap-grid.min.css";
 import "../style/Detail.scss";
-import { useParams, Link, useHistory } from "react-router-dom";
-import donateEvensts from '../Api/donateEvensts';
-import { UsergroupAddOutlined } from '@ant-design/icons';
-import PayPal from "../components/Paypal";
-import Momo from "../components/Momo";
-import { useSelector } from "react-redux";
-import axios from "axios" 
-import "../style/Momo.scss"
+import "../style/Momo.scss";
 const { TabPane } = Tabs;
 const { Option } = Select;
 const { Step } = Steps;
@@ -24,7 +23,7 @@ const layout = {
 
 
 const Detail = () => {
-    let { _id } = useParams();
+    let {_id} = useParams();
     const [Donate, setDonate] = useState([]);
     const [DonateID, setDonateID] = useState([]);
     const { isLoggedIn } = useSelector(state => state.login);
@@ -40,9 +39,11 @@ const Detail = () => {
     const [ReleatedPost, setReleatedPost] = useState([]);
     const [loading, setloading] = useState(false);
     const data = useSelector(state => state.login.user);
+    const user= JSON.parse(localStorage.getItem("user"))
     const { Text } = Typography;
     const [ellipsis, /* setEllipsis */] = React.useState(true);
     const history = useHistory()
+    const idCategoryPost = Donate.categoryPost;
     const showModal = () => {
         setIsModalVisible(true);
         setCurrent(0)
@@ -53,20 +54,35 @@ const Detail = () => {
     const handleCancel = () => {
         setIsModalVisible(false);
     };
-    const idCategoryPost = Donate.categoryPost
+   
     useEffect(() => {
 
         window.scrollTo(0, 0)
-        const fetchData = async () => {
+        const fetchData =  () => {
             try {
-                await donateEvensts.get(_id).then((res) => {
-                    setDonateID(res.data.DonateEnvent)
-                    //res.data.DonateEnvent.soTienCanDonate = res.data.DonateEnvent.soTienCanDonate.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-                    setDonate(res.data.DonateEnvent);
-                    //console.log('ádas',res.data.DonateEnvent);
-                    setImg(res.data.DonateEnvent.image)
-
-                });
+               
+                    donateEvensts.get(_id).then((res) => {
+                        setDonateID(res.data.DonateEnvent)
+                        console.log(res.data.DonateEnvent);
+                        //res.data.DonateEnvent.soTienCanDonate = res.data.DonateEnvent.soTienCanDonate.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                        setDonate(res.data.DonateEnvent);
+                        //console.log('ádas',res.data.DonateEnvent);
+                        setImg(res.data.DonateEnvent.image)
+    
+                    });
+              
+                setTimeout(()=>{
+                    donateEvensts.get(_id).then((res) => {
+                        setDonateID(res.data.DonateEnvent)
+                        console.log(res.data.DonateEnvent);
+                        //res.data.DonateEnvent.soTienCanDonate = res.data.DonateEnvent.soTienCanDonate.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                        setDonate(res.data.DonateEnvent);
+                        //console.log('ádas',res.data.DonateEnvent);
+                        setImg(res.data.DonateEnvent.image)
+    
+                    });
+                },3000)
+                
             } catch (error) {
                 console.log("Failed to fetch Donate data at: ", error);
             }
@@ -106,9 +122,9 @@ const Detail = () => {
     useEffect(() => {
 
         window.scrollTo(0, 0)
-        const fetchCategoryPost = async () => {
+        const fetchCategoryPost =  () => {
             try {
-                await donateEvensts.getPostCategory(_id).then((res) => {
+                 donateEvensts.getPostCategory(_id).then((res) => {
                     setReleatedPost(res.data.ReleatedPost)
                 });
                 setloading(true)
@@ -118,8 +134,20 @@ const Detail = () => {
         };
         fetchCategoryPost();
     }, [idCategoryPost]);
+    const Location = useLocation();
+    console.log(Location.search);
+    let str =Location.search;
+    //str.split(/[^a-zA-Z0-9_]/)
+   // str= str.split('?');
+   str= str.split('&');
 
-    console.log(ReleatedPost);
+   //str= str.split('=');
+   
+   //let array = JSON.parse("[" + str + "]");
+
+  //let a =  JSON.parse(str);
+    //console.log(del_str);
+    console.log(str);
     const phoneSelector = (
         <Form.Item name="prefix" noStyle>
             <Select style={{ width: 70 }}>
@@ -158,7 +186,7 @@ const Detail = () => {
                     console.log('Success:', values);
                     checkBtn();
                     values['checked'] = checked;
-                    values['donateEvent'] = _id;
+                    values['donateEvent'] =_id;
                     const data = JSON.stringify(values)
                     localStorage.setItem("data", data);
                 };
@@ -486,28 +514,36 @@ const Detail = () => {
     const viewAll = () => {
         history.push(`/xem-tat-ca-nguoi-ung-ho/${_id}`)
     }
-
+    console.log("-"+_id+"-");
     const onFinishMomo=(values)=>{
-        console.log("momo",values);
+        //console.log("momo",values);
         checkBtn();
-
+        //const user = JSON.parse(localStorage.getItem("user"));
+        if(user){
+            values['userId']=user._id;
+        }
         let ms = Date.now()
         values['orderId'] ="MM"+ms;
         values['requestId'] ="MM"+ms;
         values['checked'] = checked;
         values['orderInfo']=Donate.title;
-        values['donateEvent'] = _id;
+        
+        values['donateEvent'] =_id.trim();
+        console.log("momo",values);
         donateEvensts.postPayMomo(values).then((res)=>{
             console.log("data",res.data);
-            if(res.data.MomoPay.errorCode==0)
+            if(res.data.MomoPay.errorCode===0)
             {
                 let url = res.data.MomoPay.payUrl
                 console.log("url",url);
-                window.open(url)
+                //history.push(url)
+                window.location.replace(url);
+
+                
             }
         });
 
-        console.log("Day",ms);
+        //console.log("Day",ms);
     }
     const callApi = ()=>{
         let data ="Test api";
@@ -611,7 +647,7 @@ const Detail = () => {
                                 <div className="card_donate">
                                     <h3 className="card_donate_title">Quyên góp ngay</h3>
                                     
-                                    <Button onClick={callApi}>Test</Button>
+                                    <Button onClick={onFinishMomo}>Test</Button>
                                     {
                                         Donate.status === "Dừng nhận donate" ? (<>
                                             <p className="tamngung" >Tạm ngưng</p>
@@ -725,7 +761,7 @@ const Detail = () => {
                                             <Form.Item wrapperCol={{
                                                
                                             }} >
-                                                <Button type="primary" className="checkout-title" htmlType="submit">
+                                                <Button type="primary" className="checkout-title"  htmlType="submit"> 
                                                     Gửi tiền bằng Ví MoMo
                                                 </Button>
                                             </Form.Item>
@@ -782,7 +818,7 @@ const Detail = () => {
 
                                             {...layout}
                                             name="basic"
-                                            initialValues={{ prefix: "84", amountToDonate: "10000", name: `${data.username}`, phone: "0849119919" }}
+                                            initialValues={{ prefix: "84", amountToDonate: "10000", fullName: `${user.fullName}`, phone: `${user.phone}` }}
                                             onFinish={onFinishMomo}
                                             //onFinishFailed={onFinishFailed}
                                         >
@@ -801,7 +837,7 @@ const Detail = () => {
                                                 <>
                                                     <Form.Item
                                                         label="Họ và tên"
-                                                        name="name"
+                                                        name="fullName"
                                                         rules={[{ required: true, message: 'Hãy nhập họ tên của bạn !' }]}
                                                     >
                                                         <Input style={{ background: "#5858583b" }} readOnly />
@@ -920,68 +956,7 @@ const Detail = () => {
             <section className="detail_footer">
                 <div className="container">
                     <h3 className="detail_footer_title">Chương trình liên quan</h3>
-                    <div className="row">
-                        {loading ? (<>
-                            {ReleatedPost.map((item) => {
-                                return (
-                                    <>
-
-                                        <div className="col-3 " >
-                                            <Badge >
-                                                <Link to={`${item._id}`} >
-                                                    <Card className="margin-top"
-                                                        style={{ borderRadius: 10, height: 460 }}
-                                                        hoverable
-                                                        cover={<img alt="example" src={item.image[0]} />}>
-                                                        <Text className="title-text" style={ellipsis ? { width: 250 } : undefined}
-                                                            ellipsis={ellipsis ? { tooltip: `${item.title}` } : false} >
-                                                            {item.title} </Text>
-                                                        <Text className="title-tomtat"
-                                                            style={ellipsis ? { width: 250 } : undefined}
-                                                            ellipsis={ellipsis ? { tooltip: `${item.summary}` } : false} >
-                                                            {item.summary}
-                                                        </Text>
-                                                        {
-                                                            item.status === "Dừng nhận donate" ? (<><p className="tamngung" >Tạm ngưng</p></>) : (<>
-                                                                <div className="progress">
-                                                                    <div className="progress_detail_top">
-                                                                        <p className="progress_detail_text">
-                                                                            {/* convertNumber */(item.currentAmount)} vnđ quyên góp
-                                                                        </p>
-                                                                        <p className="progress_detail_number">
-                                                                            {Math.floor((item.currentAmount / item.setAmount) * 100) === 100 ? (
-                                                                                <p>Hoàn thành</p>
-                                                                            ) : (
-                                                                                <>
-                                                                                    <p className="progress_detail_number">{((item.currentAmount / item.setAmount) * 100).toFixed(3)}%</p>
-                                                                                </>
-                                                                            )}
-                                                                        </p>
-                                                                    </div>
-                                                                    <Progress percent={Math.floor((item.currentAmount / item.setAmount) * 100)} showInfo={Math.floor((item.currentAmount / item.setAmount) * 100) === 100 ? (true) : (false)} status={Math.floor((item.currentAmount / item.setAmount) * 100) === 100 ? ("success") : ("normal")} />
-                                                                    <div className="progress_detail_bot">
-                                                                        <p className="progress_detail_text">
-                                                                            <UsergroupAddOutlined /> {item.numberOfDonations} lượt quyên góp
-                                                                        </p>
-                                                                        <p className="progress_detail_number">{Number(dayEnd(item.endDay)) === 0 || Number(dayEnd(item.endDay)) < 0 ? (<>Đã hết hạn</>) : (<> {dayEnd(item.endDay)} ngày còn lại</>)} </p>
-                                                                    </div>
-                                                                </div>
-                                                            </>)
-                                                        }
-                                                    </Card>
-
-                                                </Link>
-                                            </Badge>
-                                        </div>
-
-                                    </>
-                                )
-
-                            })}
-
-                        </>) : (<><Spin size="large" /></>)}
-
-                    </div>
+                    
                 </div>
             </section>
             <Modal title="Cám ơn" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>

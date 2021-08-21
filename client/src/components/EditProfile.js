@@ -1,8 +1,8 @@
 import React, { createRef, useState } from 'react';
 import { Modal, Form, Input, Button, message } from 'antd';
-import { LockOutlined } from '@ant-design/icons';
+import { LockOutlined, KeyOutlined } from '@ant-design/icons';
 import '../style/Profile.scss';
-import donateEvensts from '../Api/donateEvensts';
+import UserApi from '../Api/UserApi';
 const Profile = () => {
     const [Error, setError] = useState("");
     /* const normFile = (e) => {
@@ -16,7 +16,7 @@ const Profile = () => {
     }; */
     const onFinish = (values) => {
         console.log('Success:', values);
-        donateEvensts.putUpdateProfile(values)
+        UserApi.putUpdateProfile(values)
         .then((res) => {
             if (res.data.status === "success") {
                 message.success("Cập nhật thông tin thành công !")
@@ -54,7 +54,7 @@ const Profile = () => {
         console.log('Failed:', errorInfo);
     };
    const onChangePass =( values)=>{
-        donateEvensts.putChangePasss(values).then((res)=>{
+    UserApi.putChangePasss(values).then((res)=>{
             console.log(res);
             if (res.data.status === "success") {
                 message.success("Thay đổi mật khẩu thành công !")
@@ -74,50 +74,38 @@ const Profile = () => {
     return (
         <>
             <div className="row">
-                <div className="col-4">
-
-
-                </div>
-                <div className="col-8">
+                <div className="col">
                     <div className="profile">
-
-
                         <Form
                             name="basic"
-                            labelCol={{ span: 8 }}
-                            wrapperCol={{ span: 16 }}
+                            className="profile_form"
+                           /*  labelCol={{ span: 8 }}
+                            wrapperCol={{ span: 16 }} */
                             initialValues={{ username: `${user.username}`, fullName: `${user.fullName}`, email: `${user.email}`, id: `${user._id}` }}
                             onFinish={onFinish}
-                            onFinishFailed={onFinishFailed}
-                        >
+                            onFinishFailed={onFinishFailed} >
                             <Form.Item
                                 name="id"
-                                hidden
-                            >
+                                hidden>
                                 <Input readOnly autoComplete={"off"} />
                             </Form.Item>
-                            <p>Tên tài khoản:</p>
                             <Form.Item
-                                name="username"
-                            >
+                            label="Tên tài khoản:"
+                                name="username">
                                 <Input readOnly autoComplete={"off"} />
                             </Form.Item>
-                            <p>Họ và tên:</p>
                             <Form.Item
-                                name="fullName"
-                            >
-                                <Input autoComplete={"off"} />
-                            </Form.Item>
-                            <p>Gmail:</p>
-                            <Form.Item
-                                name="email"
-                            >
+                            label="Họ và tên:"
+                                name="fullName">
                                 <Input autoComplete={"off"} />
                             </Form.Item>
                             <Form.Item
-
-                            >
-                                <Button onClick={showModal}>Đổi mật khẩu</Button>
+                            label="Email"
+                                name="email">
+                                <Input autoComplete={"off"} />
+                            </Form.Item>
+                            <Form.Item >
+                                <Button onClick={showModal}> <KeyOutlined />Đổi mật khẩu</Button>
                             </Form.Item>
                             <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
                                 <Button type="primary" htmlType="submit">

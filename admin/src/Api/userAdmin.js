@@ -28,7 +28,15 @@ const userAdmin = {
     postAddHappiness: (id, values) => {
         const url = `/admin/addHappiness/${id}`;
         return AxiosClient.post(url, values);
-    }
+    },
+    putChangePass: (values)=>{
+        const url  ="/admin/changePassword";
+        return AxiosClient.put(url, values);
+    },
+    postAddPost: (values) => {
+        const url = `admin/addPost`;
+        return AxiosClient.post(url, values);
+    },
 
 }
 export default userAdmin;

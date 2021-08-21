@@ -5,7 +5,8 @@ const AuthController = require('../controllers/authController');
 const UserAdmin = require('../models/userAdmin');
 const Donator = require('../models/Donator');
 const bcrypt = require('bcryptjs');
-
+const nodemailer = require("nodemailer");
+const { getMaxListeners } = require('../models/donateEvent');
 
 exports.postAddpost = catchAsync(async (req, res, next) => {
     const admin = await AuthController.adminIsLoggedIn(req.cookies.jwtAdmin);
@@ -15,8 +16,8 @@ exports.postAddpost = catchAsync(async (req, res, next) => {
             error: 'Bạn không có quyền truy cập vào dữ liệu này!'
         })
     }
-    const dataPost = req.body.data;
-
+    const dataPost = req.body;
+console.log(dataPost);
     const post = await DonateEvent.create({
         title: dataPost.title,
         image: dataPost.image,
@@ -170,7 +171,8 @@ exports.postEditUserAdmin = catchAsync(async (req, res, next) => {
     const data = req.body;
     const error = [];
     const email = await UserAdmin.findOne({email: data.email});
-    if(email){
+    const currentEmail = await UserAdmin.findById(id);
+    if(email === currentEmail){
         error.push("Email đã tồn tại.");
     }
     if(error.length != 0){

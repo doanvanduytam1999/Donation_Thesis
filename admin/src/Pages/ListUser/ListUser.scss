@@ -1,9 +1,10 @@
-.wapper_table_post{
+.wapper_table_user{
     position: relative;
     left: 50%;
+    top:30px;
     transform: translateX(-50%);
     width: 90%;
-    margin-top: 90px;
+    //margin-top: 90px;
     border-radius: 10px;
     min-height: 500px;
     -webkit-box-shadow: 0px 0px 10px -5px rgba(71, 71, 71, 1);
@@ -12,7 +13,7 @@
     .title_table{
         font-size: 25px;
         text-align: center;
-        margin: 50px 0 50px 0;
+        padding-top: 30px;
     }
 }
 .ant-spin{

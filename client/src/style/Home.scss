@@ -98,6 +98,12 @@ $fz-text: 14px;
                 }
                 .btn-explore {
                     margin-right: 10px;
+                    font-weight: bold;
+                    .btn-text {
+                        font-family: Nunito;
+                        line-height: 50px;
+                        color: #fff;
+                    }
                 }
             }
         }
@@ -110,7 +116,7 @@ $fz-text: 14px;
                 font-size: 20px;
                 margin-bottom: 20px;
             }
-            .text_wapper-about {
+            .mb-1x {
                 margin-top: 20px;
                 margin-bottom: 40px;
             }
@@ -259,6 +265,29 @@ $fz-text: 14px;
                 .col-4 {
                     .ant-badge {
                         .ant-card{
+                            overflow: hidden;
+                            .ant-card-cover{
+                                overflow: hidden;
+                              
+                                img{
+                                   
+                                    transition: 0.5s;
+                                   
+                                    object-fit: cover;
+                                }
+                            }
+                            &:hover{
+                                .ant-card-cover{
+                                    overflow: hidden;
+                                  
+                                    img{
+                                        transform: scale(1.05);
+                                        transition: 0.5s;
+                                       
+                                        object-fit: cover;
+                                    }
+                                }
+                            }
                             .ant-card-body{
                                 .title-text{
                                     font-family: NunitoBold;

@@ -6,7 +6,7 @@ import userAdmin from "../../Api/userAdmin";
 //import { responsiveArray } from 'antd/lib/_util/responsiveObserve';
 import "./EditAccount.scss";
 import "../../styles/bootstrap-grid.min.css"
-import { useParams } from 'react-router';
+import { useParams,useHistory } from 'react-router';
 const formItemLayout = {
     labelCol: {
         xs: { span: 24 },
@@ -31,8 +31,10 @@ const tailFormItemLayout = {
 };
 const { Option } = Select;
 const EditAccount = (props) => {
+    const history = useHistory();
     const [Accout, setAccout] = useState([]);
     const [form] = Form.useForm();
+    const [Error, setError] = useState('');
     let { _id } = useParams();
     useEffect(() => {
         const fetchListUser = async () => {
@@ -56,10 +58,16 @@ const EditAccount = (props) => {
     const onEdit = (values) => {
         console.log('Received values of form: ', values);
         userAdmin.putEditUserAdmin(_id,values).then((res)=>{
-         if (res.data.status == "success") {
+         if (res.data.status === "success") {
                 message.success("Chỉnh sửa thành công !")
-                
+                setTimeout(()=>{
+                    history.push("/admin/danh-sach-tai-khoan-admin")
+                },1000)
             }
+        })
+        .catch((err)=>{
+            //console.log(err.response.data.error);
+            setError(err.response.data.error)
         })
     };
     
@@ -81,6 +89,7 @@ const EditAccount = (props) => {
                 }}
                 scrollToFirstError
             >
+                <p style={{color:"red"}}> {Error}</p>
                 <Form.Item
                     name="username"
                     label="Tài khoản"

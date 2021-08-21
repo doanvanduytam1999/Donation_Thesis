@@ -3,13 +3,13 @@ import 'firebase/auth'
 import 'firebase/app'
 
 var firebaseConfig = {
-  apiKey: "AIzaSyBuvMsY6qXN0XOR2pjo9g0YJ9JC5yfh9rE",
-  authDomain: "fashionshop-11d42.firebaseapp.com",
-  projectId: "fashionshop-11d42",
-  storageBucket: "fashionshop-11d42.appspot.com",
-  messagingSenderId: "502681458242",
-  appId: "1:502681458242:web:54b097c95d91cb6eab7fdb",
-  measurementId: "G-FWTMMVNBDX"
+  apiKey: "AIzaSyDFlce1nx_WeDvvyQFoQY_VnLVXQMOdk7o",
+  authDomain: "donate-d9fdf.firebaseapp.com",
+  projectId: "donate-d9fdf",
+  storageBucket: "donate-d9fdf.appspot.com",
+  messagingSenderId: "347035314172",
+  appId: "1:347035314172:web:4d444bcf026fcaa1087479",
+  measurementId: "G-Q7YTPWCG86"
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);

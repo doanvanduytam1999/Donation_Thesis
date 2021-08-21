@@ -23,3 +23,31 @@
     left: 100%;
     transform: translateX(-100%);
 }
+.list_donate_hot{
+    .container{
+        .list_card {
+            .row{
+                .card{
+                    .ant-card {
+                       padding-left: 10px;
+                        &:hover{
+                            .ant-card-cover{
+                                img{
+                                    transform: scale(1.1);
+                                    transition: 1s;
+                                }
+                            }
+                        }
+                        .ant-card-cover{
+                            img{
+                               
+                                transition: 0.5s;
+                            }
+                        }
+                        
+                    }
+                }
+            }
+        }
+    }
+}

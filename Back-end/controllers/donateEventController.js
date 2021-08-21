@@ -12,6 +12,7 @@ const { populate } = require('../models/donateEvent');
 const https = require('https');
 const axios = require('axios')
 const crypto = require('crypto');
+const UserAdmin = require('../models/userAdmin');
 
 
 exports.getDonateEvents = catchAsync(async (req, res, next) => {
@@ -42,7 +43,7 @@ exports.getCategoryDonateEvents = catchAsync(async (req, res, next) => {
 
 exports.postDonate = catchAsync(async (req, res, next) => {
     const data = req.body.data;
-   
+
     const user = await AuthController.userIsLoggedIn(req.cookies.jwt);
     let donateEvent = await DonateEvent.findById(data.donateEvent);
     let currentAmount = donateEvent.currentAmount;
@@ -115,6 +116,15 @@ exports.postRegister = catchAsync(async (req, res, next) => {
     if (email) {
         error.push(" Email đã tồn tại.");
     }
+    if(req.body.password.length < 8){
+        error.push(" Mật khẩu phải có ít nhất 8 ký tự.");
+    }
+    if(typeof req.body.password === 'undefined'){
+        error.push(" Vui lòng cung cấp mật khẩu.");
+    }
+    if(typeof req.body.passwordConfirm === 'undefined'){
+        error.push(" Vui lòng cung cấp mật khẩu xác nhận.");
+    }
     if (error.length != 0) {
         return res.status(400).json({
             status: 'error',
@@ -154,24 +164,24 @@ exports.getRelatedPost = catchAsync(async (req, res, next) => {
     let result = [];
     const donateEvent = await DonateEvent.findById(id);
     //console.log(donateEvent);
-    const relatedPost = await CategoryDonateEvent.findById(donateEvent.categoryPost).populate({path: 'donateEnvents', match: {status: "Chưa đủ"}});
+    const relatedPost = await CategoryDonateEvent.findById(donateEvent.categoryPost).populate({ path: 'donateEnvents', match: { status: "Chưa đủ" } });
     //console.log(relatedPost.donateEnvents);
-    if(relatedPost.donateEnvents.length > 4){
-        let random = Math.floor(Math.random()* (relatedPost.donateEnvents.length - 1));
+    if (relatedPost.donateEnvents.length > 4) {
+        let random = Math.floor(Math.random() * (relatedPost.donateEnvents.length - 1));
         for (let index = random; index < random + 4; index++) {
             result.push(relatedPost.donateEnvents[index]);
-            
+
         }
-    }else{
-        const listDonateEvent = await DonateEvent.find({status: "Chưa đủ"});
-        if(listDonateEvent.length >= 4){
+    } else {
+        const listDonateEvent = await DonateEvent.find({ status: "Chưa đủ" });
+        if (listDonateEvent.length >= 4) {
             for (let index = 0; index < 4; index++) {
                 result.push(listDonateEvent[index]);
             }
-        }else{
+        } else {
             result = relatedPost.donateEnvents;
         }
-        
+
     }
     res.status(200).json({
         status: 'success',
@@ -199,19 +209,20 @@ exports.getAllDonater = catchAsync(async (req, res, next) => {
 
 exports.postUpdateProfileUser = catchAsync(async (req, res, next) => {
     const data = req.body;
-    console.log(data);
+    const userLogin = await AuthController.userIsLoggedIn(req.cookies.jwt);
     const error = [];
     const email = await UserCustomer.findOne({ email: data.email });
-    if (email) {
+    const currentEmail = await UserCustomer.findById(userLogin.id);
+
+    if (email === currentEmail) {
         error.push("Email đã tồn tại.");
     }
-  /*   if (error.length != 0) {
-        return res.status(400).json({
-            status: 'error',
-            error: error
-        })
-    } */
-    const userLogin = await AuthController.userIsLoggedIn(req.cookies.jwt);
+      if (error.length != 0) {
+          return res.status(400).json({
+              status: 'error',
+              error: error
+          })
+      }
     const user = await UserCustomer.findByIdAndUpdate(userLogin.id, {
         fullName: data.fullName,
         email: data.email,
@@ -261,85 +272,67 @@ exports.putChangePassword = catchAsync(async (req, res, next) => {
 
 
 
-/////Pay Momo
-
-exports.postPayMomo = catchAsync(async(req,res, next)=>{
-    console.log(req.body);
-    //console.log(req.body);
-    let dataReq =req.body
-    //let endpoint = "https://test-payment.momo.vn/gw_payment/transactionProcessor";
-    //let hostname = "https://test-payment.momo.vn";
-    //let path = "/gw_payment/transactionProcessor";
-    let partnerCode = "MOMOCJMP20200704";
-    let accessKey = "BQWokz0y0lEnkaej";
-    let serectkey = "0QzyjrezSx6dIJhEMWz2LlK4nShCGHqb";
+//Payment Momo
+exports.postPayMomo = catchAsync(async (req, res, next) => {
+    let dataReq = req.body
+    let partnerCode = "MOMOLNRO20210818";
+    let accessKey = "zrUc3Qph1aoOpIau";
+    let serectkey = "nhBVWNhzdeU5KpXLUlLtdMnbNplHAUkR";
     let orderInfo = dataReq.orderInfo
     let returnUrl = `http://localhost:3000/thong-tin-chi-tiet/${dataReq.donateEvent} `
-    let notifyurl = "http://localhost:4000/api/payMomoSusess"
-    let amount = "1000"//dataReq.amountToDonate
-    let orderId = dataReq.orderId
+    let notifyUrl = "https://donatethesis.herokuapp.com/api/payMomoSusess"
+    let amount = dataReq.amountToDonate.toString();
+    let orderId = dataReq.orderId;
     let requestId = dataReq.requestId
     let requestType = "captureMoMoWallet";
-    let extraData = "merchantName=[Donate];merchantId=[Donate123]";
-    var rawSignature = "partnerCode="+partnerCode+"&accessKey="+accessKey+"&requestId="+requestId+"&amount="+amount+"&orderId="+orderId+"&orderInfo="+orderInfo+"&returnUrl="+returnUrl+"&notifyUrl="+notifyurl+"&extraData="+extraData
-    var signature = crypto.createHmac('sha256', serectkey)
-                   .update(rawSignature)
-                   .digest('hex');
-console.log("--------------------SIGNATURE----------------")
-console.log(signature)
-    /* var body = JSON.stringify({
-        partnerCode : partnerCode,
-        accessKey : accessKey,
-        requestId : requestId,
-        amount : amount,
-        orderId : orderId,
-        orderInfo : orderInfo,
-        returnUrl : returnUrl,
-        notifyUrl : notifyurl,
-        extraData : extraData,
-        requestType : requestType,
-        signature : signature,
-    })
-    var options = {
-        hostname: 'test-payment.momo.vn',
-        port: 443,
-        path: '/gw_payment/transactionProcessor',
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Content-Length': Buffer.byteLength(body)
-       }
-      };
-    var req = https.request(options, (res) => {
-        console.log(`Status: ${res.statusCode}`);
-        console.log(`Headers: ${JSON.stringify(res.headers)}`);
-        res.setEncoding('utf8');
-        res.on('data', (body) => {
-          console.log('Body');
-          console.log(body);
-          console.log('payURL');
-          console.log(JSON.parse(body).payUrl);
-        });
-        res.on('end', () => {
-          console.log('No more data in response.');
-        });
-      });
-      
-      req.on('error', (e) => {
-        console.log(`problem with request: ${e.message}`);
-      });
-      
-      
-      req.write(body);
-      req.end(); */
+    let extra = {};
 
-    let momo={};
+    console.log(dataReq);
+    if (dataReq.checked) { //incognito
+        extra = {
+            checked: true,
+            id: dataReq.donateEvent,
+        };
+        if (typeof dataReq.userId !== 'undefined') {
+            extra['userId'] = dataReq.userId;
+        }
+        if (typeof dataReq.message !== 'undefined') {
+            extra['message'] = dataReq.message;
+        }
+    } else { //not incognito
+        extra = {
+            checked: false,
+            id: dataReq.donateEvent,
+            fullName: dataReq.fullName
+        };
+        if (typeof dataReq.userId !== 'undefined') {
+            extra['userId'] = dataReq.userId;
+        }
+        if (typeof dataReq.message !== 'undefined') {
+            extra['message'] = dataReq.message;
+        }
+        if (typeof dataReq.phone !== 'undefined') {
+            extra['phone'] = dataReq.message;
+        }
+
+    }
+
+
+    let extraData = JSON.stringify(extra);
+    var rawSignature = "partnerCode=" + partnerCode + "&accessKey=" + accessKey + "&requestId=" + requestId + "&amount=" + amount + "&orderId=" + orderId + "&orderInfo=" + orderInfo + "&returnUrl=" + returnUrl + "&notifyUrl=" + notifyUrl + "&extraData=" + extraData
+    var signature = crypto.createHmac('sha256', serectkey)
+        .update(rawSignature)
+        .digest('hex');
+    console.log("--------------------SIGNATURE----------------")
+    console.log(signature)
+
+    let momo = {};
     const url = "https://test-payment.momo.vn/gw_payment/transactionProcessor"
     const data = {
         "accessKey": accessKey,
         "partnerCode": partnerCode,
         "requestType": requestType,
-        "notifyUrl": "http://localhost:4000/api/payMomoSusess",
+        "notifyUrl": "https://donatethesis.herokuapp.com/api/payMomoSusess",
         "returnUrl": returnUrl,
         "orderId": orderId,
         "amount": amount,
@@ -348,40 +341,100 @@ console.log(signature)
         "extraData": extraData,
         "signature": signature,
     }
-    const header =  {
+    const header = {
         'Content-Type': 'application/json',
-        //'Content-Length': Buffer.byteLength(data)
     }
 
-    //const option = 
-
-    axios.post(url,data, {
-        headers:header
-    }).then((respont)=>{
+    axios.post(url, data, {
+        headers: header
+    }).then((respont) => {
         momo = respont.data
         console.log("tam123", momo);
-        if(momo.errorCode ==0){
+        if (momo.errorCode == 0) {
             res.status(200).json({
                 status: 'success',
                 MomoPay: momo
             })
         }
-        else if (momo.errorCode ==6){
-            console.log("sdsdd");
+        else {
             res.status(200).json({
-                status: 'success',
+                status: 'fail',
                 MomoPay: momo
             })
-        }else{
-            console.log("truong hop khac");
         }
-        
+
     })
 
-  
+
 })
-exports.postPayMomoSusess = catchAsync(async(req, res, next)=>{
-    console.log("abc");
-    let data= req.body; 
-    console.log("thanh toan",data);
+exports.postPayMomoSusess = catchAsync(async (req, res, next) => {
+    console.log(req.body);
+    const data = req.body;
+    const extraData = JSON.parse(data.extraData);
+    let user = '';
+
+    //get amount current and amount donate
+    let donateEvent = await DonateEvent.findById(extraData.id);
+    let currentAmount = donateEvent.currentAmount;
+    let numberOfDonations = donateEvent.numberOfDonations;
+    let amountToDonate = data.amount.toString();
+
+    //get message
+    let content = "";
+    if (extraData.message) {
+        content = extraData.message;
+    }
+    //get phone
+    let phone = '';
+    if(extraData.phone){
+        phone = extraData.phone;
+    }
+    //update amount donate current
+    numberOfDonations = numberOfDonations + 1;
+    currentAmount = (Number(currentAmount) + Number(amountToDonate)).toString();
+    const updateTienDaDonate = await DonateEvent.findByIdAndUpdate(extraData.id, {
+        currentAmount: currentAmount,
+        numberOfDonations: numberOfDonations
+    }, {
+        new: true,
+        runValidators: true
+    });
+
+    if (data.message === 'Success') {
+        if (extraData.userId) {
+            if (extraData.checked) {
+                const donateAnDanh = await DonateAction.create({
+                    amountToDonate: amountToDonate,
+                    message: content,
+                    donateEvent: extraData.id,
+                    donator: extraData.userId
+                })
+            } else {
+                const donateAction = await DonateAction.create({
+                    fullName: extraData.fullName,
+                    phone: phone,
+                    message: content,
+                    amountToDonate: amountToDonate,
+                    donateEvent: extraData.id,
+                    donator: extraData.userId
+                })
+            }
+        } else {
+            if (extraData.checked) {
+                const donateAnDanh2 = await DonateAction.create({
+                    amountToDonate: amountToDonate,
+                    message: content,
+                    donateEvent: extraData.id
+                })
+            } else {
+                const donateAction2 = await DonateAction.create({
+                    fullName: extraData.fullName,
+                    phone: phone,
+                    message: content,
+                    amountToDonate: amountToDonate,
+                    donateEvent: extraData.id
+                })
+            }
+        } 
+    }
 })

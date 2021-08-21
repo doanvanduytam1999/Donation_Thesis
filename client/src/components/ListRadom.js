@@ -1,10 +1,8 @@
 
-import React, { useState, /* useEffect */ } from 'react';
-import { Card, Progress, Typography, Badge, Input } from 'antd';
-import { UsergroupAddOutlined } from '@ant-design/icons';
-import { Link } from "react-router-dom";
-import "../style/Home.scss";
+import { Typography } from 'antd';
+import React, { useState } from 'react';
 import "../style/bootstrap-grid.min.css";
+import "../style/Home.scss";
 const ListRadom = (props) => {
     const [list, /* setlist */] = useState([props.listDonate]);
     const { Text } = Typography;

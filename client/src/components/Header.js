@@ -1,14 +1,14 @@
-import React from 'react';
-import { Menu, Row, Col, /* Button, */ Dropdown, Badge } from 'antd';
 //import { AppstoreOutlined, SettingOutlined } from '@ant-design/icons';
-import { DownOutlined, BellOutlined } from '@ant-design/icons';
-import "../style/Header.scss";
-import { Link,Redirect } from 'react-router-dom';
-import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../redux/actions/auth.js";
-import ModalLogin from './ModalLogin';
+import { DownOutlined } from '@ant-design/icons';
+import { Col, /* Button, */ Dropdown, Menu, Row } from 'antd';
 import firebase from 'firebase';
-import donateEvensts from '../Api/donateEvensts';
+import React from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { Link, Redirect } from 'react-router-dom';
+import UserApi from '../Api/UserApi';
+import { logout } from "../redux/actions/auth.js";
+import "../style/Header.scss";
+import ModalLogin from './ModalLogin';
 /* const handleClick = (e) => {
     console.log(e.target);
 } */
@@ -24,12 +24,14 @@ const Header = () => {
     const dispatch = useDispatch();
     const data = useSelector(state => state.login.user);
     const logOut = () => {
-        donateEvensts.getLogout().then((res)=>{
+      
+        UserApi.getLogout().then((res)=>{
+         
             if(res.data.status==="success"){
-                <Redirect to="/" />
-                dispatch(logout());
                 firebase.auth().signOut();
+                dispatch(logout());
                 localStorage.removeItem('user');
+               
             }
         })
     };
@@ -46,19 +48,7 @@ const Header = () => {
             </Menu.Item>
         </Menu>
     );
-    const notification = (
-        <Menu>
-            <Menu.Item>
-                <Link to="">Trang chủ</Link>
-            </Menu.Item>
-            <Menu.Item >
-                <Link to="/thong-tin-tai-khoan">Thông tin tài khoản</Link>
-            </Menu.Item>
-            <Menu.Item danger >
-                <Link onClick={logOut}>Đăng xuất</Link>
-            </Menu.Item>
-        </Menu>
-    );
+   
     <Redirect to="/" />
     return (
         <>
@@ -66,16 +56,16 @@ const Header = () => {
                 <Col span={24} >
                     <Menu style={style} /* onClick={handleClick} */ selectedKeys={"hehe"} mode="horizontal">
                         <Menu.Item className="logo-item" key="mail">
-                            <Link to=""><img alt="logo" style={{ marginLeft: '30px' }} width="40px" src="../images/logo.png" ></img></Link>
+                            <Link to=""><img alt="logo" style={{ marginLeft: '30px', fontWeight:"bold" }} width="40px" src="../images/logo.png" ></img></Link>
                         </Menu.Item>
                         <Menu.Item key="app">
-                            <a href="#register">Gây quỹ</a>
+                            <a style={{  fontWeight:"bolder" }}  href="#register">Gây quỹ</a>
                         </Menu.Item>
-                        <Menu.Item key="about">
-                            Về chúng tôi
+                        <Menu.Item style={{  fontWeight:"bolder" }}  key="about">
+                          Về chúng tôi
                         </Menu.Item>
                         <Menu.Item key="contact">
-                            <Link to="/lien-he">Liên hệ</Link>
+                            <Link style={{  fontWeight:"bolder" }}  to="/lien-he">Liên hệ</Link>
                         </Menu.Item>
                         {isLoggedIn === false ? (
                             <>
@@ -85,19 +75,10 @@ const Header = () => {
                             </>
                         ) : (
                             <>
-                                <Menu.Item className="right-lg" key="notification"  >
-
-                                    <Dropdown overlay={notification} trigger={['click']}>
-                                        <a href="#/" className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-                                            <Badge size="default" count={5}>
-                                                <BellOutlined style={{ fontSize: "30px" }} />
-                                            </Badge>
-                                        </a>
-                                    </Dropdown>
-                                </Menu.Item>
+                             
                                 <Dropdown className='right' overlay={menu}>
                                     <a href="#/" className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-                                        {data.username} <DownOutlined />
+                                        {data.fullName } <DownOutlined />
                                     </a>
                                 </Dropdown>
                             </>

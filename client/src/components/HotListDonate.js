@@ -1,11 +1,11 @@
-import "../style/Home.scss";
-import "../style/bootstrap-grid.min.css";
-import React, { useState, useEffect } from 'react';
-import { Card, Progress, Typography, Modal, Form, Input, Button, Steps, message, Checkbox, Select, Result, InputNumber } from 'antd';
 import { UsergroupAddOutlined } from '@ant-design/icons';
-import { Link } from "react-router-dom";
-import PayPal from "../components/Paypal"
+import { Button, Card, Checkbox, Form, Input, InputNumber, message, Modal, Progress, Result, Select, Steps, Typography } from 'antd';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import PayPal from "../components/Paypal";
+import "../style/bootstrap-grid.min.css";
+import "../style/Home.scss";
 //import ListDonate from "./ListDonate";
 //import donateEvensts from "../Api/donateEvensts";
 //import { logout } from "../redux/actions/auth.js";
@@ -34,7 +34,7 @@ const HotListDonate = (props) => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [ellipsis, /* setEllipsis */] = React.useState(true);
     const [current, setCurrent] = React.useState(0);
-    const [licked, setLicked] = React.useState(false);
+    const [licked, setLicked] = useState(false);
     const [checked, setChecked] = React.useState(false);
     const [value, setValue] = useState(1);
     const { isLoggedIn } = useSelector(state => state.login);
@@ -115,11 +115,15 @@ const HotListDonate = (props) => {
             title: 'Nhập thông tin',
             content: () => {
                 const onFinish = (values) => {
+                    const user = JSON.parse(localStorage.getItem("user"))
                     console.log('Success:', values);
                     checkBtn();
                     values['checked'] = checked;
                     values['donateEvent'] = id;
                     values['orderInfo']= donator[0].title;
+                    if(user){
+                        values['userId']=user._id;
+                    }
                     const data = JSON.stringify(values)
                     localStorage.setItem("data", data);
                 };
@@ -244,15 +248,11 @@ const HotListDonate = (props) => {
 
                                             {...layout}
                                             name="basic"
-                                            initialValues={{ prefix: "84", amountToDonate: "10000", fullName: `${data.username}`, phone: "0849119919" }}
+                                            initialValues={{ prefix: "84", amountToDonate: "10000", fullName: `${data.fullName}`, phone: "0849119919" }}
                                             onFinish={onFinish}
                                             onFinishFailed={onFinishFailed}
                                         >
-                                            {/*  <Radio.Group onChange={onChange} buttonStyle="solid" defaultValue="a">
-<Radio.Button value="a">Cá nhân</Radio.Button>
-<Radio.Button value="b">Tổ chức</Radio.Button>
-
-</Radio.Group> */}
+                                           
                                             <Form.Item label='Ủng hộ ẩn danh' onChange={handlechecked}>
                                                 <Checkbox />
 

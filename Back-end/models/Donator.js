@@ -3,10 +3,13 @@ const validator = require('validator');
 const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
-  username: {
-    unique: true,
+  googleID: {
     type: String,
-    required: [true, 'Vui lòng cung cấp username']
+    default: ""
+  },
+  username: {
+    default: "",
+    type: String,
   },
   fullName: {
       type: String,
@@ -15,19 +18,16 @@ const userSchema = new mongoose.Schema({
   email: {
     required: [true, 'Vui lòng cung cấp email'],
     type: String,
-    unique: true,
     lowercase: true,
     validate: [validator.isEmail, 'Vui lòng cung cấp email đúng format']
   },
   password: {
+    default: '',
     type: String,
-    required: [true, 'Vui lòng cung cấp password'],
-    minlength: 8,
     select: false
   },
   passwordConfirm: {
     type: String,
-    required: [true, 'Vui lòng cung cấp xác nhận mật khẩu'],
     validate: {
       // This only works on CREATE and SAVE!!!
       validator: function (el) {

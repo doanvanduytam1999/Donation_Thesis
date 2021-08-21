@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input, Button, Tabs,Spin } from 'antd';
+import { Form, Input, Button, Tabs, Spin } from 'antd';
 import { CheckOutlined } from '@ant-design/icons';
 import donateEvensts from '../Api/donateEvensts';
 //import { Link } from "react-router-dom";
@@ -10,7 +10,7 @@ import HotListDonate from "../components/HotListDonate"
 import ListDonate from '../components/ListDonate';
 import ScrollToTop from "react-scroll-to-top";
 import { useSelector } from 'react-redux';
-import { Redirect,Link } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 
 //import { useCookies } from 'react-cookie';
 
@@ -18,14 +18,15 @@ const { TabPane } = Tabs;
 const Home = () => {
     const [listDonates, setListdonates] = useState([]);
     const [listDonate, setListdonate] = useState([]);
-    const [listCategory, setListCategory] = useState([]); 
+    const [listCategory, setListCategory] = useState([]);
     const { isLoggedIn } = useSelector(state => state.login);
     const [loadingSum, setLoadingSum] = useState(false);
     //const [Count, /* setCount */] = useState(0);
     //const  data  = useSelector(state => state.auth.user);
     //const order= JSON.parse(localStorage.getItem("orderStatus"))
-        //console.log(data);
-        //window.scrollTo({ behavior: 'smooth' });
+    //console.log(data);
+    //window.scrollTo({ behavior: 'smooth' });
+
     useEffect(() => {
         window.scrollTo(0, 0);
         const fetchdonatesData = async () => {
@@ -39,7 +40,7 @@ const Home = () => {
                 console.log("Failed to fetch brand data at: ", error);
             }
         };
-     
+
         const fetchCategory = async () => {
             try {
                 await donateEvensts.getCategory().then((res) => {
@@ -95,23 +96,23 @@ const Home = () => {
         backgroundImage: `url("../images/donate/bg-rs.jpg")`,
 
     }
-    const sumConinDonate = ()=>{
+    const sumConinDonate = () => {
         let sum = 0
         for (let i = 0; i < listDonate.length; i++) {
-             sum =sum+  Number(listDonate[i].currentAmount);
-            
+            sum = sum + Number(listDonate[i].currentAmount);
+
         }
-        
+
         return sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
     }
     //console.log(listDonate);
-    if(isLoggedIn){
+    if (isLoggedIn) {
         <Redirect to="/" />
-    
-      }
+
+    }
     return (
         <>
-          <ScrollToTop smooth={true} />
+            <ScrollToTop smooth={true} />
             <div className="homepage container-sm">
                 <div className="homepage_content col-10 offset-1 ">
                     <div>
@@ -126,7 +127,7 @@ const Home = () => {
                         <div className="button_wapper ">
                             <a type="button" className="ant-btn ant-btn-primary btn-explore" href="/explore"><span className="btn-text">Tìm hiểu về tổ chức từ thiện</span></a>
                         </div>
-                       {/*  <div className="button_wapper ">
+                        {/*  <div className="button_wapper ">
                             <a type="button" className="ant-btn ant-btn-default btn-sign-in" href="/explore"><span className="btn-text">Explore Charities</span></a>
                         </div> */}
 
@@ -134,13 +135,13 @@ const Home = () => {
                     <div className="text_wapper">
                         <p className="text-bold ">Chúng tôi đã quyên góp được</p>
                         <h2 className="text-bold"><span>
-                            { sumConinDonate()} VNĐ 
+                            {sumConinDonate()} VNĐ
 
 
-                            </span></h2>
+                        </span></h2>
                         <div className="icon-micro-heart"><img width="50px" alt="Heart" src="../images/hands.svg" /></div>
                         <div className="mb-1x"><span className="text-medium"><div className="html-sanitizer">Hãy giúp chúng thôi một tay</div></span></div>
-                        <div className="text_wapper-about"><a href="/about-us"><span className="text-bold text-uppercase">Tìm hiểu về chúng tôi</span></a></div>
+                       
                     </div>
                 </div>
             </div>
@@ -149,9 +150,9 @@ const Home = () => {
                     <div className="research_text col-10 offset-1 ">
                         <h2 className="text-bold">Hãy chung tay quyên góp</h2>
                         <p>YÊU THƯƠNG LAN TỎA TỪ NHỮNG CHUYẾN HÀNG CHÌNH TỪ THIỆN</p>
-                        <div className="button_wapper ">
+                        {/* <div className="button_wapper ">
                             <a type="button" className="ant-btn ant-btn-primary btn-find-out-how" href="/explore"><span className="btn-text">Tìm hiểu cách tham gia</span></a>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
 
@@ -159,11 +160,11 @@ const Home = () => {
             <div className="homepage_list_donate list_donate_hot">
                 <div className="container">
                     <div className="list_donate_text  col-10 offset-1 ">
-                        <h2 style={{ textAlign: "center" }}  className="text-bold">Nổi bật </h2>
+                        <h2 style={{ textAlign: "center" }} className="text-bold">Nổi bật </h2>
                     </div>
                     <div className="list_card col-10 offset-1">
                         <div className="row">
-                            {loadingSum ? <HotListDonate listDonates={listDonates}/> : <Spin size="large" />}
+                            {loadingSum ? <HotListDonate listDonates={listDonates} /> : <Spin size="large" />}
                         </div>
                     </div>
                 </div>
@@ -175,7 +176,7 @@ const Home = () => {
                         <Tabs defaultActiveKey="1" size="large" centered onChange={handleClick} style={{ marginBottom: 32, }}>
                             <TabPane tab="Tất cả" key="1">
                             </TabPane>
-                           {/*  <TabPane tab="Mới nhất" key="2">
+                            {/*  <TabPane tab="Mới nhất" key="2">
                             </TabPane>
                             <TabPane tab="Sắp hết hạn" key="3">
                             </TabPane> */}
@@ -191,27 +192,15 @@ const Home = () => {
 
                         </Tabs>
                         <div className="row all-donate1" >
-                            
-                            {loadingSum ? <ListDonate listDonate={listDonate} /> : <Spin size="large" />}
-                                                 
-                        </div>
-                        <Link className="ant-btn ant-btn-primary bnt-load-more" to="/tat-ca-chuong-trinh" >Xem tất cả </Link> 
-                    </div>
-                </div>
-            </div>
-            <div className="homepage_app">
-                <div className="container">
-                    <div className="app_text col-10 offset-1 ">
-                        <h2 className="text-bold">Tải ứng dụng trên điện thoại</h2>
-                        <p>Tải ứng dụng miễn phí về điện thoại của bạn và bắt đầu ủng hộ cùng chúng tôi</p>
-                        <div className="img_dowload">
-                            <img src="../images/download-ios.png" alt="download-ios"></img>
-                            <img src="../images/download-adr.png" alt="download-adr"></img>
-                        </div>
-                    </div>
-                </div>
 
+                            {loadingSum ? <ListDonate listDonate={listDonate} /> : <Spin size="large" />}
+
+                        </div>
+                        <Link className="ant-btn ant-btn-primary bnt-load-more" to="/tat-ca-chuong-trinh" >Xem tất cả </Link>
+                    </div>
+                </div>
             </div>
+            
             <div style={bghomepageRegister} id="register" className="homepage_register">
                 <div className="container">
                     <div className="register_text col-10 offset-1 ">

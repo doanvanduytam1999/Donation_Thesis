@@ -440,7 +440,7 @@ router.get('/donateEvents', DonateEnvent.getDonateEvents);
  */
 router.get('/categoryDonateEvents', DonateEnvent.getCategoryDonateEvents);
 router.post('/payMomo', DonateEnvent.postPayMomo);
-router.get('/payMomoSusess', DonateEnvent.postPayMomoSusess);
+router.post('/payMomoSusess', DonateEnvent.postPayMomoSusess);
 
 /**
  * @swagger
@@ -841,5 +841,7 @@ router.put('/updateProfileUser', AuthController.checkUserLogin, DonateEnvent.pos
  *                                  type: string
  */
 router.put('/changePassword', AuthController.checkUserLogin, DonateEnvent.putChangePassword);
+
+router.post('/loginByGoogle', AuthController.loginByGoogle);
 
 module.exports = router;

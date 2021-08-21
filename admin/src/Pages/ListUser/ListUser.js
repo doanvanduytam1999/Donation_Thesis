@@ -135,8 +135,7 @@ const ListUser = () => {
   
   return (
     <>
-      
-      <div className="wapper_table row">
+      <div className="wapper_table_user row">
         <div className="col-10 offset-1">
           <h2 className="title_table">Danh sách tài khoản</h2>
           { loading ? <Table columns={columns} dataSource={ListUser} /> :  <Spin size="large" /> }
@@ -144,7 +143,6 @@ const ListUser = () => {
         </div>
 
       </div>
-
     </>
   );
 }

@@ -1,17 +1,26 @@
-.ant-menu{
-    background: #1b9e9e;
+.ant-menu {
+    //background: #1b9e9e;
     color: #fff;
-    .ant-menu-submenu{
-        background: #1b9e9e;
+    .ant-menu-submenu {
+        //background: #1b9e9e;
         color: #fff;
     }
 }
-.ant-menu-item-group-title{
-    background: #1b9e9e;
-    color: #ffffff !important; 
-    .anticon{
-        color: #fff;    
-
+.ant-menu-item-group {
+    .ant-menu-item-group-title {
+        background: #1b9e9e;
+        color: #ffffff !important;
+        .anticon {
+            color: #fff;
+        }
     }
-   
+}
+.navigation {
+    position: relative;
+
+    margin-top: 30px !important;
+    height:500px !important;
+    -webkit-box-shadow: 0px 0px 10px -5px rgba(71, 71, 71, 1) !important;
+    -moz-box-shadow: 0px 0px 10px -5px rgba(71, 71, 71, 1) !important;
+    box-shadow: 0px 0px 10px -5px rgba(71, 71, 71, 1) !important;
 }

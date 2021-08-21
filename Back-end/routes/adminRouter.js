@@ -812,4 +812,6 @@ router.put('/changeStatusPost/:id', AuthController.checkAdminLogin, AdminControl
  *                                  type: string
  */
 router.put('/changePassword', AuthController.checkAdminLogin, AdminController.putChangePassword)
+
+
 module.exports = router;

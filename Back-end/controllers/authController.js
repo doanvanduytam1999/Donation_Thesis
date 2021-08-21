@@ -163,8 +163,9 @@ const createSendToken = (user, statusCode, res) => {
 
   res.cookie('jwt', token, cookieOptions);
   // Remove password from output
+  
   user.password = undefined;
-
+  console.log("s",user);
   res.status(statusCode).json({
     status: 'success',
     token,
@@ -185,7 +186,7 @@ const createSendTokenAdmin = (userAdmin, statusCode, res) => {
   };
 
   //if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
-  
+
   // Remove password from output
   userAdmin.password = undefined;
   res.cookie('jwtAdmin', token, cookieOptions);
@@ -199,7 +200,7 @@ const createSendTokenAdmin = (userAdmin, statusCode, res) => {
       user: userAdmin
     }
   });
-  
+
 };
 
 //logout  customer
@@ -252,6 +253,39 @@ exports.loginCustomer = catchAsync(async (req, res, next) => {
 
   createSendToken(user, 200, res);
 });
+
+//Login by google
+exports.loginByGoogle = catchAsync(async (req, res, next) => {
+  const islogin = await this.userIsLoggedIn(req.cookies.jwt);
+  if (islogin !== 'No Login') {
+    return res.status(301).json({
+      status: "Is Login",
+      user: islogin
+    })
+  }
+  const idGoogle = req.body.id;
+  console.log("id:", idGoogle);
+  if(typeof req.body.id ===  'undefined'){
+    return res.status(301).json({
+      status: 'fail',
+      error: 'Bạn chưa login bằng Google.'
+    })
+  }
+  //2) check if user exist and passowrd is correct
+  const user = await User.findOne({ 'googleID': idGoogle });
+  console.log("user da co",user);
+  if (!user || user.active === false) {
+    const newUser = await User.create({
+      googleID: idGoogle,
+      fullName: req.body.fullName,
+      email: req.body.email,
+    })
+    console.log('success');
+    createSendToken(newUser, 200, res);
+  }
+  createSendToken(user, 200, res);
+});
+
 //Login Admin
 exports.loginAdmin = catchAsync(async (req, res, next) => {
   const islogin = await this.adminIsLoggedIn(req.cookies.jwtAdmin);

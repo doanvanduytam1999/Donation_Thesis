@@ -1,9 +1,9 @@
-import React, { useState, /* useEffect */ } from 'react';
-import { Card, Progress, Typography, Badge, Input, Button } from 'antd';
 import { UsergroupAddOutlined } from '@ant-design/icons';
+import { Badge, Button, Card, Input, Progress, Typography } from 'antd';
+import React, { useState } from 'react';
 import { Link } from "react-router-dom";
-import "../style/Home.scss";
 import "../style/bootstrap-grid.min.css";
+import "../style/Home.scss";
 const { Search } = Input;
 const ListALl = (props) => {
 

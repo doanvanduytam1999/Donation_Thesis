@@ -15,7 +15,7 @@ const Momo = () => {
         const url = "http://localhost:4000/api/payMomo";
         axios.post(url,getData).then((res)=>{
             console.log("data",res.data);
-            if(res.data.MomoPay.errorCode==0)
+            if(res.data.MomoPay.errorCode===0)
             {
                 let url = res.data.MomoPay.payUrl
                 console.log("url",url);

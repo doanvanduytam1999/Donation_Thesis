@@ -10,11 +10,13 @@ const Profile = () => {
     return (
         <>
             <div className="container">
-                <div className='col-6 offset-6'>
-                    <h3 style={{ fontSize: "30px" }}>Thông tin tài khoản</h3>
+
+                <div className='wapper_edit_user'>
+                    <h3  className='title_edit_user' >Thông tin tài khoản</h3>
+                    <ProFile></ProFile>
                 </div>
                 <div>
-                    <ProFile></ProFile>
+                    
                 </div>
             </div>
 

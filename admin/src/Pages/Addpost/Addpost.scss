@@ -1,3 +1,4 @@
+
 .title{
     text-align: center;
     font-size: 30px;
@@ -6,5 +7,43 @@
     height:  500px;
     .ck-content{
         height: 100%;
+    }
+}
+.wapper_addpost{
+    position: relative;
+    left: 50%;
+    top:30px;
+    transform: translateX(-50%);
+    width: 90%;
+    border-radius: 10px;
+    min-height: 400px;
+    -webkit-box-shadow: 0px 0px 10px -5px rgba(71, 71, 71, 1);
+    -moz-box-shadow: 0px 0px 10px -5px rgba(71, 71, 71, 1);
+    box-shadow: 0px 0px 10px -5px rgba(71, 71, 71, 1);
+    .title_addpost {
+        font-size: 25px;
+        text-align: center;
+       padding-top: 30px;
+    }
+    .ant-form-vertical{
+        margin-left: 20px;
+        margin-right: 20px;
+       .ant-form-item-label{
+           font-weight: bold;
+           font-size: 16pxs;
+       }
+    }
+
+}
+.group_day{
+    display: flex;
+    .ant-form-item{
+        margin-right: 50px;
+    }
+}
+.group_post{
+    display: flex;
+    .ant-form-item{
+        margin-right: 50px;
     }
 }

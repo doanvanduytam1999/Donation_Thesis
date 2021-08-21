@@ -6,11 +6,14 @@ import donateEnvents from "../../Api/donateEvensts";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import Editor from 'ckeditor5-custom-build/build/ckeditor';
 import Firebase from '../Js/Firebase';
+import Nodemailer from "nodemailer";
 
 import "./EditPost.scss";
 import "../../styles/bootstrap-grid.min.css"
 import { useParams } from 'react-router';
 import userAdmin from '../../Api/userAdmin';
+import Axios from "axios"
+
 const formItemLayout = {
     labelCol: {
         xs: { span: 24 },
@@ -60,6 +63,13 @@ const EditPost = () => {
         };
         fetchPost();
     }, []);
+
+    const sendmail =  () => {
+       Axios.get(" http://localhost:4000/api/admin/sendmail").then((res)=>{
+        console.log(res.data);
+       })
+
+    }
     const handleChange = (event, editor) => {
         const data = editor.getData();
         console.log(data);
@@ -150,6 +160,7 @@ const EditPost = () => {
     console.log(Post);
     return (
         <>
+            <button onClick={sendmail}> send Mail</button>
             <div className="wapper_editpost row">
                 <div className="col-10 offset-1">
                     <h2 className="title_editpost">Chỉnh sửa bài viết</h2>
@@ -167,6 +178,7 @@ const EditPost = () => {
                                 summary: `${Post.summary}`,
                                 currentAmount: `${Post.currentAmount}`,
                                 setAmount: `${Post.setAmount}`,
+                                status: `${Post.status}`
                             }}
                             scrollToFirstError
                         >
@@ -209,7 +221,7 @@ const EditPost = () => {
                             <Form.Item name="status"
                                 label="Trạng thái"
                             >
-                                <Select style={{ width: 170 }} defaultValue={Post.trangThai}>
+                                <Select style={{ width: 170 }} >
                                     <Option value="Dừng nhận donate">Tạm ngưng</Option>
                                     <Option value="Chưa đủ">Chưa đủ</Option>
 

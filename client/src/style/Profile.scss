@@ -1,49 +1,82 @@
-body{
+body {
     font-family: Nunito;
 }
-.col-8 {
-    
-       
-        
-    .ant-form {
-       
-        p{
-            font-size: 16px;
-            margin-bottom: 5px !important;
+.col {
+    .profile {
+        margin-top: 10px;
+        margin-left: 30px;
+        margin-bottom: 50px;
+        border-radius: 10px;
+        -webkit-box-shadow: 0px 0px 10px -5px rgba(71, 71, 71, 1);
+        -moz-box-shadow: 0px 0px 10px -5px rgba(71, 71, 71, 1);
+        box-shadow: 0px 0px 10px -5px rgba(71, 71, 71, 1);
+        width: 90%;
+       height: 400px;
+        .title_form{
+            text-align: center;
+            padding: 30px 0 40px 0;
+            font-size: 25px;
+            font-weight: bold;
         }
-        .ant-form-item {
-            .ant-form-item-control {
-                .ant-form-item-control-input {
-                    .ant-form-item-control-input-content {
-                        .ant-input-affix-wrapper-focused {
-                            border: none !important;
-                            box-shadow: none;
-                        }
-                        
-                            .ant-input,
-                            .ant-input:focus {
-                                width: 100%;
-                                box-sizing: border-box;
-                                border: none;
-                                font-size: 16px;
-                                padding-left: 10px;
-                                padding-bottom: 2px;
-                                box-shadow: inset 0px -1px 0px 0px;
-                                outline: none;
-                                transition: opacity 0.5s ease-out;
-                            }
+        .profile_form {
+            width: 500px;
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+            padding-top: 40px;
+            p {
+                font-size: 16px;
+                margin-bottom: 5px !important;
+            }
+            .ant-form-item {
+                width: 500px;
+                .ant-form-item-control {
+                    .ant-form-item-control-input {
+                        .ant-form-item-control-input-content {
+                            width: 500px;
                            
-                        
+                        }
                     }
+                }
+                .ant-form-item-label{
+                    font-weight: bold;
                 }
             }
         }
     }
 }
-.ant-upload.ant-upload-select-picture-card {
-    width: 150px;
-    height: 150px;
+.container {
+    .profile_user {
+        //border: 1px solid #000;
+        width: 80% !important;
+        position: relative;
+        left: 50%;
+        top: 40px;
+        transform: translateX(-50%);
+        border-radius: 10px;
+        -webkit-box-shadow: 0px 0px 10px -5px rgba(71, 71, 71, 1);
+        -moz-box-shadow: 0px 0px 10px -5px rgba(71, 71, 71, 1);
+        box-shadow: 0px 0px 10px -5px rgba(71, 71, 71, 1);
+        .profile_user_title {
+            text-align: center;
+            padding: 30px 0 10px 0;
+            font-size: 28px;
+            font-weight: bold;
+        }
+    }
 }
-.btn-update-img{
-    margin-left: 30px;
+.tbl_history{
+    margin-left: 10px;
+    width: 95%;
+    border-radius: 10px;
+    -webkit-box-shadow: 0px 0px 10px -5px rgba(71, 71, 71, 1);
+    -moz-box-shadow: 0px 0px 10px -5px rgba(71, 71, 71, 1);
+    box-shadow: 0px 0px 10px -5px rgba(71, 71, 71, 1);
+    margin-bottom: 50px;
+
+}
+.ant-table-thead{
+    .ant-table-cell{
+        font-weight: bolder;
+    }
 }

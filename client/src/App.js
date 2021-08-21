@@ -1,27 +1,27 @@
-import './App.css';
-import Header from './components/Header';
+import { unwrapResult } from '@reduxjs/toolkit';
 import 'antd/dist/antd.css';
-import Home from './pages/Home';
-import Footer from './components/Footer';
-import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
-import Detail from './pages/Detail';
-//import Login from './pages/Login';
-import Resgister from './pages/Resgister';
-import Profile from './pages/Profile'
-import React, { useState, useEffect } from 'react';
 //import ScrollToTop from "react-scroll-to-top";
 import firebase from 'firebase';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { unwrapResult } from '@reduxjs/toolkit';
-import { getMe } from './redux/reducer/UserSlice';
-import Contact from './pages/Contact';
+import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom";
+import './App.css';
+import Footer from './components/Footer';
+import Header from './components/Header';
 import AllDonate from './pages/AllDonate';
-import ScrollToTop from './Api/ScrollToTop';
+import Contact from './pages/Contact';
+import Detail from './pages/Detail';
+import Home from './pages/Home';
 import ListDonator from './pages/ListDonator';
+import Profile from './pages/Profile';
+//import Login from './pages/Login';
+import Resgister from './pages/Resgister';
+import { getMe } from './redux/reducer/UserSlice';
+import UserApi from './Api/UserApi';
 // Configure Firebase.
-const config = {
-  apiKey: 'AIzaSyBuvMsY6qXN0XOR2pjo9g0YJ9JC5yfh9rE',
-  authDomain: 'fashionshop-11d42.firebaseapp.com',
+const config = {  
+  apiKey: 'AIzaSyDFlce1nx_WeDvvyQFoQY_VnLVXQMOdk7o',
+  authDomain: 'donate-d9fdf.firebaseapp.com',
   // ...
 };
 firebase.initializeApp(config);
@@ -38,25 +38,44 @@ function App() {
         console.log("Chưa đăng nhập");
         return
       }
-      try {
-        const actionResult = await dispatch(getMe());
-        const currentUser = unwrapResult(actionResult);
-        localStorage.setItem("user", JSON.stringify(currentUser));
-        console.log('Logged in user: ', currentUser);
+      else{
+        try {
+          const actionResult = await dispatch(getMe());
+          const currentUser = await unwrapResult(actionResult);
+          UserApi.postLoginGoogle(currentUser).then((res)=>{
+            if(res.data.status ==="success"){
+               let user=  res.data.data.user;
+               dispatch({
+                type: "LOGIN_SUCCESS",
+                payload: { user: user },
+              });
+               console.log(user);
+              localStorage.setItem("user", JSON.stringify(user));
 
-      } catch (error) {
-        console.log('Failed to login ', error.message);
-        // show toast error
+              //window.location.reload();
+            }
+          })
+          
+          
+          console.log('Logged in user: ', currentUser);
+         //window.location.reload()
+  
+        } catch (error) {
+          console.log('Failed to login ', error.message);
+          // show toast error
+        }
       }
-      console.log("Đã đăng nhập");
+      console.log("Đã đăng nhập", user);
+     
     });
     return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
 
   }, []);
-  if (isLoggedIn) {
+  
+/*   if (isLoggedIn) {
     <Redirect to="/" />
 
-  }
+  } */
   return (
 
     <Router>

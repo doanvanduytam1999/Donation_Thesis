@@ -1,8 +1,8 @@
+import { FacebookOutlined, InstagramOutlined, TwitterOutlined, YoutubeOutlined } from '@ant-design/icons';
+import { Divider } from 'antd';
 import React from 'react';
-import {FacebookOutlined,TwitterOutlined,InstagramOutlined,YoutubeOutlined} from '@ant-design/icons';
 import "../style/bootstrap-grid.min.css";
 import "../style/Footer.scss";
-import { Divider } from 'antd';
 const Footer = () => {
     return (
         <> 
