@@ -66,6 +66,11 @@ const Register = () => {
                             required: true,
                             message: 'Nhập tên tài khoản!',
                         },
+                        {
+                            min:3,
+                            max:16,
+                            message: 'Tên tài khoản phải từ 3-16 kí tự !',
+                        }
                     ]}
 
                 >
@@ -96,7 +101,11 @@ const Register = () => {
                             required: true,
                             message: 'Please input your password!',
                         },
-                        {min:8, message:'Mật khẩu phải đủ 8 kí tự'}
+                        {
+                            min:8,
+                            max:16,
+                            message: 'Mật khẩu phải từ 8-16 kí tự !',
+                        }
                     ]}
                     hasFeedback
                 >

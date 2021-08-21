@@ -7,16 +7,14 @@ import "../../styles/bootstrap-grid.min.css";
 import donateEvensts from '../../Api/donateEvensts';
 const Dashboard = () => {
     const [listDonate, setListDonate] = useState([]);
-    
+    const [dashboard, setDashboard] = useState([]);
     const convertNumber = (x) => {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
 useEffect(() => {
-    const fetchdonatesData = async () => {
+    const fetchdonatesData =  () => {
         try {
-            await donateEvensts.getAll().then((res) => {
-               
-               
+             donateEvensts.getAll().then((res) => {
                 setListDonate(res.data.AllPost);
                 
             });
@@ -24,6 +22,17 @@ useEffect(() => {
             console.log("Failed to fetch brand data at: ", error);
         }
     };
+    const fetchDashboard =  () => {
+        try {
+             donateEvensts.getDashboard.then((res) => {
+                setDashboard(res.data);
+                
+            });
+        } catch (error) {
+            console.log("Failed to fetch brand data at: ", error);
+        }
+    };
+    fetchDashboard();
     fetchdonatesData();
 }, []);
     const columns = [

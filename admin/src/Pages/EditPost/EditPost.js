@@ -65,7 +65,7 @@ const EditPost = () => {
     }, []);
 
     const sendmail =  () => {
-       Axios.get(" http://localhost:4000/api/admin/sendmail").then((res)=>{
+       Axios.post("http://localhost:4000/api/admin/sendMail/61212ad6471340581847c604").then((res)=>{
         console.log(res.data);
        })
 
@@ -220,10 +220,11 @@ const EditPost = () => {
                             </Form.Item>
                             <Form.Item name="status"
                                 label="Trạng thái"
+                                
                             >
-                                <Select style={{ width: 170 }} >
-                                    <Option value="Dừng nhận donate">Tạm ngưng</Option>
-                                    <Option value="Chưa đủ">Chưa đủ</Option>
+                                <Select  style={{ width: 170 }} >
+                                    <Option disabled value="Dừng nhận donate">Tạm ngưng</Option>
+                                    <Option disabled value="Chưa đủ">Chưa đủ</Option>
 
                                 </Select>
                             </Form.Item>
