@@ -97,6 +97,11 @@ const ModalLogin = () => {
                                             {
                                                 pattern: new RegExp(/^[a-zA-Z0-9]{3,16}$/),
                                                 message: "Tài khoản phải không có kí tự đặc biệt !",
+                                            },
+                                            {
+                                                min:3,
+                                                max:16,
+                                                message: 'Tài khoản phải từ 3-16 kí tự !',
                                             }
                                         ]}>
                                         <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Tài khoản" autoComplete="off" />
@@ -104,7 +109,12 @@ const ModalLogin = () => {
                                     <p>Mật khẩu</p>
                                     <Form.Item
                                         name="password"
-                                        rules={[{ required: true, message: 'Hãy nhập mật khẩu!' }]}
+                                        rules={[{ required: true, message: 'Hãy nhập mật khẩu!' },
+                                        {
+                                            min:8,
+                                            max:16,
+                                            message: 'Mật khẩu phải từ 8-16 kí tự !',
+                                        }]}
                                     >
                                         <Input
                                             prefix={<LockOutlined className="site-form-item-icon" />}

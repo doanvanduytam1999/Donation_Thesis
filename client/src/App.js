@@ -4,7 +4,8 @@ import 'antd/dist/antd.css';
 import firebase from 'firebase';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import UserApi from './Api/UserApi';
 import './App.css';
 import Footer from './components/Footer';
 import Header from './components/Header';
@@ -12,12 +13,13 @@ import AllDonate from './pages/AllDonate';
 import Contact from './pages/Contact';
 import Detail from './pages/Detail';
 import Home from './pages/Home';
+import Join from './pages/Join';
 import ListDonator from './pages/ListDonator';
+import MailPost from './pages/MailPost';
 import Profile from './pages/Profile';
 //import Login from './pages/Login';
 import Resgister from './pages/Resgister';
 import { getMe } from './redux/reducer/UserSlice';
-import UserApi from './Api/UserApi';
 // Configure Firebase.
 const config = {  
   apiKey: 'AIzaSyDFlce1nx_WeDvvyQFoQY_VnLVXQMOdk7o',
@@ -88,6 +90,12 @@ function App() {
         <Route exact path="/lien-he">
           <Contact />
 
+        </Route>
+        <Route exact path="/tham-gia">
+          <Join />
+        </Route>
+        <Route exact path="/hoan-canh-kho-khan">
+          <MailPost />
         </Route>
         <Route onUpdate={() => window.scrollTo(0, 0)} exact path="/tat-ca-chuong-trinh">
           <AllDonate />

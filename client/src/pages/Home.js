@@ -206,49 +206,10 @@ const Home = () => {
                     <div className="register_text col-10 offset-1 ">
                         <h2 className="text-bold text-wh ">Hãy tham gia cùng với chúng tôi</h2>
                         <p className="text-bold text-wh ">Cùng nhau chia sẽ và giúp đỡ những hoàn cảnh khó khăn</p>
-                        {/* <div className="form_rs">
-                            <Form form={form}
-                                name="horizontal_login"
-                                layout="inline"
-                        onFinish={onFinish}>
-                                <Form.Item
-                                    name="username"
-                                    rules={[{ required: true, message: 'Please input your username!' }]}
-                                >
-                                    <Input style={{ width: '255px', height: '40px' }} placeholder="Nhâp tên của bạn..." />
-                                </Form.Item>
-                                <Form.Item
-                                    name="email"
-
-                                    rules={[
-                                        {
-                                            type: 'email',
-                                            message: 'The input is not valid E-mail!',
-                                        },
-                                        {
-                                            required: true,
-                                            message: 'Please input your E-mail!',
-                                        },
-                                    ]}
-                                >
-                                    <Input style={{ width: '255px', height: '40px' }} placeholder="Nhập gmail" />
-                                </Form.Item>
-                                <Form.Item
-                                    name="gmail"
-                                    rules={[{ required: true, message: 'Hãy nhập gmail' }]}
-                                >
-                                    <Input
-                                        style={{ width: '255px', height: '40px' }}
-                                        type="phone"
-                                        placeholder="Nhập số điện thoại của bạn"
-                                    />
-                                </Form.Item>
-
-                            </Form>
-                            <div className="btn_frm_rs">
-                                <Button style={{ width: "500px", height: "45px", fontSize: "20px", fontWeight: "700" }}> Tham gia ngay</Button>
+                        <div className="btn_frm_rs">
+                                <Button style={{ width: "200px", height: "45px", fontSize: "20px", fontWeight: "700" }}><Link to="/tham-gia"> Tham gia ngay</Link></Button>
+                                <Button style={{ width: "220px", height: "45px", fontSize: "20px", fontWeight: "700",marginLeft:"40px" }}><Link to="/hoan-canh-kho-khan">Hoàn cảnh khó khăn</Link></Button>
                             </div>
-                        </div> */}
                     </div>
                 </div>
             </div>

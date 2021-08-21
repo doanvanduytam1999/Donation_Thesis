@@ -1,12 +1,12 @@
 
-import React, { useState /* useEffect */,createRef } from 'react';
+import React, { useState, /* useEffect */ } from 'react';
 import { Card, Form, Input, Button,message } from 'antd';
 import { init, sendForm } from 'emailjs-com';
 import "../style/bootstrap-grid.min.css";
 import "../style/Contact.scss"
 import { PhoneOutlined, HomeOutlined, SendOutlined } from '@ant-design/icons';
 init('user_34PJkVJOxKj7nBHxWBCKl');
-const Contact = () => {
+const MailPost = () => {
     const [/* contactNumber */, setContactNumber] = useState("000000");
     const [form] = Form.useForm();
     const generateContactNumber = () => {
@@ -15,14 +15,12 @@ const Contact = () => {
     }
     const onFinish = () => {
         message.loading("Đang gửi gmail...")
-     
         generateContactNumber();
-        sendForm('service_o3fxixm', 'template_homhg9p', '#basic')
+        sendForm('service_o3fxixm', 'template_hu34ui1', '#basic')
         .then(function(response) {
             if(response.status ===200){
                
                 message.success("Gửi gmail thành công!")
-                
                 form.resetFields();
                
             }
@@ -42,7 +40,7 @@ const Contact = () => {
                     <div className="row">
                         <div className="col-6 offset-1">
                             <div className=" contact_form">
-                                <h3 className="title">Liên lạc</h3>
+                                <h3 className="title">Hoàn cảnh khó khăn</h3>
                                 <Form
                                     style={{ width: "450px" }}
                                     name="basic"
@@ -60,6 +58,17 @@ const Contact = () => {
                                         rules={[{ required: true, message: 'Hãy nhập gmail!' }]}
                                     >
                                         <Input  name="user_email" placeholder="Gmail" />
+                                    </Form.Item>
+                                    <Form.Item
+                                        name="user_phone"
+                                        rules={[{ required: true, message: 'Hãy nhập số điện thoại!' },
+                                        {
+                                            min:10,
+                                            max:11,
+                                            message: 'Số điện thoại từ 10-11 số'
+                                        }]}
+                                    >
+                                        <Input  name="user_phone" placeholder="Số điện thoại" />
                                     </Form.Item>
                                     <Form.Item
                                         name="message"
@@ -99,4 +108,4 @@ const Contact = () => {
     );
 }
 
-export default Contact;
+export default MailPost;
