@@ -35,9 +35,8 @@ const Register = () => {
     const onFinish = (values) => {
         console.log('Received values of form: ', values);
         dispatch(register(values)).then((res)=>{
-            console.log(res);
-            message.error(res)
            
+            message.error(res)
 
         })
         
@@ -54,7 +53,7 @@ const Register = () => {
                 name="register"
                 onFinish={onFinish}
                 initialValues={{
-                    prefix: '84',
+                    prefix: '84',role:`${'CTV'}`
                 }}
                 scrollToFirstError
             >
@@ -137,7 +136,7 @@ const Register = () => {
                 <Form.Item name="role"
                     label="Loại tài khoản"
                 >
-                    <Select style={{ width: 170 }} defaultValue="CTV">
+                    <Select name="role" style={{ width: 170 }} defaultValue="CTV">
                         <Option value="Manager">Manager</Option>
                        
                         <Option value="CTV">Cộng tác viên</Option>

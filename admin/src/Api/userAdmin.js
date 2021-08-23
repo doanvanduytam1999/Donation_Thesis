@@ -37,6 +37,10 @@ const userAdmin = {
         const url = `admin/addPost`;
         return AxiosClient.post(url, values);
     },
+    postResetPass: (values) =>{
+        const url ="admin/resetPassWord"
+        return AxiosClient.post(url,values)
+    }
 
 }
 export default userAdmin;

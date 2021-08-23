@@ -3,12 +3,14 @@ import { message } from 'antd';
 import ApiLogin from "../../Api/ApiLogin";
 import { LoadingOutlined} from '@ant-design/icons';
  const API_URL = "http://localhost:4000/admin";
+ 
 //const API_URLRS ="http://localhost:4000/";
 const register = (values) => {
+  
     return ApiLogin.postAddUser(values).then((res)=>{
-      console.log(res.data.status);
+      //console.log(res.data.status);
       if (res.data.status ==="success") {
-        console.log(res.data.status);
+       // console.log(res.data.status);
         message.success("Đăng kí thành công!")
         setTimeout(()=>{
           window.location.reload();

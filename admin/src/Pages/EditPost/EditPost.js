@@ -64,10 +64,10 @@ const EditPost = () => {
         fetchPost();
     }, []);
 
-    const sendmail =  () => {
-       Axios.post("http://localhost:4000/api/admin/sendMail/61212ad6471340581847c604").then((res)=>{
-        console.log(res.data);
-       })
+    const sendmail = () => {
+        Axios.post("http://localhost:4000/api/admin/sendMail/61212ad6471340581847c604").then((res) => {
+            console.log(res.data);
+        })
 
     }
     const handleChange = (event, editor) => {
@@ -220,15 +220,15 @@ const EditPost = () => {
                             </Form.Item>
                             <Form.Item name="status"
                                 label="Trạng thái"
-                                
+
                             >
-                                <Select  style={{ width: 170 }} >
+                                <Select style={{ width: 170 }} >
                                     <Option disabled value="Dừng nhận donate">Tạm ngưng</Option>
                                     <Option disabled value="Chưa đủ">Chưa đủ</Option>
 
                                 </Select>
                             </Form.Item>
-                            <Form.Item label="Nội dung bài viết">
+                            <Form.Item label="Trao yêu thương">
                                 <CKEditor
                                     name="content"
                                     editor={Editor}
@@ -285,10 +285,10 @@ const EditPost = () => {
                                         }
                                     }}
                                 >
-                                    {/* <figure className="image">
-                        <img src="..." alt="..."/>
-                    <figcaption>A caption goes here...</figcaption>
-                    </figure> */}
+                                    <figure className="image">
+                                        <img src="..." alt="..." />
+                                        <figcaption>A caption goes here...</figcaption>
+                                    </figure>
                                 </CKEditor>
                             </Form.Item>
 

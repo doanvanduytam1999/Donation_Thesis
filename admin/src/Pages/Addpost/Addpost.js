@@ -198,58 +198,74 @@ const Addpost = () => {
   }
   class MyUploadAdapter {
     constructor(loader) {
-      this.loader = loader;
+        this.loader = loader;
     }
     // Starts the upload process.
     upload() {
-      return this.loader.file.then(
-        file =>
-          new Promise((resolve, reject) => {
-            let storage = Firebase.storage().ref();
-            let uploadTask = storage
-              .child('img_post/' + file.name)
-              .put(file);
-            uploadTask.on(
-              Firebase.storage.TaskEvent.state_changed, // or 'state_changed'
-              function (snapshot) {
-                // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-                var progress =
-                  (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                console.log("Upload is " + progress + "% done");
-                switch (snapshot.state) {
-                  case Firebase.storage.TaskState.PAUSED: // or 'paused'
-                    console.log("Upload is paused");
-                    break;
-                  case Firebase.storage.TaskState.RUNNING: // or 'running'
-                    console.log("Upload is running");
-                    break;
-                }
-              },
-              function (error) {
-                // A full list of error codes is available at
-                // https://firebase.google.com/docs/storage/web/handle-errors
-                // eslint-disable-next-line default-case
-                switch (error.code) {
-                  case "storage/unauthorized":
-                    reject(" User doesn't have permission to access the object");
-                    break;
+        return this.loader.file.then(
+            file =>
+                new Promise((resolve, reject) => {
+                    let storage = Firebase.storage().ref();
+                    let uploadTask = storage
+                        .child('img_happy/' + file.name)
+                        .put(file);
+                    uploadTask.on(
+                        Firebase.storage.TaskEvent.state_changed, // or 'state_changed'
+                        function (snapshot) {
+                            // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                            var progress =
+                                (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                            console.log("Upload is " + progress + "% done");
+                            switch (snapshot.state) {
+                                case Firebase.storage.TaskState.PAUSED: // or 'paused'
+                                    console.log("Upload is paused");
+                                    break;
+                                case Firebase.storage.TaskState.RUNNING: // or 'running'
+                                    console.log("Upload is running");
+                                    break;
+                            }
+                        },
+                        function (error) {
+                            // A full list of error codes is available at
+                            // https://firebase.google.com/docs/storage/web/handle-errors
+                            // eslint-disable-next-line default-case
+                            switch (error.code) {
+                                case "storage/unauthorized":
+                                    reject(" User doesn't have permission to access the object");
+                                    break;
 
-                  case "storage/canceled":
-                    reject("User canceled the upload");
-                    break;
+                                case "storage/canceled":
+                                    reject("User canceled the upload");
+                                    break;
 
-                  case "storage/unknown":
-                    reject(
-                      "Unknown error occurred, inspect error.serverResponse"
+                                case "storage/unknown":
+                                    reject(
+                                        "Unknown error occurred, inspect error.serverResponse"
+                                    );
+                                    break;
+                            }
+                        },
+                        function () {
+                            // Upload completed successfully, now we can get the download URL
+                            uploadTask.snapshot.ref
+                                .getDownloadURL()
+                                .then(function (downloadURL) {
+                                    // console.log("File available at", downloadURL);
+
+                                    //setImg(oldArray => [...oldArray, downloadURL]);
+
+                                    resolve({
+                                        default: downloadURL,
+
+
+                                    });
+                                });
+                        }
                     );
-                    break;
-                }
-              }
-            );
-          })
-      );
+                })
+        );
     }
-  }
+}
   /*   const beforeUpload = file => {
       setFileList(fileList.concat(file));
      
@@ -355,67 +371,67 @@ const Addpost = () => {
           </Form.Item>
          
           <Form.Item label="Nội dung bài viết">
-            <CKEditor
-              name="content"
-              editor={Editor}
-              onReady={editor => {
-                editor.plugins.get("FileRepository").createUploadAdapter = loader => {
-                  return new MyUploadAdapter(loader);
-                };
-              }}
-              onChange={handleChange}
-              config={{
-                removePlugins: ["Title"],
-                plugin: ["Image"],
-                toolbar: [
-                  'heading', '|', 'bold', 'italic', 'underline', 'link', '|', 'alignment', '|', 'fontBackgroundColor', 'fontColor', 'fontFamily', 'fontSize', 'hightlight', '|', 'insertTable', '|', 'imageInsert', 'mediaEmbed', 'uploadImage', 'code', 'undo', 'redo', 'horizontalLine', 'specialCharacters'
-                ],
-                image: {
-                  style: ['alignLeft', 'alignCenter', 'alignRight'],
-                  resizeOption: [
-                    {
-                      name: "resizeImage: original",
-                      label: "Original",
-                      value: null,
-                    },
-                    {
-                      name: "resizeImage:50",
-                      label: "50%",
-                      value: "50"
-                    }, {
-                      name: "resizeImage:75",
-                      label: "75%",
-                      value: "75"
-                    }
-                  ],
-                  toolbar: [
-                    "imageStyle:alignLeft",
-                    "imageStyle:alignCenter",
-                    "imageStyle:alignRight",
-                    "|",
-                    "resizeImage",
-                    "|",
-                    "imageTextAlternative",
+          <CKEditor
+                                    name="content"
+                                    editor={Editor}
+                                    onReady={editor => {
+                                        editor.plugins.get("FileRepository").createUploadAdapter = loader => {
+                                            return new MyUploadAdapter(loader);
+                                        };
+                                    }}
+                                    onChange={handleChange}
+                                    config={{
+                                        removePlugins: ["Title"],
+                                        plugin: ["Image"],
+                                        toolbar: [
+                                            'heading', '|', 'bold', 'italic', 'underline', 'link', '|', 'alignment', '|', 'fontBackgroundColor', 'fontColor', 'fontFamily', 'fontSize', 'hightlight', '|', 'insertTable', '|', 'imageInsert', 'mediaEmbed', 'uploadImage', 'code', 'undo', 'redo', 'horizontalLine', 'specialCharacters'
+                                        ],
+                                        image: {
+                                            style: ['alignLeft', 'alignCenter', 'alignRight'],
+                                            resizeOption: [
+                                                {
+                                                    name: "resizeImage: original",
+                                                    label: "Original",
+                                                    value: null,
+                                                },
+                                                {
+                                                    name: "resizeImage:50",
+                                                    label: "50%",
+                                                    value: "50"
+                                                }, {
+                                                    name: "resizeImage:75",
+                                                    label: "75%",
+                                                    value: "75"
+                                                }
+                                            ],
+                                            toolbar: [
+                                                "imageStyle:alignLeft",
+                                                "imageStyle:alignCenter",
+                                                "imageStyle:alignRight",
+                                                "|",
+                                                "resizeImage",
+                                                "|",
+                                                "imageTextAlternative",
 
-                  ],
-                },
-                table: {
-                  contentToolbar: [
-                    "tableColumn",
-                    "tableRow",
-                    "mergeTableCells",
-                    "tableCellsProperties",
-                    "toggleTableCaption",
-                    "tableProperties"
-                  ]
-                }
-              }}
-            >
-              {/* <figure className="image">
+                                            ],
+                                        },
+                                        table: {
+                                            contentToolbar: [
+                                                "tableColumn",
+                                                "tableRow",
+                                                "mergeTableCells",
+                                                "tableCellsProperties",
+                                                "toggleTableCaption",
+                                                "tableProperties"
+                                            ]
+                                        }
+                                    }}
+                                >
+                                    <figure className="image">
                         <img src="..." alt="..."/>
                     <figcaption>A caption goes here...</figcaption>
-                    </figure> */}
-            </CKEditor>
+                    </figure>
+                                </CKEditor>
           </Form.Item>
           <Form.Item style={{ display:"block", textAlign:"center"}} >
             <Button style={{marginBottom:"30px"}} type="primary" htmlType="submit">
