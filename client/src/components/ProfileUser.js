@@ -12,31 +12,56 @@ const ProfileUser = () => {
             <div className="row">
                 <div className="col">
                     <div className="profile">
-                        <Form
-                        layout="vertical"
-                            //name="basic"
-                            className="profile_form"
-                            initialValues={{ username: `${user.username}`, fullName: `${user.fullName}`, email: `${user.email}`, id: `${user._id}` }}>
-                            <Form.Item
-                                name="id"
-                                hidden>
-                                <Input readOnly autoComplete={"off"} />
-                            </Form.Item>
-                            <Form.Item
-                                label="Tên tài khoản:"
-                                name="username">
-                                <Input readOnly autoComplete={"off"} />
-                            </Form.Item>
-                            <Form.Item label="Họ và tên:"
-                                name="fullName">
-                                <Input readOnly autoComplete={"off"} />
-                            </Form.Item>
-                            <Form.Item
-                                label="Email:"
-                                name="email">
-                                <Input readOnly autoComplete={"off"} />
-                            </Form.Item>
-                        </Form>
+                        {user.googleID ? (<>
+                            <Form
+                                layout="vertical"
+                                //name="basic"
+                                className="profile_form"
+                                initialValues={{ username: `${user.username}`, fullName: `${user.fullName}`, email: `${user.email}`, id: `${user._id}` }}>
+                                <Form.Item
+                                    name="id"
+                                    hidden>
+                                    <Input readOnly autoComplete={"off"} />
+                                </Form.Item>
+                                <Form.Item label="Họ và tên:"
+                                    name="fullName">
+                                    <Input readOnly autoComplete={"off"} />
+                                </Form.Item>
+                                <Form.Item
+                                    label="Email:"
+                                    name="email">
+                                    <Input readOnly autoComplete={"off"} />
+                                </Form.Item>
+                            </Form>
+                        </>) : (<>
+                            <Form
+                                layout="vertical"
+                                //name="basic"
+                                className="profile_form"
+                                initialValues={{ username: `${user.username}`, fullName: `${user.fullName}`, email: `${user.email}`, id: `${user._id}` }}>
+                                <Form.Item
+                                    name="id"
+                                    hidden>
+                                    <Input readOnly autoComplete={"off"} />
+                                </Form.Item>
+                                <Form.Item
+                                    label="Tên tài khoản:"
+                                    name="username">
+                                    <Input readOnly autoComplete={"off"} />
+                                </Form.Item>
+                                <Form.Item label="Họ và tên:"
+                                    name="fullName">
+                                    <Input readOnly autoComplete={"off"} />
+                                </Form.Item>
+                                <Form.Item
+                                    label="Email:"
+                                    name="email">
+                                    <Input readOnly autoComplete={"off"} />
+                                </Form.Item>
+                            </Form>
+
+                        </>)}
+
                     </div>
                 </div>
             </div>

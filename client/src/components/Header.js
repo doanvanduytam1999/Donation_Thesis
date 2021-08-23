@@ -58,11 +58,10 @@ const Header = () => {
                         <Menu.Item className="logo-item" key="mail">
                             <Link to=""><img alt="logo" style={{ marginLeft: '30px', fontWeight:"bold" }} width="40px" src="../images/logo.png" ></img></Link>
                         </Menu.Item>
-                        <Menu.Item key="app">
-                            <a style={{  fontWeight:"bolder" }}  href="#register">Gây quỹ</a>
-                        </Menu.Item>
+                      
                         <Menu.Item style={{  fontWeight:"bolder" }}  key="about">
-                          Về chúng tôi
+                         
+                          <Link to="gioi-thieu"> Về chúng tôi</Link>
                         </Menu.Item>
                         <Menu.Item key="contact">
                             <Link style={{  fontWeight:"bolder" }}  to="/lien-he">Liên hệ</Link>

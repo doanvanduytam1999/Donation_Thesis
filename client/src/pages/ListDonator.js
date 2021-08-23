@@ -4,25 +4,25 @@ import "../style/bootstrap-grid.min.css";
 import "../style/Detail.scss";
 import { useParams } from "react-router-dom";
 import donateEvensts from '../Api/donateEvensts';
-import { useSelector } from "react-redux";
+//import { useSelector } from "react-redux";
 
 
 
 const ListDonator = () => {
     let { _id } = useParams();
     const [Donate, setDonate] = useState([]);
-    const [DonateID, setDonateID] = useState([]);
+    const [/* DonateID */, setDonateID] = useState([]);
     //const { isLoggedIn } = useSelector(state => state.login);
     const [img, setImg] = useState([]);
 
-    const [licked, setLicked] = React.useState(false);
+    const [licked, /* setLicked */] = React.useState(false);
 
     const [AllDonator, setAllDonator] = useState([]);
-    const [AllDonates, setAllDonates] = useState([]);
+    const [/* AllDonates */, setAllDonates] = useState([]);
    
     const [ReleatedPost, setReleatedPost] = useState([]);
-    const [loading, setloading] = useState(false);
-    const data = useSelector(state => state.login.user);
+    const [/* loading */, setloading] = useState(false);
+    //const data = useSelector(state => state.login.user);
     const idCategoryPost = Donate.categoryPost
     useEffect(() => {
         window.scrollTo(0, 0)
@@ -69,7 +69,7 @@ const ListDonator = () => {
         fetchData();
         fetchAllDonater();
         //radomDonateEvent()
-    }, [licked, _id]);
+    }, [licked,_id]);
     console.log(idCategoryPost);
     console.log(Donate);
     useEffect(() => {

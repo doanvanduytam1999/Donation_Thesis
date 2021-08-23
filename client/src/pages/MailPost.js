@@ -5,7 +5,7 @@ import { init, sendForm } from 'emailjs-com';
 import "../style/bootstrap-grid.min.css";
 import "../style/Contact.scss"
 import { PhoneOutlined, HomeOutlined, SendOutlined } from '@ant-design/icons';
-init('user_34PJkVJOxKj7nBHxWBCKl');
+init('user_fklwuZE0RZY32Omw7nLdC');
 const MailPost = () => {
     const [/* contactNumber */, setContactNumber] = useState("000000");
     const [form] = Form.useForm();
@@ -16,7 +16,7 @@ const MailPost = () => {
     const onFinish = () => {
         message.loading("Đang gửi gmail...")
         generateContactNumber();
-        sendForm('service_o3fxixm', 'template_hu34ui1', '#basic')
+        sendForm('service_k4prnha', 'template_gk5gmk9', '#basic')
         .then(function(response) {
             if(response.status ===200){
                
@@ -40,7 +40,7 @@ const MailPost = () => {
                     <div className="row">
                         <div className="col-6 offset-1">
                             <div className=" contact_form">
-                                <h3 className="title">Hoàn cảnh khó khăn</h3>
+                                <h3 className="title">Chia sẻ hoàn cảnh cần giúp đỡ</h3>
                                 <Form
                                     style={{ width: "450px" }}
                                     name="basic"

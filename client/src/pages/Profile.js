@@ -101,7 +101,7 @@ const Profile = () => {
         //console.log(e[0].tieuDe);
     })
     const merge3 = DonateHistory.flat(1);
-
+    const user = JSON.parse(localStorage.getItem("user"))
     if (!islogin) {
 
         return <Redirect to='/' />;
@@ -116,9 +116,31 @@ const Profile = () => {
                         Thông tin tài khoản
                     </h3>
                     <Tabs tabPosition="left" defaultActiveKey="1"  >
+                    {user.googleID ? (<>
                         <TabPane tab={ <span><ProfileOutlined />Thông tin cá nhân</span>} key="1">
                             <ProfileUser></ProfileUser>
                         </TabPane>
+                      
+                      {/*   <TabPane tab={ <span><EditOutlined />Chinh sửa thông tin</span>} key="2">
+                            <ProFile></ProFile>
+                        </TabPane> */}
+
+                        <TabPane  tab={ <span><HistoryOutlined />Lịch sử ủng hộ</span>} key="3">
+                            <div className="tbl_history" style={{ textAlign: "center" }}>
+
+                                <Table {...layout}
+
+                                    dataSource={
+                                        merge3
+                                    }
+                                    columns={columns} />;
+                            </div>
+                        </TabPane>
+                        </>):(<>
+                            <TabPane tab={ <span><ProfileOutlined />Thông tin cá nhân</span>} key="1">
+                            <ProfileUser></ProfileUser>
+                        </TabPane>
+                      
                         <TabPane tab={ <span><EditOutlined />Chinh sửa thông tin</span>} key="2">
                             <ProFile></ProFile>
                         </TabPane>
@@ -134,6 +156,8 @@ const Profile = () => {
                                     columns={columns} />;
                             </div>
                         </TabPane>
+                        </>)}
+                        
 
                     </Tabs>
                 </div>

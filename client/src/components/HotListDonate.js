@@ -1,5 +1,5 @@
 import { UsergroupAddOutlined } from '@ant-design/icons';
-import { Button, Card, Checkbox, Form, Input, InputNumber, message, Modal, Progress, Result, Select, Steps, Typography } from 'antd';
+import { Button, Card, Checkbox, Form, Input, /* InputNumber, */ message, Modal, Progress, Result, Select, Steps, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -73,11 +73,11 @@ const HotListDonate = (props) => {
     const convertNumber = (x) => {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     }
-    const handleOk = () => {
+  /*   const handleOk = () => {
         setIsModalVisible(false);
         setCurrent(0)
         
-    };
+    }; */
     const handleCancel = () => {
         setIsModalVisible(false);
         setLicked(false)
@@ -109,7 +109,7 @@ const HotListDonate = (props) => {
     /* if(order){
         setCount(1)
     } */
-    console.log(isLoggedIn);
+    //console.log(isLoggedIn);
     const steps = [
         {
             title: 'Nhập thông tin',
@@ -167,9 +167,18 @@ const HotListDonate = (props) => {
                                                         required: true,
                                                         message: 'Hãy nhập số tiền ủng hộ',
                                                     },
+                                                    {
+                                                           
+                                                        min:5,
+                                                        message: "Số tiền ủng hộ từ 10.000 trở lên",
+                                                    },
+                                                    {
+                                                        pattern: new RegExp(/^\d*\.?\d+$/),
+                                                        message: "Số tiền không chứa chữ !",
+                                                    }
                                                 ]}
                                                 name="amountToDonate">
-                                                <InputNumber
+                                                <Input
                                                     onChange={onChange}
                                                     style={{ width: "200px" }}
                                                     defaultValue={10000}
@@ -208,10 +217,18 @@ const HotListDonate = (props) => {
                                                     {
                                                         required: true,
                                                         message: 'Hãy nhập số tiền ủng hộ',
+                                                    }, {
+                                                           
+                                                        min:5,
+                                                        message: "Số tiền ủng hộ từ 10.000 trở lên",
                                                     },
+                                                    {
+                                                        pattern: new RegExp(/^\d*\.?\d+$/),
+                                                        message: "Số tiền không chứa chữ !",
+                                                    }
                                                 ]}
                                                 name="amountToDonate">
-                                                <InputNumber
+                                                <Input
                                                     onChange={onChange}
                                                     style={{ width: "200px" }}
                                                     defaultValue={10000}
@@ -248,7 +265,7 @@ const HotListDonate = (props) => {
 
                                             {...layout}
                                             name="basic"
-                                            initialValues={{ prefix: "84", amountToDonate: "10000", fullName: `${data.fullName}`, phone: "0849119919" }}
+                                            initialValues={{ prefix: "84", amountToDonate: "10000", fullName: `${data.fullName}`,phone:`${""}`}}
                                             onFinish={onFinish}
                                             onFinishFailed={onFinishFailed}
                                         >
@@ -271,9 +288,10 @@ const HotListDonate = (props) => {
                                                     <Form.Item
                                                         label="Số điện thoại"
                                                         name="phone"
+                                                        
 
                                                     >
-                                                        <Input style={{ width: '100%', backgroundColor: "#5858583b" }} readOnly />
+                                                        <Input  />
                                                     </Form.Item>
 
                                                     <Form.Item
@@ -283,10 +301,18 @@ const HotListDonate = (props) => {
                                                             {
                                                                 required: true,
                                                                 message: 'Hãy nhập số tiền ủng hộ',
+                                                            }, {
+                                                           
+                                                                min:5,
+                                                                message: "Số tiền ủng hộ từ 10.000 trở lên",
                                                             },
+                                                            {
+                                                                pattern: new RegExp(/^\d*\.?\d+$/),
+                                                                message: "Số tiền không chứa chữ !",
+                                                            }
                                                         ]}
                                                         name="amountToDonate">
-                                                        <InputNumber
+                                                        <Input
                                                             onChange={onChange}
                                                             style={{ width: "200px" }}
                                                             defaultValue={10000}
@@ -326,10 +352,18 @@ const HotListDonate = (props) => {
                                                             {
                                                                 required: true,
                                                                 message: 'Hãy nhập số tiền ủng hộ',
+                                                            }, {
+                                                           
+                                                                min:5,
+                                                                message: "Số tiền ủng hộ từ 10.000 trở lên",
                                                             },
+                                                            {
+                                                                pattern: new RegExp(/^\d*\.?\d+$/),
+                                                                message: "Số tiền không chứa chữ !",
+                                                            }
                                                         ]}
                                                         name="amountToDonate">
-                                                        <InputNumber
+                                                        <Input
                                                             onChange={onChange}
                                                             style={{ width: "200px" }}
                                                             defaultValue={10000}
@@ -408,7 +442,7 @@ const HotListDonate = (props) => {
         },
     ];
 
-console.log(licked);
+//console.log(licked);
 
     return (
         <>

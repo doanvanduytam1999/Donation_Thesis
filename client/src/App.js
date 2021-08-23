@@ -9,6 +9,7 @@ import UserApi from './Api/UserApi';
 import './App.css';
 import Footer from './components/Footer';
 import Header from './components/Header';
+import AboutUs from './pages/AboutUs';
 import AllDonate from './pages/AllDonate';
 import Contact from './pages/Contact';
 import Detail from './pages/Detail';
@@ -89,6 +90,10 @@ function App() {
         </Route>
         <Route exact path="/lien-he">
           <Contact />
+
+        </Route>
+        <Route exact path="/gioi-thieu">
+          <AboutUs />
 
         </Route>
         <Route exact path="/tham-gia">

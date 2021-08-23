@@ -1,10 +1,11 @@
 import { UsergroupAddOutlined } from '@ant-design/icons';
-import { Badge, Button, Card, Checkbox, Divider, Form, Image, Input, InputNumber, Modal, Progress, Result, Select, Spin, Steps, Table, Tabs, Typography } from 'antd';
-import axios from "axios";
+import { Badge, Button, Card, Checkbox, Divider, Form, Image, Input, /* InputNumber, message, */ Modal, Progress, Result, Select,/*  Spin, */ Steps, Table, Tabs, Typography } from 'antd';
+//import axios from "axios";
 import React, { useEffect, useState } from 'react';
 import parse from 'react-html-parser';
 import { useSelector } from "react-redux";
 import { Link, useHistory, useParams,useLocation } from "react-router-dom";
+import ScrollToTop from 'react-scroll-to-top';
 import donateEvensts from '../Api/donateEvensts';
 import PayPal from "../components/Paypal";
 import "../style/bootstrap-grid.min.css";
@@ -18,10 +19,6 @@ const layout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
 };
-
-
-
-
 const Detail = () => {
     let {_id} = useParams();
     const [Donate, setDonate] = useState([]);
@@ -34,10 +31,9 @@ const Detail = () => {
     const [value, setValue] = useState(1);
     const [current, setCurrent] = React.useState(0);
     const [AllDonator, setAllDonator] = useState([]);
-    const [AllDonates, setAllDonates] = useState([]);
-    const [ArrayDonateCategory, setArrayDonateCategory] = useState([]);
+    const [/* AllDonates */, setAllDonates] = useState([]);
+    //const [ArrayDonateCategory, setArrayDonateCategory] = useState([]);
     const [ReleatedPost, setReleatedPost] = useState([]);
-    const [loading, setloading] = useState(false);
     const data = useSelector(state => state.login.user);
     const user= JSON.parse(localStorage.getItem("user"))
     const { Text } = Typography;
@@ -117,17 +113,15 @@ const Detail = () => {
         fetchAllDonater();
         //radomDonateEvent()
     }, [licked, _id]);
-    console.log(idCategoryPost);
-    console.log(Donate);
+    //console.log(ReleatedPost);
     useEffect(() => {
-
         window.scrollTo(0, 0)
         const fetchCategoryPost =  () => {
             try {
                  donateEvensts.getPostCategory(_id).then((res) => {
                     setReleatedPost(res.data.ReleatedPost)
                 });
-                setloading(true)
+              
             } catch (error) {
                 console.log("Failed to fetch Donate data at: ", error);
             }
@@ -135,19 +129,10 @@ const Detail = () => {
         fetchCategoryPost();
     }, [idCategoryPost]);
     const Location = useLocation();
-    console.log(Location.search);
-    let str =Location.search;
-    //str.split(/[^a-zA-Z0-9_]/)
-   // str= str.split('?');
-   str= str.split('&');
-
-   //str= str.split('=');
-   
-   //let array = JSON.parse("[" + str + "]");
-
-  //let a =  JSON.parse(str);
-    //console.log(del_str);
-    console.log(str);
+    //console.log(Location.search);
+    //let str =Location.search;
+   //str= str.split('&');
+    //console.log(str);
     const phoneSelector = (
         <Form.Item name="prefix" noStyle>
             <Select style={{ width: 70 }}>
@@ -156,7 +141,6 @@ const Detail = () => {
             </Select>
         </Form.Item>
     );
-    //const [value, setValue] = useState(1);
     const checkBtn = () => {
         setLicked(true)
     }
@@ -184,11 +168,19 @@ const Detail = () => {
             content: () => {
                 const onFinish = (values) => {
                     console.log('Success:', values);
-                    checkBtn();
-                    values['checked'] = checked;
-                    values['donateEvent'] =_id;
-                    const data = JSON.stringify(values)
-                    localStorage.setItem("data", data);
+                    /* if(Number(values.amountToDonate) <10000){
+                        message.error("Số tiền phải lớn hơn bằng 10.000Đ");
+                        setLicked(false)
+                        return
+                    }
+                    else{ */
+                        checkBtn();
+                        values['checked'] = checked;
+                        values['donateEvent'] =_id;
+                        const data = JSON.stringify(values)
+                        localStorage.setItem("data", data);
+                   /* }  */
+                   
                 };
                 const onFinishFailed = (errorInfo) => {
                     console.log('Failed:', errorInfo.values.name);
@@ -200,7 +192,7 @@ const Detail = () => {
                                 <Form
                                     {...layout}
                                     name="basic"
-                                    initialValues={{ prefix: "84", amountToDonate: "10000" }}
+                                    initialValues={{ prefix: "84", amountToDonate: "10000", phone:"" }}
                                     onFinish={onFinish}
                                     onFinishFailed={onFinishFailed}
                                 >
@@ -220,19 +212,35 @@ const Detail = () => {
                                             <Form.Item
                                                 label="Số điện thoại"
                                                 name="phone"
+                                                rules={[{ min: 10,max:11, message: 'Số điện thoại từ 10-11 số !' },
+                                                {
+                                                    pattern: new RegExp(/^\+?(\d.*){10,11}$/),
+                                                    message: "Vui lòng nhập đúng số điện thoại !",
+                                                },
+                                            ]}
                                             >
                                                 <Input autoComplete="off" placeholder="Nhập số điện thoại của bạn " addonBefore={phoneSelector} style={{ width: '100%' }} />
                                             </Form.Item>
                                             <Form.Item
-                                                label="Số tiền ủng hộ"
+                                                label="Số tiền ủng hộ "
                                                 rules={[
                                                     {
                                                         required: true,
                                                         message: 'Hãy nhập số tiền ủng hộ',
                                                     },
+                                                    {
+                                                           
+                                                        min:5,
+                                                        message: "Số tiền ủng hộ từ 10.000 trở lên",
+                                                    },
+                                                    {
+                                                        pattern: new RegExp(/^\d*\.?\d+$/),
+                                                        message: "Số tiền không chứa chữ !",
+                                                    }
+                                                    
                                                 ]}
                                                 name="amountToDonate">
-                                                <InputNumber
+                                                <Input
                                                     onChange={onChange}
                                                     style={{ width: "200px" }}
                                                     defaultValue={10000}
@@ -272,9 +280,18 @@ const Detail = () => {
                                                         required: true,
                                                         message: 'Hãy nhập số tiền ủng hộ',
                                                     },
+                                                    {
+                                                           
+                                                        min:5,
+                                                        message: "Số tiền ủng hộ từ 10.000 trở lên",
+                                                    },
+                                                    {
+                                                        pattern: new RegExp(/^\d*\.?\d+$/),
+                                                        message: "Số tiền không chứa chữ !",
+                                                    }
                                                 ]}
                                                 name="amountToDonate">
-                                                <InputNumber
+                                                <Input
                                                     onChange={onChange}
                                                     style={{ width: "200px" }}
                                                     defaultValue={10000}
@@ -311,15 +328,11 @@ const Detail = () => {
 
                                             {...layout}
                                             name="basic"
-                                            initialValues={{ prefix: "84", amountToDonate: "10000", name: `${data.username}`, phone: "0849119919" }}
+                                            initialValues={{ prefix: "84", amountToDonate: "10000", name: `${data.username}`, phone: "" }}
                                             onFinish={onFinish}
                                             onFinishFailed={onFinishFailed}
                                         >
-                                            {/*  <Radio.Group onChange={onChange} buttonStyle="solid" defaultValue="a">
-<Radio.Button value="a">Cá nhân</Radio.Button>
-<Radio.Button value="b">Tổ chức</Radio.Button>
-
-</Radio.Group> */}
+                                           
                                             <Form.Item label='Ủng hộ ẩn danh' onChange={handlechecked}>
                                                 <Checkbox />
 
@@ -338,22 +351,35 @@ const Detail = () => {
                                                     <Form.Item
                                                         label="Số điện thoại"
                                                         name="phone"
-
+                                                        rules={[{ min: 10,max:11, message: 'Số điện thoại từ 10-11 số !' }, {
+                                                            pattern: new RegExp(/^\+?(\d.*){10,11}$/),
+                                                            message: "Vui lòng nhập đúng số điện thoại !",
+                                                        },]}
                                                     >
-                                                        <Input style={{ width: '100%', backgroundColor: "#5858583b" }} readOnly />
+                                                        <Input style={{ width: '100%' }}  />
                                                     </Form.Item>
-
+                                                        
                                                     <Form.Item
-                                                        label="Số tiền ủng hộ"
+                                                        label="Số tiền ủng hộ "
                                                         rules={[
 
                                                             {
                                                                 required: true,
                                                                 message: 'Hãy nhập số tiền ủng hộ',
                                                             },
+                                                           
+                                                            {
+                                                           
+                                                                min:5,
+                                                                message: "Số tiền ủng hộ từ 10.000 trở lên",
+                                                            },
+                                                            {
+                                                                pattern: new RegExp(/^\d*\.?\d+$/),
+                                                                message: "Số tiền không chứa chữ !",
+                                                            }
                                                         ]}
                                                         name="amountToDonate">
-                                                        <InputNumber
+                                                        <Input
                                                             onChange={onChange}
                                                             style={{ width: "200px" }}
                                                             defaultValue={10000}
@@ -394,9 +420,19 @@ const Detail = () => {
                                                                 required: true,
                                                                 message: 'Hãy nhập số tiền ủng hộ',
                                                             },
+                                                            {
+                                                           
+                                                                min:5,
+                                                                message: "Số tiền ủng hộ từ 10.000 trở lên",
+                                                            },
+                                                            {
+                                                                pattern: new RegExp(/^\d*\.?\d+$/),
+                                                                message: "Số tiền không chứa chữ !",
+                                                            }
+                                                          
                                                         ]}
                                                         name="amountToDonate">
-                                                        <InputNumber
+                                                        <Input
                                                             onChange={onChange}
                                                             style={{ width: "200px" }}
                                                             defaultValue={10000}
@@ -499,7 +535,7 @@ const Detail = () => {
 
         },
         {
-            title: 'Số tiền ủng hộ (VNĐ)',
+            title: 'Số tiền ủng hộ',
             dataIndex: 'amountToDonate',
             key: 'amountToDonate',
             render: text => (
@@ -526,8 +562,7 @@ const Detail = () => {
         values['orderId'] ="MM"+ms;
         values['requestId'] ="MM"+ms;
         values['checked'] = checked;
-        values['orderInfo']=Donate.title;
-        
+        values['orderInfo']=Donate.title;    
         values['donateEvent'] =_id.trim();
         console.log("momo",values);
         donateEvensts.postPayMomo(values).then((res)=>{
@@ -545,12 +580,10 @@ const Detail = () => {
 
         //console.log("Day",ms);
     }
-    const callApi = ()=>{
-        let data ="Test api";
-        axios.post("http://localhost:4000/api/payMomoSusess",data);
-    }
+   
     return (
         <>
+          <ScrollToTop smooth={true} />
             <section className="detail_header">
                 <div className="container">
                     <div className="">
@@ -646,8 +679,7 @@ const Detail = () => {
                                 </div>
                                 <div className="card_donate">
                                     <h3 className="card_donate_title">Quyên góp ngay</h3>
-                                    
-                                    <Button onClick={onFinishMomo}>Test</Button>
+                                                                 
                                     {
                                         Donate.status === "Dừng nhận donate" ? (<>
                                             <p className="tamngung" >Tạm ngưng</p>
@@ -708,7 +740,7 @@ const Detail = () => {
                                 <Form
                                     {...layout}
                                     name="basic"
-                                    initialValues={{ prefix: "84", amountToDonate: "10000" }}
+                                    initialValues={{ prefix: "84", amountToDonate: "10000",phone:"" }}
                                     onFinish={onFinishMomo}
                                     ///onFinishFailed={onFinishFailed}
                                 >
@@ -728,19 +760,33 @@ const Detail = () => {
                                             <Form.Item
                                                 label="Số điện thoại"
                                                 name="phone"
+                                                 rules={[{ min: 10,max:11, message: 'Số điện thoại từ 10-11 số !' },
+                                                 {
+                                                    pattern: new RegExp(/^\+?(\d.*){10,11}$/),
+                                                    message: "Vui lòng nhập đúng số điện thoại !",
+                                                },]}
                                             >
                                                 <Input autoComplete="off" placeholder="Nhập số điện thoại của bạn " addonBefore={phoneSelector} style={{ width: '100%' }} />
                                             </Form.Item>
                                             <Form.Item
-                                                label="Số tiền ủng hộ"
+                                                label="Số tiền ủng hộ "
                                                 rules={[
                                                     {
                                                         required: true,
                                                         message: 'Hãy nhập số tiền ủng hộ',
                                                     },
+                                                    {
+                                                           
+                                                        min:5,
+                                                        message: "Số tiền ủng hộ từ 10.000 trở lên",
+                                                    },
+                                                    {
+                                                        pattern: new RegExp(/^\d*\.?\d+$/),
+                                                        message: "Số tiền không chứa chữ !",
+                                                    }
                                                 ]}
                                                 name="amountToDonate">
-                                                <InputNumber
+                                                <Input
                                                     onChange={onChange}
                                                     style={{ width: "200px" }}
                                                     defaultValue={10000}
@@ -772,16 +818,25 @@ const Detail = () => {
                                                 <Input />
                                             </Form.Item>
                                             <Form.Item
-                                                label="Số tiền ủng hộ"
+                                                label="Số tiền ủng hộ "
                                                 rules={[
 
                                                     {
                                                         required: true,
                                                         message: 'Hãy nhập số tiền ủng hộ',
+                                                    }, {
+                                                           
+                                                        min:5,
+                                                        message: "Số tiền ủng hộ từ 10.000 trở lên",
                                                     },
+                                                    {
+                                                        pattern: new RegExp(/^\d*\.?\d+$/),
+                                                        message: "Số tiền không chứa chữ !",
+                                                    }
+                                                    
                                                 ]}
                                                 name="amountToDonate">
-                                                <InputNumber
+                                                <Input
                                                     onChange={onChange}
                                                     style={{ width: "200px" }}
                                                     defaultValue={10000}
@@ -818,21 +873,14 @@ const Detail = () => {
 
                                             {...layout}
                                             name="basic"
-                                            initialValues={{ prefix: "84", amountToDonate: "10000", fullName: `${user.fullName}`, phone: `${user.phone}` }}
+                                            initialValues={{ prefix: "84", amountToDonate: "10000", fullName: `${user.fullName}`, phone: `${""}` }}
                                             onFinish={onFinishMomo}
                                             //onFinishFailed={onFinishFailed}
                                         >
-                                            {/*  <Radio.Group onChange={onChange} buttonStyle="solid" defaultValue="a">
-<Radio.Button value="a">Cá nhân</Radio.Button>
-<Radio.Button value="b">Tổ chức</Radio.Button>
-
-</Radio.Group> */}
                                             <Form.Item label='Ủng hộ ẩn danh' onChange={handlechecked}>
                                                 <Checkbox />
 
                                             </Form.Item>
-
-
                                             {checked === false ? (
                                                 <>
                                                     <Form.Item
@@ -845,22 +893,34 @@ const Detail = () => {
                                                     <Form.Item
                                                         label="Số điện thoại"
                                                         name="phone"
-
+                                                        rules={[{ min: 10,max:11, message: 'Số điện thoại từ 10-11 số !' },
+                                                        {
+                                                            pattern: new RegExp(/^\+?(\d.*){10,11}$/),
+                                                            message: "Vui lòng nhập đúng số điện thoại !",
+                                                        },]}
                                                     >
-                                                        <Input style={{ width: '100%', backgroundColor: "#5858583b" }} readOnly />
+                                                        <Input style={{ width: '100%'}}  />
                                                     </Form.Item>
-
                                                     <Form.Item
-                                                        label="Số tiền ủng hộ"
+                                                        label="Số tiền ủng hộ "
                                                         rules={[
 
                                                             {
                                                                 required: true,
                                                                 message: 'Hãy nhập số tiền ủng hộ',
+                                                            }, {
+                                                           
+                                                                min:5,
+                                                                message: "Số tiền ủng hộ từ 10.000 trở lên",
                                                             },
+                                                            {
+                                                                pattern: new RegExp(/^\d*\.?\d+$/),
+                                                                message: "Số tiền không chứa chữ !",
+                                                            }
+                                                           
                                                         ]}
                                                         name="amountToDonate">
-                                                        <InputNumber
+                                                        <Input
                                                             onChange={onChange}
                                                             style={{ width: "200px" }}
                                                             defaultValue={10000}
@@ -879,7 +939,7 @@ const Detail = () => {
                                                         <Input />
                                                     </Form.Item>
                                                     <Form.Item wrapperCol={{
-                                                       
+                                                   
                                                     }} >
                                                         <Button onClick={checkBtn} className="checkout-title" type="primary" htmlType="submit">
                                                         Gửi tiền bằng Ví MoMo
@@ -893,16 +953,25 @@ const Detail = () => {
                                                     </Form.Item>
                                                     <Form.Item
 
-                                                        label="Số tiền ủng hộ"
+                                                        label="Số tiền ủng hộ "
                                                         rules={[
 
                                                             {
                                                                 required: true,
                                                                 message: 'Hãy nhập số tiền ủng hộ',
                                                             },
+                                                            {
+                                                           
+                                                                min:5,
+                                                                message: "Số tiền ủng hộ từ 10.000 trở lên",
+                                                            },
+                                                            {
+                                                                pattern: new RegExp(/^\d*\.?\d+$/),
+                                                                message: "Số tiền không chứa chữ !",
+                                                            }
                                                         ]}
                                                         name="amountToDonate">
-                                                        <InputNumber
+                                                        <Input
                                                             onChange={onChange}
                                                             style={{ width: "200px" }}
                                                             defaultValue={10000}
@@ -956,10 +1025,66 @@ const Detail = () => {
             <section className="detail_footer">
                 <div className="container">
                     <h3 className="detail_footer_title">Chương trình liên quan</h3>
-                    
+                    <div style={{display:"flex",justifyContent:"space-between"}}>
+                    {ReleatedPost.map((item) => {
+                return (
+                    <>
+                        <div  className="col-2" >
+                            <Badge count={item.categoryName}>
+                                <Link to={`${item._id}`} >
+                                    <Card className="margin-top"
+                                        style={{ borderRadius: 10, height: 460 }}
+                                        hoverable
+                                        cover={<img alt="example" src={item.image[0]} />}>
+                                        <Text className="title-text" style={ellipsis ? { width: 250 } : undefined}
+                                            ellipsis={ellipsis ? { tooltip: `${item.title}` } : false} >
+                                            {item.title} </Text>
+                                        <Text className="title-tomtat"
+                                            style={ellipsis ? { width: 250 } : undefined}
+                                            ellipsis={ellipsis ? { tooltip: `${item.summary}` } : false} >
+                                            {item.summary}
+                                        </Text>
+                                        {
+                                            item.status === "Dừng nhận donate" ? (<><p className="tamngung" >Tạm ngưng</p></>) : (<>
+                                                <div className="progress">
+                                                    <div className="progress_detail_top">
+                                                        <p className="progress_detail_text">
+                                                            {/* convertNumber */(item.currentAmount)} vnđ quyên góp
+                                                        </p>
+                                                        <p className="progress_detail_number">
+                                                            {Math.floor((item.currentAmount / item.setAmount) * 100) === 100 ? (
+                                                                <p>Hoàn thành</p>
+                                                            ) : (
+                                                                <>
+                                                                    <p className="progress_detail_number">{((item.currentAmount / item.setAmount) * 100).toFixed(3)}%</p>
+                                                                </>
+                                                            )}
+                                                        </p>
+                                                    </div>
+                                                    <Progress percent={Math.floor((item.currentAmount / item.setAmount) * 100)} showInfo={Math.floor((item.currentAmount / item.setAmount) * 100) === 100 ? (true) : (false)} status={Math.floor((item.currentAmount / item.setAmount) * 100) === 100 ? ("success") : ("normal")} />
+                                                    <div className="progress_detail_bot">
+                                                        <p className="progress_detail_text">
+                                                            <UsergroupAddOutlined /> {item.numberOfDonations} lượt quyên góp
+                                                        </p>
+                                                        <p className="progress_detail_number">{Number(dayEnd(item.endDay))===0 ||Number(dayEnd(item.endDay))<0 ?(<>Đã hết hạn</>):(<> {dayEnd(item.endDay)} ngày còn lại</>) } </p>
+                                                    </div>
+                                                </div>
+                                            </>)
+                                        }
+                                    </Card>
+
+                                </Link>
+                            </Badge>
+                        </div>
+                    </>
+                )
+
+            })}
+                    </div>
+
                 </div>
             </section>
-            <Modal title="Cám ơn" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+            <Modal title="Cám ơn" visible={isModalVisible} footer={null} onOk={handleOk} onCancel={handleCancel}>
                 <Result
                     status="success"
                     title="Cám ơn bạn đã quyên góp!"

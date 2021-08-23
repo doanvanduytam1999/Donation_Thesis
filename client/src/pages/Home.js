@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input, Button, Tabs, Spin } from 'antd';
+import { /* Form, Input, */ Button, Tabs, Spin } from 'antd';
 import { CheckOutlined } from '@ant-design/icons';
 import donateEvensts from '../Api/donateEvensts';
 //import { Link } from "react-router-dom";
@@ -83,7 +83,7 @@ const Home = () => {
 
         }
     }
-    const [form] = Form.useForm();
+    //const [form] = Form.useForm();
     const iconStyle = {
         color: "#2569d9"
     }
@@ -125,7 +125,8 @@ const Home = () => {
                     </div>
                     <div className="button">
                         <div className="button_wapper ">
-                            <a type="button" className="ant-btn ant-btn-primary btn-explore" href="/explore"><span className="btn-text">Tìm hiểu về tổ chức từ thiện</span></a>
+                      
+                           <Link to="gioi-thieu" className="ant-btn ant-btn-primary btn-explore" > <span className="btn-text"> Tìm hiểu về tổ chức từ thiện</span></Link>
                         </div>
                         {/*  <div className="button_wapper ">
                             <a type="button" className="ant-btn ant-btn-default btn-sign-in" href="/explore"><span className="btn-text">Explore Charities</span></a>
@@ -141,7 +142,7 @@ const Home = () => {
                         </span></h2>
                         <div className="icon-micro-heart"><img width="50px" alt="Heart" src="../images/hands.svg" /></div>
                         <div className="mb-1x"><span className="text-medium"><div className="html-sanitizer">Hãy giúp chúng thôi một tay</div></span></div>
-                       
+
                     </div>
                 </div>
             </div>
@@ -200,16 +201,24 @@ const Home = () => {
                     </div>
                 </div>
             </div>
-            
+
             <div style={bghomepageRegister} id="register" className="homepage_register">
                 <div className="container">
                     <div className="register_text col-10 offset-1 ">
                         <h2 className="text-bold text-wh ">Hãy tham gia cùng với chúng tôi</h2>
-                        <p className="text-bold text-wh ">Cùng nhau chia sẽ và giúp đỡ những hoàn cảnh khó khăn</p>
-                        <div className="btn_frm_rs">
-                                <Button style={{ width: "200px", height: "45px", fontSize: "20px", fontWeight: "700" }}><Link to="/tham-gia"> Tham gia ngay</Link></Button>
-                                <Button style={{ width: "220px", height: "45px", fontSize: "20px", fontWeight: "700",marginLeft:"40px" }}><Link to="/hoan-canh-kho-khan">Hoàn cảnh khó khăn</Link></Button>
+                        <div style={{display:"flex", width:"900px",justifyContent:"space-between"}}>
+                            <div className="btn_frm_rs">
+                                <p className="text-bold text-wh ">Cùng nhau chia sẽ và giúp đỡ những hoàn cảnh khó khăn</p>
+                                <Button className="btn-tham-gia" ><Link to="/tham-gia"> Tham gia ngay</Link></Button>
+
                             </div>
+                            <div className="btn_frm_rs ">
+                                <p className="text-bold text-wh ">Hãy  cho chúng tôi những hoàn cảnh cần giúp đỡ mà bạn biết</p>
+                                <Button  className="btn-hckk"><Link to="/hoan-canh-kho-khan">Chia sẻ Hoàn cảnh cần giúp đỡ</Link></Button>
+                            </div>
+                        </div>
+
+
                     </div>
                 </div>
             </div>

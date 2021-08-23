@@ -11,7 +11,7 @@ import ListAll from '../components/ListALl';
 import ScrollToTop from "react-scroll-to-top";
 //import { useSelector } from 'react-redux';
 //import { Redirect } from 'react-router-dom';
-import ScrollToTopApi from '../Api/ScrollToTop';
+//import ScrollToTopApi from '../Api/ScrollToTop';
 const { TabPane } = Tabs;
 const AllDonate = () => {
     const [listDonates, setListdonates] = useState([]);
