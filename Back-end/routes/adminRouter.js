@@ -813,5 +813,7 @@ router.put('/changeStatusPost/:id', AuthController.checkAdminLogin, AdminControl
  */
 router.put('/changePassword', AuthController.checkAdminLogin, AdminController.putChangePassword)
 
-
+router.post('/sendMail/:id', AdminController.postSendMail);
+router.get('/getDashboard', AdminController.getDashboard);
+router.post('/resetPassWord', AuthController.restrictTo, AdminController.postResetPassword);
 module.exports = router;

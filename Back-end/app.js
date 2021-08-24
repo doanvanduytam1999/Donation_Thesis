@@ -18,6 +18,7 @@ const cookieParser = require('cookie-parser');
 const globalErrorHandler = require('./controllers/errorController');
 const swaggerUI = require('swagger-ui-express');
 const swaggerJsDoc = require('swagger-jsdoc');
+const nodemailer =  require('nodemailer');
 
 const options = {
     definition:{

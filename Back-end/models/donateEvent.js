@@ -21,11 +21,11 @@ const DonateEnventSchemea = new mongoose.Schema(
             required: [true, 'Vui lòng cung cấp nội dung bài đăng']
         },
         startDay: {
-            type: String,
+            type: Date,
             required: [true, 'Vui lòng cung cấp ngày bắt đầu nhận donate']
         },
         endDay: {
-            type: String,
+            type: Date,
             required: [true, 'Vui lòng cung cấp ngày kết thúc doante']
         },
         setAmount: {
@@ -68,7 +68,11 @@ const DonateEnventSchemea = new mongoose.Schema(
         requestChangeStatus: {
             type: Boolean,
             default: false
-        }
+        },
+        listEmail: [{
+            default: [],
+            type: String
+        }]
 
     }
     

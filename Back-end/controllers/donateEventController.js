@@ -79,7 +79,17 @@ exports.postDonate = catchAsync(async (req, res, next) => {
                 amountToDonate: amountToDonate,
                 donateEvent: data.donateEvent,
                 donator: user.id
-            })
+            });
+            const _donateEvent = await DonateEvent.findById(data.donateEvent);
+            if (!_donateEvent.listEmail.includes(user.email)) {
+                _donateEvent.listEmail.push(user.email);
+                const updateListEmail = await DonateEvent.findByIdAndUpdate(data.donateEvent, {
+                    listEmail: _donateEvent.listEmail
+                }, {
+                    new: true,
+                    runValidators: true
+                })
+            }
         }
     } else {
         if (data.checked) {
@@ -113,16 +123,19 @@ exports.postRegister = catchAsync(async (req, res, next) => {
     if (username) {
         error.push("Username đã tồn tại.");
     }
+    if (req.body.username.length < 3 || req.body.username.length > 16) {
+        error.push("Username phải từ 3 - 16 ký tự.");
+    }
     if (email) {
         error.push(" Email đã tồn tại.");
     }
-    if(req.body.password.length < 8){
-        error.push(" Mật khẩu phải có ít nhất 8 ký tự.");
+    if (req.body.password.length < 8 || req.body.password.length > 16) {
+        error.push(" Mật khẩu phải từ 8 - 16 ký tự.");
     }
-    if(typeof req.body.password === 'undefined'){
+    if (typeof req.body.password === 'undefined') {
         error.push(" Vui lòng cung cấp mật khẩu.");
     }
-    if(typeof req.body.passwordConfirm === 'undefined'){
+    if (typeof req.body.passwordConfirm === 'undefined') {
         error.push(" Vui lòng cung cấp mật khẩu xác nhận.");
     }
     if (error.length != 0) {
@@ -217,12 +230,12 @@ exports.postUpdateProfileUser = catchAsync(async (req, res, next) => {
     if (email === currentEmail) {
         error.push("Email đã tồn tại.");
     }
-      if (error.length != 0) {
-          return res.status(400).json({
-              status: 'error',
-              error: error
-          })
-      }
+    if (error.length != 0) {
+        return res.status(400).json({
+            status: 'error',
+            error: error
+        })
+    }
     const user = await UserCustomer.findByIdAndUpdate(userLogin.id, {
         fullName: data.fullName,
         email: data.email,
@@ -386,7 +399,7 @@ exports.postPayMomoSusess = catchAsync(async (req, res, next) => {
     }
     //get phone
     let phone = '';
-    if(extraData.phone){
+    if (extraData.phone) {
         phone = extraData.phone;
     }
     //update amount donate current
@@ -417,7 +430,18 @@ exports.postPayMomoSusess = catchAsync(async (req, res, next) => {
                     amountToDonate: amountToDonate,
                     donateEvent: extraData.id,
                     donator: extraData.userId
-                })
+                });
+                const userDonate = await UserCustomer.findById(extraData.userId);
+                const _donateEvent = await DonateEvent.findById(extraData.id);
+                if (!_donateEvent.listEmail.includes(userDonate.email)) {
+                    _donateEvent.listEmail.push(userDonate.email);
+                    const updateListEmail = await DonateEvent.findByIdAndUpdate(extraData.id, {
+                        listEmail: _donateEvent.listEmail
+                    }, {
+                        new: true,
+                        runValidators: true
+                    })
+                }
             }
         } else {
             if (extraData.checked) {
@@ -435,6 +459,6 @@ exports.postPayMomoSusess = catchAsync(async (req, res, next) => {
                     donateEvent: extraData.id
                 })
             }
-        } 
+        }
     }
 })

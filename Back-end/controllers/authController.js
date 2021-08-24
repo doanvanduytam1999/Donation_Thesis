@@ -324,6 +324,8 @@ exports.loginAdmin = catchAsync(async (req, res, next) => {
 //Allow user for access route
 exports.restrictTo = catchAsync(async (req, res, next) => {
   const userAdmin = await this.adminIsLoggedIn(req.cookies.jwtAdmin);
+  console.log("ủeadmin", userAdmin);
+  console.log("aaa", req.body);
   if (userAdmin.role === 'Admin') {
     return next();
   } else {
