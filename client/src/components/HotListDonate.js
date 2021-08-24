@@ -500,7 +500,7 @@ const HotListDonate = (props) => {
             {donator != null ? (
                 <>
 
-                    <Modal title={donator[0].title} visible={isModalVisible}footer={null} onCancel={handleCancel}>
+                    <Modal title={donator[0].title} visible={isModalVisible} footer={null} onCancel={handleCancel}>
                         <Steps current={current}>
                             {steps.map(item => (
                                 <Step key={item.title} title={item.title} />
@@ -533,7 +533,7 @@ const HotListDonate = (props) => {
                 </>
             ) : (
                 <>
-                    <Modal title={"ủng hộ"} visible={isModalVisible}  onCancel={handleCancel}>
+                    <Modal title={"ủng hộ"} footer={null} visible={isModalVisible}  onCancel={handleCancel}>
                         <Steps current={current}>
                             {steps.map(item => (
                                 <Step key={item.title} title={item.title} />

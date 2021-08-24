@@ -17,7 +17,7 @@ const Contact = () => {
         message.loading("Đang gửi gmail...")
      
         generateContactNumber();
-        sendForm('service_o3fxixm', 'template_homhg9p', '#basic')
+        sendForm('service_p1w3ye5', 'template_12aifjc', '#basic')
         .then(function(response) {
             if(response.status ===200){
                

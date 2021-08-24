@@ -12,11 +12,11 @@ const Paypal = () => {
     };
     const handleOk = () => {
         setIsModalVisible(false);
-        window.location.reload();
+        //window.location.reload();
     };
-   /*  const handleCancel = () => {
+    const handleCancel = () => {
         setIsModalVisible(false);
-    }; */
+    };
     console.log(vndToUsd);
     useEffect(() => {
         window.paypal
@@ -66,7 +66,7 @@ const Paypal = () => {
             <div>
                 <div ref={paypal}></div>
             </div>
-            <Modal title="" visible={isModalVisible}>
+            <Modal footer={null} title="" visible={isModalVisible} onCancel={handleCancel}>
                 <Result
                     status="success"
                     title="Cám ơn bạn đã ủng hộ !"

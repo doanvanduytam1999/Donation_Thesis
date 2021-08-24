@@ -16,7 +16,7 @@ const Join = () => {
     const onFinish = () => {
         message.loading("Đang gửi gmail...")
         generateContactNumber();
-        sendForm('service_o3fxixm', 'template_lmcltx8', '#basic')
+        sendForm('service_p1w3ye5', 'template_1mmlm6q', '#basic')
         .then(function(response) {
             if(response.status ===200){
                

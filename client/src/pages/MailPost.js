@@ -16,7 +16,7 @@ const MailPost = () => {
     const onFinish = () => {
         message.loading("Đang gửi gmail...")
         generateContactNumber();
-        sendForm('service_k4prnha', 'template_gk5gmk9', '#basic')
+        sendForm('service_aknvozk', 'template_aynzi67', '#basic')
         .then(function(response) {
             if(response.status ===200){
                
