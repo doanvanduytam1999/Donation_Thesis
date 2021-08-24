@@ -6,10 +6,10 @@ import "./Dashboard.scss"
 import "../../styles/bootstrap-grid.min.css";
 import donateEvensts from '../../Api/donateEvensts';
 const Dashboard = () => {
-    const [listDonate, setListDonate] = useState([]);
+    const [load, setLoad] = useState(true);
     const [dashboard, setDashboard] = useState([]);
     let sumAmount = 0;
-    const isLoggedIn = JSON.parse(localStorage.getItem("user"))
+    //const isLoggedIn = JSON.parse(localStorage.getItem("user"))
    
 
     useEffect(() => {
@@ -24,7 +24,9 @@ const Dashboard = () => {
                     res.data["sumAmount"] = sumAmount;
                     //delete res.data.allDonate;
                     setDashboard(res.data);
+                    setLoad(false)
                 });
+              
             } catch (error) {
                 console.log("Failed to fetch brand data at: ", error);
             }
@@ -153,10 +155,10 @@ const Dashboard = () => {
                 <div className="col-10 offset-1">
                     <h2 className="title_dashboard">Thống kê</h2>
 
-                    <Table pagination={false}  columns={columns} dataSource={resul} />
+                    <Table pagination={false} loading={load}  columns={columns} dataSource={resul} />
 
                     <h2 className="title_dashboard">Danh sách các đợt đang quyên góp.</h2>
-                    <Table dataSource={dashboard.allDonate} columns={columns1} />
+                    <Table  loading={load}  dataSource={dashboard.allDonate} columns={columns1} />
                 </div>
             </div>
 

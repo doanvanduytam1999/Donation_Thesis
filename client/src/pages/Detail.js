@@ -32,6 +32,7 @@ const Detail = () => {
     const [current, setCurrent] = React.useState(0);
     const [AllDonator, setAllDonator] = useState([]);
     const [/* AllDonates */, setAllDonates] = useState([]);
+    const [load, setLoad]=useState(false);
     //const [ArrayDonateCategory, setArrayDonateCategory] = useState([]);
     const [ReleatedPost, setReleatedPost] = useState([]);
     const data = useSelector(state => state.login.user);
@@ -119,9 +120,10 @@ const Detail = () => {
         const fetchCategoryPost =  () => {
             try {
                  donateEvensts.getPostCategory(_id).then((res) => {
-                    setReleatedPost(res.data.ReleatedPost)
+                    setReleatedPost(res.data.ReleatedPost);
+                    setLoad(true);
                 });
-              
+                setLoad(true);
             } catch (error) {
                 console.log("Failed to fetch Donate data at: ", error);
             }
@@ -328,7 +330,7 @@ const Detail = () => {
 
                                             {...layout}
                                             name="basic"
-                                            initialValues={{ prefix: "84", amountToDonate: "10000", name: `${data.username}`, phone: "" }}
+                                            initialValues={{ prefix: "84", amountToDonate: "10000", name: `${data.fullName}`, phone: "" }}
                                             onFinish={onFinish}
                                             onFinishFailed={onFinishFailed}
                                         >
@@ -550,7 +552,7 @@ const Detail = () => {
     const viewAll = () => {
         history.push(`/xem-tat-ca-nguoi-ung-ho/${_id}`)
     }
-    console.log("-"+_id+"-");
+    console.log(data);
     const onFinishMomo=(values)=>{
         //console.log("momo",values);
         checkBtn();
@@ -1026,6 +1028,7 @@ const Detail = () => {
                 <div className="container">
                     <h3 className="detail_footer_title">Chương trình liên quan</h3>
                     <div style={{display:"flex",justifyContent:"space-between"}}>
+                   {load === true? (<>
                     {ReleatedPost.map((item) => {
                 return (
                     <>
@@ -1080,6 +1083,9 @@ const Detail = () => {
                 )
 
             })}
+                   </>):(<></>)}
+                   
+                 
                     </div>
 
                 </div>

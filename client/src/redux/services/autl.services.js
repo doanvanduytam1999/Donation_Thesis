@@ -46,6 +46,7 @@ const login = (values) => {
         message.success("Đăng nhập thành công! ")
         localStorage.setItem("user", JSON.stringify(response.data.data.user));
         //Cookies.set('userKaca', response.data.data, {path: '/', maxAge: 30000, httpOnly: true });
+        //window.location.reload()
 
       }
 

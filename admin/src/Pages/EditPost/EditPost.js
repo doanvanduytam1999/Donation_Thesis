@@ -65,7 +65,7 @@ const EditPost = () => {
     }, []);
 
     const sendmail = () => {
-        Axios.post("http://localhost:4000/api/admin/sendMail/61212ad6471340581847c604").then((res) => {
+        userAdmin.postSenMail(_id).then((res) => {
             console.log(res.data);
         })
 
@@ -160,7 +160,7 @@ const EditPost = () => {
     console.log(Post);
     return (
         <>
-            <button onClick={sendmail}> send Mail</button>
+            
             <div className="wapper_editpost row">
                 <div className="col-10 offset-1">
                     <h2 className="title_editpost">Chỉnh sửa bài viết</h2>
@@ -296,6 +296,7 @@ const EditPost = () => {
                                 <Button type="primary" htmlType="submit">
                                     Chỉnh sửa
                                 </Button>
+                                <Button style={{marginLeft: "30px"}} onClick={sendmail}> Gửi Mail</Button>
                             </Form.Item>
                         </Form>
 

@@ -39,13 +39,15 @@ const HotListDonate = (props) => {
     const [value, setValue] = useState(1);
     const { isLoggedIn } = useSelector(state => state.login);
     const data = useSelector(state => state.login.user);
+    const user= JSON.parse(localStorage.getItem("user"))
     const [Listhost, setListhost] = useState(props.listDonates);
+    const [form] = Form.useForm();
     //const [Count, setCount] = useState(0);
     //const order= JSON.parse(localStorage.getItem("user"))
 //console.log(order);
     useEffect(() => {
         setListhost(props.listDonates);
-    }, [props.listDonates, licked,id])
+    }, [props.listDonates, licked,id,user])
     const dayEnd = (day) => {
         const currentDay = new Date();
         let endtDay = Date.parse(day)
@@ -81,7 +83,9 @@ const HotListDonate = (props) => {
     const handleCancel = () => {
         setIsModalVisible(false);
         setLicked(false)
+        form.resetFields();
         setCurrent(0)
+
     };
     const next = () => {
         setCurrent(current + 1);
@@ -137,6 +141,7 @@ const HotListDonate = (props) => {
                                 <Form
                                     {...layout}
                                     name="basic"
+                                    form={form}
                                     initialValues={{ prefix: "84", amountToDonate: "10000" }}
                                     onFinish={onFinish}
                                     onFinishFailed={onFinishFailed}
@@ -265,7 +270,8 @@ const HotListDonate = (props) => {
 
                                             {...layout}
                                             name="basic"
-                                            initialValues={{ prefix: "84", amountToDonate: "10000", fullName: `${data.fullName}`,phone:`${""}`}}
+                                            form={form} 
+                                            initialValues={{ prefix: "84", amountToDonate: "10000", fullName: `${user.fullName}`,phone:`${""}`}}
                                             onFinish={onFinish}
                                             onFinishFailed={onFinishFailed}
                                         >
@@ -442,7 +448,7 @@ const HotListDonate = (props) => {
         },
     ];
 
-//console.log(licked);
+console.log(data);
 
     return (
         <>

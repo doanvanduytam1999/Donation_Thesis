@@ -12,7 +12,7 @@ const Paypal = () => {
     };
     const handleOk = () => {
         setIsModalVisible(false);
-        //window.location.reload();
+        window.location.reload();
     };
     const handleCancel = () => {
         setIsModalVisible(false);
@@ -38,7 +38,7 @@ const Paypal = () => {
                 onApprove: async (data, actions) => {
                     const order = await actions.order.capture();
                     console.log(order.status);
-                    const url = 'https://donatethesis.herokuapp.com/api/donate';
+                    const url = 'http://localhost:4000/api/donate';
                     if (order.status === "COMPLETED") {
                         console.log(order.status);
                         console.log(getData);

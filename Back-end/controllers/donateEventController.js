@@ -56,13 +56,27 @@ exports.postDonate = catchAsync(async (req, res, next) => {
     }
     numberOfDonations = numberOfDonations + 1;
     currentAmount = (Number(currentAmount) + Number(amountToDonate)).toString();
-    const updateTienDaDonate = await DonateEvent.findByIdAndUpdate(data.donateEvent, {
-        currentAmount: currentAmount,
-        numberOfDonations: numberOfDonations
-    }, {
-        new: true,
-        runValidators: true
-    });
+    console.log("vo day");
+    console.log("ss", Number(currentAmount) >= Number(donateEvent.setAmount));
+    if (Number(currentAmount) >= Number(donateEvent.setAmount)) {
+        const updateTienDaDonate = await DonateEvent.findByIdAndUpdate(data.donateEvent, {
+            status: 'Đã đủ',
+            currentAmount: currentAmount,
+            numberOfDonations: numberOfDonations
+        }, {
+            new: true,
+            runValidators: true
+        });
+    } else {
+        const updateTienDaDonate = await DonateEvent.findByIdAndUpdate(data.donateEvent, {
+            currentAmount: currentAmount,
+            numberOfDonations: numberOfDonations
+        }, {
+            new: true,
+            runValidators: true
+        });
+    }
+
     if (user !== 'No Login') {
         if (data.checked) {
             const donateAnDanh = await DonateAction.create({
@@ -405,13 +419,25 @@ exports.postPayMomoSusess = catchAsync(async (req, res, next) => {
     //update amount donate current
     numberOfDonations = numberOfDonations + 1;
     currentAmount = (Number(currentAmount) + Number(amountToDonate)).toString();
-    const updateTienDaDonate = await DonateEvent.findByIdAndUpdate(extraData.id, {
-        currentAmount: currentAmount,
-        numberOfDonations: numberOfDonations
-    }, {
-        new: true,
-        runValidators: true
-    });
+    if(Number(currentAmount) >= Number(donateEvent.setAmount)){
+        const updateTienDaDonate = await DonateEvent.findByIdAndUpdate(extraData.id, {
+            status: 'Đã đủ',
+            currentAmount: currentAmount,
+            numberOfDonations: numberOfDonations
+        }, {
+            new: true,
+            runValidators: true
+        });
+    }else{
+        const updateTienDaDonate = await DonateEvent.findByIdAndUpdate(extraData.id, {
+            currentAmount: currentAmount,
+            numberOfDonations: numberOfDonations
+        }, {
+            new: true,
+            runValidators: true
+        });
+    }
+    
 
     if (data.message === 'Success') {
         if (extraData.userId) {

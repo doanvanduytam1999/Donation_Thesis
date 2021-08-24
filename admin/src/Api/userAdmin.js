@@ -40,7 +40,11 @@ const userAdmin = {
     postResetPass: (values) =>{
         const url ="admin/resetPassWord"
         return AxiosClient.post(url,values)
-    }
+    },
+    postSenMail: (id) => {
+        const url = `/admin/addHappiness/${id}`;
+        return AxiosClient.post(url);
+    },
 
 }
 export default userAdmin;

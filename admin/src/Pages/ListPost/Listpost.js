@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import donateEvensts from '../../Api/donateEvensts';
-import { Spin, Table, Tooltip } from 'antd';
+import { Spin, Table, Tag, Tooltip } from 'antd';
 import { Redirect, Link } from "react-router-dom";
 import { Input, Button } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
@@ -98,9 +98,28 @@ const Listpost = () => {
       ),
     },
     {
-      title: 'Trạng thai',
+      title: 'Trạng thái',
       dataIndex: 'status',
       key: 'status',
+      render: (text) => (
+        <>
+          {text === "Chưa đủ" ? (
+            <>
+              <Tag color={'red'} >
+                {"Chưa đủ".toUpperCase()}
+              </Tag>
+              
+            </>
+          ) : (
+            <>
+              <Tag color={'green'} >
+                {"Đã đủ".toUpperCase()}
+              </Tag>
+             
+            </>
+          )}
+        </>
+      ),
     },
     {
       title: 'Hành động',
