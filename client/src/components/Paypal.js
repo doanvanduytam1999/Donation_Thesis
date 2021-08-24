@@ -38,7 +38,7 @@ const Paypal = () => {
                 onApprove: async (data, actions) => {
                     const order = await actions.order.capture();
                     console.log(order.status);
-                    const url = 'http://localhost:4000/api/donate';
+                    const url = 'https://donatethesis.herokuapp.com/api/donate';
                     if (order.status === "COMPLETED") {
                         console.log(order.status);
                         console.log(getData);
