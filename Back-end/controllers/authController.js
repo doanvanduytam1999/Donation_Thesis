@@ -289,6 +289,7 @@ exports.loginByGoogle = catchAsync(async (req, res, next) => {
 //Login Admin
 exports.loginAdmin = catchAsync(async (req, res, next) => {
   const islogin = await this.adminIsLoggedIn(req.cookies.jwtAdmin);
+  console.log(req.body);
   if (islogin !== 'No Login') {
     return res.status(301).json({
       status: "Is Login",
