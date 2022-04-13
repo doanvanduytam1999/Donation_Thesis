@@ -1,7 +1,6 @@
 import AxiosClient from "./AxiosClient"
 const donateEvensts ={  
    getAll: ()=>{
-    //http://localhost:4000/api/donateEvents
     const url = '/donateEvents';
     return AxiosClient.get(url);
    },
