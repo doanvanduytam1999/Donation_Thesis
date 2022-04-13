@@ -50,7 +50,7 @@ export const register = (values) => (dispatch) => {
 export const login = (values) => (dispatch) => {
   return AuthService.login(values).then(
     (data) => {
-      if(data.status != 'error'){
+      if(data.status !== 'error'){
         dispatch({
           type: LOGIN_SUCCESS,
           payload: { user: data },

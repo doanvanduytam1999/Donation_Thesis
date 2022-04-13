@@ -115,18 +115,24 @@ const Detail = () => {
         //radomDonateEvent()
     }, [licked, _id]);
     //console.log(ReleatedPost);
+
+    let componentMounted = true;
     useEffect(() => {
         window.scrollTo(0, 0)
         const fetchCategoryPost =  () => {
-            try {
-                 donateEvensts.getPostCategory(_id).then((res) => {
-                    setReleatedPost(res.data.ReleatedPost);
-                    setLoad(true);
+            setLoad(true);
+                 donateEvensts.getPostCategory(_id).then(async (res) => {
+                if(componentMounted){
+                    setReleatedPost(await res.data.ReleatedPost);
+                    setLoad(false);
+                }
+                return()=> {
+                    componentMounted = false
+                }
+                   
                 });
-                setLoad(true);
-            } catch (error) {
-                console.log("Failed to fetch Donate data at: ", error);
-            }
+                
+            
         };
         fetchCategoryPost();
     }, [idCategoryPost]);
@@ -582,7 +588,85 @@ const Detail = () => {
 
         //console.log("Day",ms);
     }
-   
+    const Footer = ()=>{
+        return (
+            <>
+             <section className="detail_footer">
+                <div className="container">
+                    <h3 className="detail_footer_title">Chương trình liên quan</h3>
+                    <div style={{display:"flex",justifyContent:"space-between"}}>
+                   {load === true? (<>
+                    {ReleatedPost.map((item) => {
+                return (
+                    <>
+                        <div  className="col-2" >
+                            <Badge count={item.categoryName}>
+                                <Link to={`${item._id}`} >
+                                    <Card className="margin-top"
+                                        style={{ borderRadius: 10, height: 460 }}
+                                        hoverable
+                                        cover={<img alt="example" src={item.image[0]} />}>
+                                        <Text className="title-text" style={ellipsis ? { width: 250 } : undefined}
+                                            ellipsis={ellipsis ? { tooltip: `${item.title}` } : false} >
+                                            {item.title} </Text>
+                                        <Text className="title-tomtat"
+                                            style={ellipsis ? { width: 250 } : undefined}
+                                            ellipsis={ellipsis ? { tooltip: `${item.summary}` } : false} >
+                                            {item.summary}
+                                        </Text>
+                                        {
+                                            item.status === "Dừng nhận donate" ? (<><p className="tamngung" >Tạm ngưng</p></>) : (<>
+                                                <div className="progress">
+                                                    <div className="progress_detail_top">
+                                                        <p className="progress_detail_text">
+                                                            {/* convertNumber */(item.currentAmount)} vnđ quyên góp
+                                                        </p>
+                                                        <p className="progress_detail_number">
+                                                            {Math.floor((item.currentAmount / item.setAmount) * 100) === 100 ? (
+                                                                <p>Hoàn thành</p>
+                                                            ) : (
+                                                                <>
+                                                                    <p className="progress_detail_number">{((item.currentAmount / item.setAmount) * 100).toFixed(3)}%</p>
+                                                                </>
+                                                            )}
+                                                        </p>
+                                                    </div>
+                                                    <Progress percent={Math.floor((item.currentAmount / item.setAmount) * 100)} showInfo={Math.floor((item.currentAmount / item.setAmount) * 100) === 100 ? (true) : (false)} status={Math.floor((item.currentAmount / item.setAmount) * 100) === 100 ? ("success") : ("normal")} />
+                                                    <div className="progress_detail_bot">
+                                                        <p className="progress_detail_text">
+                                                            <UsergroupAddOutlined /> {item.numberOfDonations} lượt quyên góp
+                                                        </p>
+                                                        <p className="progress_detail_number">{Number(dayEnd(item.endDay))===0 ||Number(dayEnd(item.endDay))<0 ?(<>Đã hết hạn</>):(<> {dayEnd(item.endDay)} ngày còn lại</>) } </p>
+                                                    </div>
+                                                </div>
+                                            </>)
+                                        }
+                                    </Card>
+
+                                </Link>
+                            </Badge>
+                        </div>
+                    </>
+                )
+
+            })}
+                   </>):(<></>)}
+                   
+                 
+                    </div>
+
+                </div>
+            </section>
+            </>
+        )
+    }
+    const Loading1= ()=>{
+        return (
+            <>
+            Loading ...
+            </>
+        )
+    }
     return (
         <>
           <ScrollToTop smooth={true} />
@@ -1024,72 +1108,7 @@ const Detail = () => {
                 </div>
             </section>
             <Divider></Divider>
-            <section className="detail_footer">
-                <div className="container">
-                    <h3 className="detail_footer_title">Chương trình liên quan</h3>
-                    <div style={{display:"flex",justifyContent:"space-between"}}>
-                   {load === true? (<>
-                    {ReleatedPost.map((item) => {
-                return (
-                    <>
-                        <div  className="col-2" >
-                            <Badge count={item.categoryName}>
-                                <Link to={`${item._id}`} >
-                                    <Card className="margin-top"
-                                        style={{ borderRadius: 10, height: 460 }}
-                                        hoverable
-                                        cover={<img alt="example" src={item.image[0]} />}>
-                                        <Text className="title-text" style={ellipsis ? { width: 250 } : undefined}
-                                            ellipsis={ellipsis ? { tooltip: `${item.title}` } : false} >
-                                            {item.title} </Text>
-                                        <Text className="title-tomtat"
-                                            style={ellipsis ? { width: 250 } : undefined}
-                                            ellipsis={ellipsis ? { tooltip: `${item.summary}` } : false} >
-                                            {item.summary}
-                                        </Text>
-                                        {
-                                            item.status === "Dừng nhận donate" ? (<><p className="tamngung" >Tạm ngưng</p></>) : (<>
-                                                <div className="progress">
-                                                    <div className="progress_detail_top">
-                                                        <p className="progress_detail_text">
-                                                            {/* convertNumber */(item.currentAmount)} vnđ quyên góp
-                                                        </p>
-                                                        <p className="progress_detail_number">
-                                                            {Math.floor((item.currentAmount / item.setAmount) * 100) === 100 ? (
-                                                                <p>Hoàn thành</p>
-                                                            ) : (
-                                                                <>
-                                                                    <p className="progress_detail_number">{((item.currentAmount / item.setAmount) * 100).toFixed(3)}%</p>
-                                                                </>
-                                                            )}
-                                                        </p>
-                                                    </div>
-                                                    <Progress percent={Math.floor((item.currentAmount / item.setAmount) * 100)} showInfo={Math.floor((item.currentAmount / item.setAmount) * 100) === 100 ? (true) : (false)} status={Math.floor((item.currentAmount / item.setAmount) * 100) === 100 ? ("success") : ("normal")} />
-                                                    <div className="progress_detail_bot">
-                                                        <p className="progress_detail_text">
-                                                            <UsergroupAddOutlined /> {item.numberOfDonations} lượt quyên góp
-                                                        </p>
-                                                        <p className="progress_detail_number">{Number(dayEnd(item.endDay))===0 ||Number(dayEnd(item.endDay))<0 ?(<>Đã hết hạn</>):(<> {dayEnd(item.endDay)} ngày còn lại</>) } </p>
-                                                    </div>
-                                                </div>
-                                            </>)
-                                        }
-                                    </Card>
-
-                                </Link>
-                            </Badge>
-                        </div>
-                    </>
-                )
-
-            })}
-                   </>):(<></>)}
-                   
-                 
-                    </div>
-
-                </div>
-            </section>
+            {load ? <Loading1 /> : <Footer />}
             <Modal title="Cám ơn" visible={isModalVisible} footer={null} onOk={handleOk} onCancel={handleCancel}>
                 <Result
                     status="success"

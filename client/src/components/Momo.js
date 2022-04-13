@@ -12,7 +12,7 @@ const Momo = () => {
     //getData['donateEvent'] = _id;
     console.log(getData);
     const PayMomo = () => {
-        const url = "https://donatethesis.herokuapp.com/api/payMomo";
+        const url = "http://localhost:4000/api/payMomo";
         axios.post(url,getData).then((res)=>{
             console.log("data",res.data);
             if(res.data.MomoPay.errorCode===0)

@@ -90,7 +90,7 @@ const ListUser = () => {
         <>
           {text === true ? (
             <>
-              <Tag color={'green'} >
+              <Tag color={'#d9d9d9'} >
                 {"Đang hoạt động ".toUpperCase()}
               </Tag>
               

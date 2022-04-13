@@ -42,6 +42,11 @@ const ListDonator = () => {
           dataIndex: 'username',
           key: 'username',
         },
+        {
+          title: 'Email',
+          dataIndex: 'email',
+          key: 'email',
+        },
         
         {
           title: 'Trạng thái',

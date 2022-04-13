@@ -48,12 +48,13 @@ function App() {
           UserApi.postLoginGoogle(currentUser).then((res)=>{
             if(res.data.status ==="success"){
                let user=  res.data.data.user;
+               localStorage.setItem("user", JSON.stringify(user));
                dispatch({
                 type: "LOGIN_SUCCESS",
                 payload: { user: user },
               });
                console.log(user);
-              localStorage.setItem("user", JSON.stringify(user));
+             
 
               //window.location.reload();
             }

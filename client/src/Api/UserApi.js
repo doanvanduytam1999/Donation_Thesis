@@ -3,19 +3,12 @@ import AxiosClient from "./AxiosClient"
 const UserApi = {
     getMe: () => {
         return new Promise((resolve, reject) => {
-
-
-
             const currentUser = firebase.auth().currentUser;
             resolve({
                 id: currentUser.uid,
                 fullName: currentUser.displayName,
                 email: currentUser.email,
-
-
             })
-
-
         }
         )
     },
@@ -36,8 +29,5 @@ const UserApi = {
         return AxiosClient.post(url, values)
     },
 
-
-
 }
-
 export default UserApi;

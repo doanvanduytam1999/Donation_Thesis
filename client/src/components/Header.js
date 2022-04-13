@@ -24,7 +24,8 @@ const Header = () => {
     const dispatch = useDispatch();
     const data = useSelector(state => state.login.user);
     const logOut = () => {
-      
+        
+        
         UserApi.getLogout().then((res)=>{
          
             if(res.data.status==="success"){
